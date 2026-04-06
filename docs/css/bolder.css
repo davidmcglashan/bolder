@@ -1,0 +1,30 @@
+body {
+	background-color: #000;
+}
+
+.entity {
+	width: 64px;
+	height: 64px;
+	position: absolute;
+}
+
+.wall {
+	background-image: url(../assets/wall.png);
+}
+
+.earth {
+	background-image: url(../assets/earth.png);
+}
+
+.boulder {
+	background-image: url(../assets/boulder.png);
+}
+
+.diamond {
+	background-image: url(../assets/diamond.png);
+}
+
+.bob {
+	background-image: url(../assets/bob.png);
+}
+

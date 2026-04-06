@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>YE GODS! - test 1</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="css/base.css">
+		<link rel="stylesheet" href="css/scene.css">
+		<link rel="stylesheet" href="css/ui.css">
+	</head>
+	<body>
+		<div id="-subject"></div>
+		<div id="house-status" class="nav hidden">
+			<div id="status-inventory" class="aspect">
+				<div class="label" data-lang="translate">label_inventory</div>
+				<div id="status-resource-wood" class="panel">
+					<div id="status-resource-wood-counter" class="counter"></div>
+				</div>
+				<div id="status-resource-rock" class="panel">
+					<div id="status-resource-rock-counter" class="counter"></div>
+				</div>
+				<div id="status-resource-iron" class="panel hidden">
+					<div id="status-resource-iron-counter" class="counter"></div>
+				</div>
+				<div id="status-resource-water" class="panel">
+					<div id="status-resource-water-counter" class="counter"></div>
+				</div>
+				<a class="hover" id="status-inventory-button" onclick="inventory.showMenu()"></a>
+			</div>
+			<div class="separator"></div>
+			<div id="status-crafting" class="aspect">
+				<div class="label" data-lang="translate">label_craft</div>
+				<div class="panel">
+					<div id="status-craft-counter" class="counter">0</div>
+				</div>
+				<a class="hover" id="status-craft-button" onclick="study.showCraftMenu()"></a>
+			</div>
+			<div id="status-people" class="aspect">
+				<div class="label" data-lang="translate">label_people</div>
+				<div class="panel">
+					<div id="status-people-counter" class="counter">0</div>
+				</div>
+				<a class="hover" id="status-craft-button" onclick="study.showPeopleMenu()"></a>
+			</div>
+			<div id="status-theology" class="aspect">
+				<div class="label" data-lang="translate">label_theology</div>
+				<div class="panel">
+					<div id="status-theology-counter" class="counter">0</div>
+				</div>
+				<a class="hover" id="status-theology-button" onclick="study.showTheologyMenu()"></a>
+			</div>
+			<div class="separator"></div>
+			<div id="status-study">
+				<div id="status-study-label" data-lang="translate">label_study</div>
+				<div id="status-study-icon"></div>
+				<div id="status-study-info">
+					<div id="status-study-skill" data-lang="translate">house_not_studying</div>
+					<div id="status-study-gbar"></div>	
+					<div id="status-study-bar"></div>	
+				</div>
+				<div><a href="#" onclick="study.stopStudyingAtSelection()" data-lang="translate">stop</a></div>
+			</div>
+			<div class="separator"></div>
+			<div id="status-population" class="aspect">
+				<div id="status-population-info">
+					<span data-lang="translate">label_population</span><br>
+					<span data-lang="translate">label_praise</span>
+				</div>
+				<div id="status-praise-bars">
+					<div id="status-gpopl-bar"></div>
+					<div id="status-popl-bar"></div>
+					<div id="status-gpraise-bar"></div>
+					<div id="status-praise-bar"></div>
+					<span id="praise-marker-icon" class="hidden"></span>
+				</div>
+				<a class="hover" id="status-population-button" onclick="population.showMenu()"></a>
+			</div>
+		</div>
+		<div id="person-status" class="nav hidden">
+			<div id="person-inventory" class="aspect">
+				<div class="label" data-lang="translate">label_inventory</div>
+			</div>
+			<div class="separator"></div>
+			<div id="person-population" class="aspect">
+				<div id="person-population-info">
+					<span data-lang="translate">label_population</span>
+				</div>
+				<div id="person-population-bars">
+					<div id="person-gpopl-bar"></div>
+					<div id="person-popl-bar"></div>
+				</div>
+			</div>
+			<div class="separator"></div>
+			<div id="person-commands"></div>
+		</div>
+		<div id="-links" class="links"></div>
+		<div id="cpu-links" class="links"></div>
+		<div id="-viewport">
+			<div id="-scene">
+				<div id="-flag" class="hidden"></div>
+			</div>
+		</div>
+		<div id="-overlay" class="hidden" onclick="command.hideOverlay()" oncontextmenu="command.hideOverlay();return false;">
+			<div id="-menu" onclick="event.stopPropagation()"">
+				<div id="menu-label" class="ready" data-lang="translate">choose_action</div>
+				<div id="menu-options"></div>
+			</div>
+		</div>
+		<a id="-debugbtn" class="btn" onclick="command.debug()" href="#">Debug</a>
+		<pre id="-debug" class="hidden"></pre>
+	</body>
+	<!--<script type="text/javascript" src="js/yegods.js"></script>-->
+
+	<script type="text/javascript" src="js/language.js"></script>
+	<script type="text/javascript" src="js/despatch.js"></script>
+	<script type="text/javascript" src="js/scroll.js"></script>
+	<script type="text/javascript" src="js/game.js"></script>
+	<script type="text/javascript" src="js/cpuHouses.js"></script>
+	<script type="text/javascript" src="js/houses.js"></script>
+	<script type="text/javascript" src="js/people.js"></script>
+	<script type="text/javascript" src="js/world.js"></script>
+	<script type="text/javascript" src="js/selection.js"></script>
+	<script type="text/javascript" src="js/landscape.js"></script>
+	<script type="text/javascript" src="js/links.js"></script>
+	<script type="text/javascript" src="js/timeline.js"></script>
+	<script type="text/javascript" src="js/drawloop.js"></script>
+	<script type="text/javascript" src="js/util.js"></script>
+	<script type="text/javascript" src="js/inventory.js"></script>
+	<script type="text/javascript" src="js/study.js"></script>
+	<script type="text/javascript" src="js/population.js"></script>
+	<script type="text/javascript" src="js/command.js"></script>
+	<script type="text/javascript" src="js/cohort.js"></script>
+
+	<script type="text/javascript">
+		// Set up the game state.
+		world.init()
+
+		// All these could be listening to the world for an init ...
+		landscape.render()
+		landscape.show( houses.getAllHouses()[0][1].loc )
+
+		// The first tick starts the game.
+		timeline.tick()
+	</script>
+</html>
