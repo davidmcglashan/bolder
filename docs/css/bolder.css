@@ -26,5 +26,8 @@ body {
 
 .bob {
 	background-image: url(../assets/bob.png);
+	width: 64px;
+	height: 64px;
+	position: absolute;
 }
 
