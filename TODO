@@ -1,10 +1,20 @@
-- get up and running
-  - move bob with arrow keys
-  - make bob slide
-  - unsupported boulders fall
-- animate bob
+- daily generator
+  - 2,3,4 rectangles - wall around the outside, air in the middle, overlaid so that ...
+    - anything + null => anything
+    - wall + wall => wall
+	- empty + empty => empty
+	- wall + empty = random
+	- replace all the randoms with one of ... empty, wall, diamond, earth
+	- draw structures in the interiors
+    - replace all the empties in the interiors ... wall, diamond, earth
+- big maps with a viewport
+- varieties of earth
+- varieties of wall
+- animate bob ...
+  - sprites
+  - smooth motion
 - tool to build levels from flat files
-- boulders falling
 - swipe gestures to play on mobile
 - safes and keys
 - spirits and cages
+- eggs and monsters

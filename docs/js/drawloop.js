@@ -29,9 +29,9 @@ const drawloop = {
 		drawloop.previousTime = time;
 
 		drawloop.boulderTime += delta
-		if ( drawloop.boulderTime > 100 ) {
+		if ( drawloop.boulderTime > 75 ) {
 			map.moveUnsupportedBoulders()
-			drawloop.boulderTime -= 100
+			drawloop.boulderTime -= 75
 		}
 		
 		window.requestAnimationFrame( drawloop.loop );
