@@ -9,5 +9,7 @@ const bolder = {
 			if ( keyName === "ArrowLeft" || keyName === 'z'  ) { map.bobLeft() }
 			if ( keyName === "ArrowRight"  || keyName === 'x' ) { map.bobRight() }
 		} )
+
+		drawloop.start()
 	}
 }

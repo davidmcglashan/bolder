@@ -1,5 +1,6 @@
 const drawloop = {
 	previousTime: 0,
+	boulderTime: 0,
 
 	/**
 	 * Start the drawloop.
@@ -27,31 +28,12 @@ const drawloop = {
 		delta = time - drawloop.previousTime;
 		drawloop.previousTime = time;
 
-		// Perform the drawing operation. Schedule more drawing if there are active people.
-		if ( drawloop.drawPeople( delta ) > 0 ) {
-			window.requestAnimationFrame( drawloop.loop );
+		drawloop.boulderTime += delta
+		if ( drawloop.boulderTime > 100 ) {
+			map.moveUnsupportedBoulders()
+			drawloop.boulderTime -= 100
 		}
-	},
-
-	/**
-	 * Drawing loop for map entities. Returns the number of active entities.
-	 */
-	drawPeople: ( delta ) => {
-		let entities = map.getAllEntities()
-
-		entities.forEach(
-			([loc, entity]) => {
-				// If there's time on the clock move the sprite around by delta.
-				if ( entity.timer > 0 ) {
-					let div = document.getElementById( entity.id )
-					entity.top = entity.top - entity.deltaY*delta
-					entity.left = entity.left - entity.deltaX*delta
-					div.style.top = entity.top + 'px'
-					div.style.left = entity.left + 'px'
-					entity.timer = entity.timer - delta
-				}
-			});
-
-		return entities.length
+		
+		window.requestAnimationFrame( drawloop.loop );
 	},
 };

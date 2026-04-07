@@ -1,7 +1,7 @@
 const map = {
 	level: 0,
 	diamonds: 0,
-	boulders: [],
+	boulders: {},
 	bob: {},
 
 	grid: [],
@@ -46,7 +46,7 @@ const map = {
 						break
 					case map.gridtype.BOULDER:
 						elem.setAttribute( 'class', 'boulder entity' )
-						map.boulders.push( { x:x,y:y, id:'entity'+c } )
+						map.boulders[x+'_'+y] = {x:x, y:y} 
 						break
 					case map.gridtype.DIAMOND:
 						elem.setAttribute( 'class', 'diamond entity' )
@@ -152,6 +152,7 @@ const map = {
 		let entity = map.grid[loc.y][loc.x]
 		entity.elem.setAttribute( 'class', 'entity' )
 		entity.type = map.gridtype.EMPTY
+		delete( map.boulders[loc.x + '_' + loc.y] )
 	},
 
 	moveBoulderRight: ( loc ) => {
@@ -166,9 +167,64 @@ const map = {
 		map.boulderLoc( loc )
 	},
 
+	moveBoulderDown: ( loc ) => {
+		map.emptyLoc( loc )
+		loc.y += 1
+		map.boulderLoc( loc )
+	},
+
 	boulderLoc: ( loc ) => {
 		let entity = map.grid[loc.y][loc.x]
 		entity.elem.setAttribute( 'class', 'entity boulder' )
 		entity.type = map.gridtype.BOULDER
+		map.boulders[loc.x + '_' + loc.y] = loc
+	},
+
+	moveUnsupportedBoulders: () => {
+		for ( const[key,boulder] of Object.entries(map.boulders)) {
+			if ( map.boulderCanMoveInto( boulder.x, boulder.y+1 ) ) {
+				map.moveBoulderDown( boulder )
+				continue
+			}
+
+			// Boulders are unsupported if they're on a slopey object with space
+			// on either side ...
+			if ( map.slopesLeft( boulder.x, boulder.y+1 ) ) {
+				if ( map.boulderCanMoveInto( boulder.x-1, boulder.y ) && map.boulderCanMoveInto( boulder.x-1, boulder.y+1 ) ) {
+					map.moveBoulderLeft( boulder )
+					continue
+				}
+			}
+			if ( map.slopesRight( boulder.x, boulder.y+1 ) ) {
+				if ( map.boulderCanMoveInto( boulder.x+1, boulder.y ) && map.boulderCanMoveInto( boulder.x+1, boulder.y+1 ) ) {
+					map.moveBoulderRight( boulder )
+					continue
+				}
+			}
+		}
+	},
+
+	boulderCanMoveInto: ( x, y ) => {
+		// boulders can't move into bob.
+		if ( x === map.bob.x && y === map.bob.y ) {
+			return false
+		}
+
+		// Boulders can move into empty spaces.
+		let type = map.grid[y][x].type
+		if ( type === map.gridtype.EMPTY ) {
+			return true
+		}
+		return false
+	},
+
+	slopesLeft: ( x, y ) => {
+		let type = map.grid[y][x].type
+		return type === map.gridtype.BOULDER || type === map.gridtype.DIAMOND
+	},
+
+	slopesRight: ( x, y ) => {
+		let type = map.grid[y][x].type
+		return type === map.gridtype.BOULDER || type === map.gridtype.DIAMOND
 	}
 }
