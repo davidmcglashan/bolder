@@ -1,6 +1,10 @@
 const bolder = {
-	go: () => {
-		map.loadMap(0)
+	go: ( level ) => {
+		if ( level ) {
+			map.loadMap( level )
+		} else {
+			map.buildMapFromSeed()
+		}
 
 		document.addEventListener("keydown", (event) => {
 			const keyName = event.key;

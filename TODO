@@ -7,7 +7,10 @@
 	- replace all the randoms with one of ... empty, wall, diamond, earth
 	- draw structures in the interiors
     - replace all the empties in the interiors ... wall, diamond, earth
-- big maps with a viewport
+- UI
+  - big maps with a viewport
+  - score
+  - finish a level
 - varieties of earth
 - varieties of wall
 - animate bob ...
