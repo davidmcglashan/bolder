@@ -121,22 +121,22 @@ const map = {
 
 					map.grid[y][x] = map.gridtype.EARTH
 
-					// 10% chance of becoming a diamond
+					// 20% chance of becoming a diamond
 					if ( random.diceRoll( { oneIn:5, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.DIAMOND
 					} 
 					
-					// 30% chance of becoming a rock
-					if ( random.diceRoll( { oneIn:3, attempts:1 } ) ) {
+					// 25% chance of becoming a rock
+					if ( random.diceRoll( { oneIn:4, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.BOULDER
 					} 
 					
-					// 3% chance of becoming a hole
+					// 10% chance of becoming a hole
 					if ( map.grid[y-1][x] !== map.gridtype.BOULDER && random.diceRoll( { oneIn:10, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.EMPTY
 					} 
 					
-					// 5% chance of becoming a wall again
+					// 10% chance of becoming a wall again
 					if ( random.diceRoll( { oneIn:10, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.WALL
 					} 
@@ -144,6 +144,38 @@ const map = {
 			}
 		}
 		
+		// Draw some arbitrary straight walls.
+		for ( let z=0; z<random.get(2,6); z+=1 ) {
+			// random x, y, dir, length
+			let x = random.get(1,width-1)
+			let y = random.get(1,height-1)
+			let dir = random.get(0,3)
+			let len = random.get(0,parseInt(width/3))
+			if ( dir === 1 || dir === 3 ) {
+				len = random.get(0,parseInt(height/3))
+			}
+
+			for ( let i=0; i<len; i+=1 ) {
+				if ( map.grid[y][x] !== 0 ) {
+					map.grid[y][x] = map.gridtype.WALL
+					switch ( dir ) {
+						case 0: 
+							x+=1
+							break
+						case 1: 
+							y-=1
+							break
+						case 2: 
+							x-=1
+							break
+						case 3: 
+							y+=1
+							break
+					}
+				}
+			}
+		}
+
 		// find a place for bob
 		while ( !map.bob ) {
 			let x = random.get(1,width-1)
@@ -330,7 +362,7 @@ const map = {
 		let elem = document.getElementById( map.bob.id )
 		elem.style.left = map.bob.x*64 + 'px'
 		elem.style.top = map.bob.y*64 + 'px'
-		elem.scrollIntoView({ behavior: "smooth", block: "start", inline: "start" });		
+		elem.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });		
 	},
 
 	emptyLoc: ( loc ) => {
