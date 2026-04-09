@@ -1,10 +1,18 @@
 - daily generator
-  - page with parameters & sliders e.g. chance of being a rock
-  - build a json, base64 it and pass it into the URL with start button
+  - too easy to invoke infinite loops on smaller levels - find these and make every loop breakable
+  - add more parameters to the payload
+    - # cutaways
+	- %age of diamond, hole, boulder, safe, cage, egg
+	- # long walls
+	- %age long wall gappiness
+	- %age long wall direction change
+	- top %age for bob
+  - rewrite the default payload to build the index.html form
 - safes and keys
 - spirits and cages
 - eggs and monsters
 - UI
+  - back to start button
   - big maps with a viewport
   - score
   - zoom

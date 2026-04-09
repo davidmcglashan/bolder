@@ -6,15 +6,22 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="css/bolder.css">
-		<script type="text/javascript" src="js/bolder.js"></script>
-		<script type="text/javascript" src="js/levels.js"></script>
-		<script type="text/javascript" src="js/map.js"></script>
-		<script type="text/javascript" src="js/drawloop.js"></script>
-		<script type="text/javascript" src="js/random.js"></script>
 	</head>
 	<body>
-		<div id="-viewport"></div>
-		<div id="bob" class="bob"></div>
-		<script>bolder.go()</script>
+		<label>Min width <input type="number" name="minWidth" value="25"/></label>
+		<label>Max width <input type="number" name="maxWidth" value="45"/></label>
+		<label>Min height <input type="number" name="minHeight" value="25"/></label>
+		<label>Max height <input type="number" name="maxHeight" value="45"/></label>
+		<button onclick="submit()">Play</button>
 	</body>
+	<script>
+		function submit() {
+			let payload = {}
+			let inputs = document.querySelectorAll("input")
+			inputs.forEach( ( input ) => {
+  				payload[input.name] = input.value
+			} );
+			window.location.href = 'game.html?' + btoa(JSON.stringify(payload)) 
+		}
+	</script>
 </html>

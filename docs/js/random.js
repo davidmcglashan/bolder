@@ -29,7 +29,7 @@ const random = {
 		random.SEED = ((random.SEED ^ 0xB55A4F09) ^ (random.SEED >>> 16)) & 0xFFFFFFFF
 		let rnd = (random.SEED & 0xFFFFFFF) / 0x10000000
 
-		return min + Math.floor( rnd*(max-min+1) )
+		return parseInt(min) + Math.floor( rnd*(parseInt(max)-parseInt(min)+1) )
 	},
 
 	/**

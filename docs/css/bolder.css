@@ -1,5 +1,15 @@
-body {
+body,a {
+	font-family: "Karla", sans-serif;
 	background-color: #000;
+	color: #fff;
+}
+
+label {
+	display: block;
+}
+
+.scaled {
+	transform: scale(0.5);
 }
 
 .entity {

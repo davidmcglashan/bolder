@@ -18,11 +18,11 @@ const map = {
 		map.parseMap( levels.maps[ln] )
 	},
 
-	buildMapFromSeed: () => {
+	buildMapFromSeed: ( payload ) => {
 		// Initialise the map and set its dimensions.
-		let width = random.get( 25, 45 )
-		let height = random.get( 25, 45 )
-
+		let width = random.get( payload.minWidth, payload.maxWidth )
+		let height = random.get( payload.minHeight, payload.maxHeight )
+		
 		// Fill the map with walls
 		for ( let y = 0; y < height; y++ ) {
 			map.grid[y] = []
@@ -145,38 +145,37 @@ const map = {
 		}
 		
 		// Draw some arbitrary straight walls.
-		for ( let z=0; z<random.get(2,6); z+=1 ) {
+		for ( let z=0; z<random.get(4,8); z+=1 ) {
 			// random x, y, dir, length
 			let x = random.get(1,width-1)
 			let y = random.get(1,height-1)
 			let dir = random.get(0,3)
-			let len = random.get(0,parseInt(width*0.6))
-			if ( dir === 1 || dir === 3 ) {
-				len = random.get(0,parseInt(height*0.6))
-			}
+			let len = random.get(20,40)
 
 			for ( let i=0; i<len; i+=1 ) {
-				if ( map.grid[y][x] !== 0 ) {
+				// Add a new wall as long as it's within bounds.
+				if ( x>0 && x<width && y>0 && y<height && map.grid[y][x] !== 0 && !random.diceRoll( { oneIn:2, attempts:1 } )) {
 					map.grid[y][x] = map.gridtype.WALL
-					switch ( dir ) {
-						case 0: 
-							x+=1
-							break
-						case 1: 
-							y-=1
-							break
-						case 2: 
-							x-=1
-							break
-						case 3: 
-							y+=1
-							break
-					}
+				}
+						
+				switch ( dir ) {
+					case 0: 
+						x+=1
+						break
+					case 1: 
+						y-=1
+						break
+					case 2: 
+						x-=1
+						break
+					case 3: 
+						y+=1
+						break
+				}
 
-					// 10% chance of a direction change
-					if ( random.diceRoll( { oneIn:10, attempts:1 } ) ) {
-						dir = random.get(0,3)
-					}
+				// 10% chance of a direction change
+				if ( random.diceRoll( { oneIn:10, attempts:1 } ) ) {
+					dir = random.get(0,3)
 				}
 			}
 		}
@@ -184,7 +183,7 @@ const map = {
 		// find a place for bob in the top 20% of the level
 		while ( !map.bob ) {
 			let x = random.get(1,width-1)
-			let y = random.get(1,height/5)
+			let y = random.get(1,parseInt(height/5))
 
 			if ( map.grid[y][x] === map.gridtype.EARTH ) {
 				map.bob = { x:x, y:y, id:'bob' }
