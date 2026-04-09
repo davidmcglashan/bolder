@@ -150,9 +150,9 @@ const map = {
 			let x = random.get(1,width-1)
 			let y = random.get(1,height-1)
 			let dir = random.get(0,3)
-			let len = random.get(0,parseInt(width/3))
+			let len = random.get(0,parseInt(width*0.6))
 			if ( dir === 1 || dir === 3 ) {
-				len = random.get(0,parseInt(height/3))
+				len = random.get(0,parseInt(height*0.6))
 			}
 
 			for ( let i=0; i<len; i+=1 ) {
@@ -172,14 +172,19 @@ const map = {
 							y+=1
 							break
 					}
+
+					// 10% chance of a direction change
+					if ( random.diceRoll( { oneIn:10, attempts:1 } ) ) {
+						dir = random.get(0,3)
+					}
 				}
 			}
 		}
 
-		// find a place for bob
+		// find a place for bob in the top 20% of the level
 		while ( !map.bob ) {
 			let x = random.get(1,width-1)
-			let y = random.get(1,height-1)
+			let y = random.get(1,height/5)
 
 			if ( map.grid[y][x] === map.gridtype.EARTH ) {
 				map.bob = { x:x, y:y, id:'bob' }
