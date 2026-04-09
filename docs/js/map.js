@@ -135,11 +135,14 @@ const map = {
 					if ( map.grid[y-1][x] !== map.gridtype.BOULDER && random.diceRoll( { oneIn:10, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.EMPTY
 					} 
+					
+					// 5% chance of becoming a wall again
+					if ( random.diceRoll( { oneIn:10, attempts:1 } ) ) {
+						map.grid[y][x] = map.gridtype.WALL
+					} 
 				}
 			}
 		}
-
-		// - replace the 2s with rnd()
 		
 		// find a place for bob
 		while ( !map.bob ) {
@@ -327,6 +330,7 @@ const map = {
 		let elem = document.getElementById( map.bob.id )
 		elem.style.left = map.bob.x*64 + 'px'
 		elem.style.top = map.bob.y*64 + 'px'
+		elem.scrollIntoView({ behavior: "smooth", block: "start", inline: "start" });		
 	},
 
 	emptyLoc: ( loc ) => {

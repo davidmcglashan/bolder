@@ -1,23 +1,20 @@
 - daily generator
-  - 2,3,4 rectangles - wall around the outside, air in the middle, overlaid so that ...
-    - anything + null => anything
-    - wall + wall => wall
-	- empty + empty => empty
-	- wall + empty = random
-	- replace all the randoms with one of ... empty, wall, diamond, earth
-	- draw structures in the interiors
-    - replace all the empties in the interiors ... wall, diamond, earth
+  - page with parameters & sliders e.g. chance of being a rock
+  - build a json, base64 it and pass it into the URL with start button
+- safes and keys
+- spirits and cages
+- eggs and monsters
 - UI
   - big maps with a viewport
   - score
-  - finish a level
+  - zoom
+- finish a level
 - varieties of earth
 - varieties of wall
 - animate bob ...
   - sprites
   - smooth motion
-- tool to build levels from flat files
+- tools to ...
+  - build level JSON from flat files
+  - export generated levels as JSON and as flats
 - swipe gestures to play on mobile
-- safes and keys
-- spirits and cages
-- eggs and monsters
