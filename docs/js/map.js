@@ -49,7 +49,7 @@ const map = {
 				case 1:
 					z = random.get(1,width/4)
 					w = random.get(2,width/2)
-					x = width/2 - z
+					x = parseInt(width/2 - z)
 					y = 0
 					h = random.get(2,height/2)
 					break
@@ -61,14 +61,14 @@ const map = {
 					break
 				case 3:
 					z = random.get(1,width/4)
-					y = height/2 - z
+					y = parseInt(height/2 - z)
 					h = random.get(2,height/2)
 					x = 0
 					w = random.get(2,width/2)
 					break
 				case 4:
 					z = random.get(1,width/4)
-					y = height/2 - z
+					y = parseInt(height/2 - z)
 					h = random.get(2,height/2)
 					w = random.get(2,width/2)
 					x = width-w
@@ -82,7 +82,7 @@ const map = {
 				case 6:
 					z = random.get(1,width/4)
 					w = random.get(2,width/2)
-					x = width/2 - z
+					x = parseInt(width/2 - z)
 					h = random.get(2,height/2)
 					y = height-h
 					break
@@ -93,7 +93,7 @@ const map = {
 					y = height-h
 					break
 			}
-			
+
 			// Fill the map with zeroes where this cutaway is
 			for ( let yy=y; yy<y+h; yy++ ) {
 				for ( let xx=x; xx<x+w; xx++ ) {
@@ -193,6 +193,10 @@ const map = {
 				}
 			}
 		}
+
+		// Get bob in the right place.
+		map.emptyLoc( map.bob )
+		map.moveBob()
 	},
 
 	parseMap( mapObj ) {
