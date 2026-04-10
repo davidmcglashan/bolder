@@ -36,14 +36,6 @@ const random = {
 	 * Gets or derives the seed.
 	 */
 	getSeed: () => {
-		const urlParams = new URLSearchParams( window.location.search );
-		const seed = urlParams.get( 'seed' );
-
-		// Did we get one?
-		if ( seed !== null ) {
-			return seed
-		}
-
 		// Never mind. Fashion one out of today's date.
 		let today = new Date()
 		let month = '' + (today.getMonth() + 1)

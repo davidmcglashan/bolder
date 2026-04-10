@@ -17,8 +17,11 @@ const map = {
 	loadMap: ( ln ) => {
 		map.parseMap( levels.maps[ln] )
 	},
-
+	
 	buildMapFromSeed: ( payload ) => {
+		random.SEED = parseInt( payload.seed )
+		console.log ( random.SEED )
+
 		// Initialise the map and set its dimensions.
 		let width = random.get( payload.minWidth, payload.maxWidth )
 		let height = random.get( payload.minHeight, payload.maxHeight )
@@ -31,73 +34,77 @@ const map = {
 			}
 		}
 
-		// There are up to four cutaways in eight "compass" locations
+		// There are up to four cutaways in eight "compass" locations, only if the level is larger than 10x10
 		// - generate cutaway number between 2..4
 		// - choose a 0..7 location for it
 		// - derive x,y,w,h based on loc and rng
-		for ( let cw=0; cw < random.get(2,4); cw += 1 ) {
-			let loc = random.get(0,7)
-			let x,y,w,h,z
+		if ( width > 10 && height > 10 ) {
+			for ( let cw=0; cw < random.get( payload.minCutaways, payload.maxCutaways ); cw += 1 ) {
+				let loc = random.get(0,7)
+				let x,y,w,h,z
 
-			switch ( loc ) {
-				case 0:
-					x = 0
-					y = 0
-					w = random.get(2,width/2)
-					h = random.get(2,height/2)
-					break
-				case 1:
-					z = random.get(1,width/4)
-					w = random.get(2,width/2)
-					x = parseInt(width/2 - z)
-					y = 0
-					h = random.get(2,height/2)
-					break
-				case 2:
-					w = random.get(2,width/2)
-					x = width-w
-					y = 0
-					h = random.get(2,height/2)
-					break
-				case 3:
-					z = random.get(1,width/4)
-					y = parseInt(height/2 - z)
-					h = random.get(2,height/2)
-					x = 0
-					w = random.get(2,width/2)
-					break
-				case 4:
-					z = random.get(1,width/4)
-					y = parseInt(height/2 - z)
-					h = random.get(2,height/2)
-					w = random.get(2,width/2)
-					x = width-w
-					break
-				case 5:
-					h = random.get(2,height/2)
-					y = height-h
-					x = 0
-					w = random.get(2,width/2)
-					break
-				case 6:
-					z = random.get(1,width/4)
-					w = random.get(2,width/2)
-					x = parseInt(width/2 - z)
-					h = random.get(2,height/2)
-					y = height-h
-					break
-				case 7:
-					w = random.get(2,width/2)
-					x = width-w
-					h = random.get(2,height/2)
-					y = height-h
-					break
-			}
+				switch ( loc ) {
+					case 0:
+						x = 0
+						y = 0
+						w = random.get(2,width/3)
+						h = random.get(2,height/3)
+						break
+					case 1:
+						z = random.get(1,width/4)
+						w = random.get(2,width/3)
+						x = parseInt(width/2 - z)
+						y = 0
+						h = random.get(2,height/3)
+						break
+					case 2:
+						w = random.get(2,width/3)
+						x = width-w
+						y = 0
+						h = random.get(2,height/3)
+						break
+					case 3:
+						z = random.get(1,width/4)
+						y = parseInt(height/2 - z)
+						h = random.get(2,height/3)
+						x = 0
+						w = random.get(2,width/3)
+						break
+					case 4:
+						z = random.get(1,width/4)
+						y = parseInt(height/2 - z)
+						h = random.get(2,height/3)
+						w = random.get(2,width/3)
+						x = width-w
+						break
+					case 5:
+						h = random.get(2,height/3)
+						y = height-h
+						x = 0
+						w = random.get(2,width/3)
+						break
+					case 6:
+						z = random.get(1,width/4)
+						w = random.get(2,width/3)
+						x = parseInt(width/2 - z)
+						h = random.get(2,height/3)
+						y = height-h
+						break
+					case 7:
+						w = random.get(2,width/3)
+						x = width-w
+						h = random.get(2,height/3)
+						y = height-h
+						break
+				}
 
-			// Fill the map with zeroes where this cutaway is
-			for ( let yy=y; yy<y+h; yy++ ) {
-				for ( let xx=x; xx<x+w; xx++ ) {
-					map.grid[yy][xx] = 0
+				console.log( x,y,w,h )
+
+				// Fill the map with zeroes where this cutaway is
+				for ( let yy=y; yy<y+h; yy++ ) {
+					for ( let xx=x; xx<x+w; xx++ ) {
+						map.grid[yy][xx] = 0
+					}
 				}
 			}
 		}
@@ -180,14 +187,21 @@ const map = {
 			}
 		}
 
-		// find a place for bob in the top 20% of the level
+		// find a place for bob in the top 20% of the level for 100 tries, then everywhere ...
+		let bc = 0
 		while ( !map.bob ) {
 			let x = random.get(1,width-1)
-			let y = random.get(1,parseInt(height/5))
+			let y = random.get(1,parseInt( ( bc < 100 ? height/5 : height-1 ) ) )
 
-			if ( map.grid[y][x] === map.gridtype.EARTH ) {
+			if ( map.grid[y][x] === map.gridtype.EARTH || map.grid[y][x] === map.gridtype.EMPTY ) {
 				map.bob = { x:x, y:y, id:'bob' }
 				map.grid[y][x] = map.gridtype.EMPTY
+			}
+
+			// If we fail to place bob in 200 goes we put him in the middle.
+			bc += 1
+			if ( bc === 200 ) {
+				map.bob = { x:parseInt(width/2), y: parseInt(height/2), id:'bob' }
 			}
 		}
 

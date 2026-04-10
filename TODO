@@ -1,13 +1,16 @@
 - daily generator
-  - too easy to invoke infinite loops on smaller levels - find these and make every loop breakable
   - add more parameters to the payload
-    - # cutaways
-	- %age of diamond, hole, boulder, safe, cage, egg
-	- # long walls
-	- %age long wall gappiness
-	- %age long wall direction change
-	- top %age for bob
-  - rewrite the default payload to build the index.html form
+    - seed
+	- advanced jazz ...
+		- # cutaways
+		- %age of diamond, hole, boulder, safe, cage, egg
+		- # long walls
+		- %age long wall gappiness
+		- %age long wall direction change
+		- top %age for bob
+		- rocks are fatal
+		- spirits are fatal
+		- number of TNT
 - safes and keys
 - spirits and cages
 - eggs and monsters
@@ -15,7 +18,23 @@
   - back to start button
   - big maps with a viewport
   - score
+    - 10 for earth
+	- 50 for diamond
+	- 100 for killing monster
+	- 1 for every vertical rock drop
+	- -1 for every second a monster is alive
   - zoom
+  - see a map of the level
+- TNT
+  - placed to the left, right, or under
+  - timed then explodes, turning ...
+    - walls, diamonds, boulders into earth
+    - earth into space
+- structures
+  - safe room
+    - turn a diamond into a safe
+	- draw a wall box so that the new safe is on one side
+	- fill with diamonds
 - finish a level
 - varieties of earth
 - varieties of wall

@@ -8,8 +8,15 @@ label {
 	display: block;
 }
 
+.border {
+	position: absolute;
+	inset: 2rem;
+	border: 1px solid white;
+}
 .scaled {
-	transform: scale(0.5);
+	position: absolute;
+	inset: 2rem;
+	overflow: hidden;
 }
 
 .entity {
