@@ -309,7 +309,6 @@ const map = {
 				c=c+1
 			}
 		}
-		map.moveBob()
 	},
 
 	/**
@@ -387,8 +386,12 @@ const map = {
 	},
 
 	boulderCanMoveInto: ( x, y ) => {
-		// boulders can't move into bob.
+		// boulders can't move into where bob is now.
 		if ( x === bob.x && y === bob.y ) {
+			return false
+		}
+		// boulders can't move into where bob was previously if he's still moving from there.
+		if ( x === bob.oldX && y === bob.oldY ) {
 			return false
 		}
 

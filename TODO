@@ -6,7 +6,9 @@
 	  - rocks are fatal
 	  - spirits are fatal
 	  - number of TNT
-- don't empty square until bob is "half" out of it
+- restarting
+  - death costs 100 points
+  - button to die and return to start x/y
 - safes and keys
 - spirits and cages
 - eggs and monsters

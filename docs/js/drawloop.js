@@ -38,13 +38,20 @@ const drawloop = {
 		// Move bob if he has a delta
 		if ( bob.delta > 0 ) {
 			bob.delta -= delta/4
+
+			// When bob gets a bit of the way through a move, tidy the map up.
+			if ( bob.delta < 32 ) {
+				bob.finishMove()
+			}
+
+			// If bob reaches the end of a move he can start the next one.
 			if ( bob.delta <= 0 ) {
 				bob.startToMove()
 			}
 
+			// Move the display to keep bob centred.
 			bob.viewport.scrollLeft = (bob.x * 64) - bob.offsetX - (bob.delta*bob.dx)
 			bob.viewport.scrollTop = (bob.y * 64) - bob.offsetY - (bob.delta*bob.dy)
-
 			bob.elem.style.left = (bob.x*64 - (bob.delta*bob.dx)) + 'px'
 			bob.elem.style.top = (bob.y*64 - (bob.delta*bob.dy)) + 'px'
 		}
