@@ -1,4 +1,6 @@
 const bolder = {
+	score: 0,
+
 	fields: [
 		{ name: "seed", label: "Level seed", help: "Leave this blank for today's seed", type: "text" },
 
@@ -67,5 +69,14 @@ const bolder = {
 		}
 		bob.init()
 		drawloop.start()
+	},
+
+	/**
+	 * Adds an increment to Bob's score and updates the UI.
+	 */
+	addToScore: ( inc ) => {
+		bolder.score += inc
+		let elem = document.getElementById( '-score' )
+		elem.innerHTML = 'score: ' + bolder.score
 	}
 }

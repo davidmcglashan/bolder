@@ -92,7 +92,7 @@ const bob = {
 		bob.dy = -1
 		bob.delta = 64
 		bob.y -= 1
-		map.emptyLoc( bob )
+		map.emptyLoc( bob, true )
 	},
 
 	/**
@@ -118,7 +118,7 @@ const bob = {
 		bob.dy = 0
 		bob.delta = 64
 		bob.x -= 1
-		map.emptyLoc( bob )
+		map.emptyLoc( bob, true )
 	},
 
 	/**
@@ -145,7 +145,7 @@ const bob = {
 		bob.dy = 0
 		bob.delta = 64
 		bob.x += 1
-		map.emptyLoc( bob )
+		map.emptyLoc( bob, true )
 	},
 
 	/**
@@ -160,7 +160,7 @@ const bob = {
 		bob.dy = 1
 		bob.delta = 64
 		bob.y += 1
-		map.emptyLoc( bob )
+		map.emptyLoc( bob, true )
 	},
 
 	moveBob: () => {

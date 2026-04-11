@@ -296,10 +296,26 @@ const map = {
 		map.moveBob()
 	},
 
-	emptyLoc: ( loc ) => {
+	/**
+	 * Empties a square on the map at the given loc. Send scoring = true to add to bob's score.
+	 */
+	emptyLoc: ( loc, scoring = false ) => {
 		let entity = map.grid[loc.y][loc.x]
+
+		if ( scoring ) {
+			switch ( entity.type ) {
+				case map.gridtype.EARTH:
+					bolder.addToScore( 10 )
+					break
+				case map.gridtype.DIAMOND:
+					bolder.addToScore( 50 )
+					break
+			}
+		}
 		entity.elem.setAttribute( 'class', 'entity' )
 		entity.type = map.gridtype.EMPTY
+		
+		// Get rid of the boulder that was here
 		delete( map.boulders[loc.x + '_' + loc.y] )
 	},
 
@@ -319,6 +335,7 @@ const map = {
 		map.emptyLoc( loc )
 		loc.y += 1
 		map.boulderLoc( loc )
+		bolder.addToScore( 1 )
 	},
 
 	boulderLoc: ( loc ) => {

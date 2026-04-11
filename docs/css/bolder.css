@@ -24,6 +24,12 @@ label {
 	/* transform: scale(0.25); */
 }
 
+.toolbar {
+	display: flex;
+	gap: 3rem;
+	padding-left: 2rem;
+}
+
 .entity {
 	width: 64px;
 	height: 64px;
