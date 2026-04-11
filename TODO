@@ -1,13 +1,11 @@
 - better form layout
-  - form remembers values in localstorager
+  - form remembers values in localstorage or unpacks the GET? param
 - daily generator
   - add more parameters to the payload
 	- advanced jazz ...
 	  - rocks are fatal
 	  - spirits are fatal
 	  - number of TNT
-- restarting
-  - button to die and return to start x/y
 - spirits and cages
 - eggs and monsters
 - structured earth 

@@ -121,6 +121,16 @@ const bolder = {
 		elem.innerHTML = 'diamonds: ' + map.diamonds
 	},
 
+	/**
+	 * Called from the UI when the player is stuck. Kills bob.
+	 */
+	stuck: () => {
+		bob.killBob()
+	},
+
+	/**
+	 * Makes the DOM element displaying the level's JSON visible.
+	 */
 	json: () => {
 		let elem = document.getElementById( '-json' )
 		elem.style.display = 'block'
