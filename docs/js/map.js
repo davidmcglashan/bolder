@@ -206,6 +206,8 @@ const map = {
 
 		// Turn the map grid into a proper model with DOM elements
 		let canvas = document.getElementById( "-canvas" )
+		let jsonElem = document.getElementById( "-json" )
+		let jsonVal = '{"map":{"width":' + width + ',"height":' + height + ',"map":"'
 		let c = 0
 
 		for ( let y=0; y<height; y++ ) {
@@ -219,32 +221,46 @@ const map = {
 					
 					switch ( map.grid[y][x] ) {
 						case map.gridtype.EMPTY:
+							if ( x === bob.x & y === bob.y ) {
+								jsonVal += 'x'
+							} else {
+								jsonVal += ' '
+							}
 							elem.setAttribute( 'class', 'entity' )
 							map.grid[y][x] = { type: map.gridtype.EMPTY, id:'entity'+c, elem:elem }
 							break
 						case map.gridtype.WALL:
+							jsonVal += '#'
 							elem.setAttribute( 'class', 'wall entity' )
 							map.grid[y][x] = { type: map.gridtype.WALL, id:'entity'+c, elem:elem }
 							break
 						case map.gridtype.EARTH:
+							jsonVal += '.'
 							elem.setAttribute( 'class', 'earth entity' )
 							map.grid[y][x] = { type: map.gridtype.EARTH, id:'entity'+c, elem:elem }
 							break
 						case map.gridtype.DIAMOND:
+							jsonVal += '^'
 							elem.setAttribute( 'class', 'diamond entity' )
 							map.grid[y][x] = { type: map.gridtype.DIAMOND, id:'entity'+c, elem:elem }
 							map.diamonds += 1
 							break
 						case map.gridtype.BOULDER:
+							jsonVal += 'O'
 							elem.setAttribute( 'class', 'boulder entity' )
 							map.grid[y][x] = { type: map.gridtype.BOULDER, id:'entity'+c, elem:elem }
 							map.boulders[x+'_'+y] = {x:x, y:y} 
 							break
 					}
 					c += 1
+				} else {
+					jsonVal += '!'
 				}
 			}
 		}
+
+		jsonVal += '"}}'
+		jsonElem.innerHTML = jsonVal
 	},
 
 	parseMap( mapObj ) {
