@@ -126,7 +126,7 @@ const bob = {
 	 */
 	up: () => {
 		let next = map.grid[bob.y-1][bob.x].type
-		if ( next === map.gridtype.WALL || next === map.gridtype.BOULDER ) {
+		if ( next === map.gridtype.WALL || next === map.gridtype.BOULDER || next === map.gridtype.SAFE ) {
 			return
 		}
 		bob.dx = 0
@@ -141,7 +141,7 @@ const bob = {
 	 */
 	left: () => {
 		let next = map.grid[bob.y][bob.x-1].type
-		if ( next === map.gridtype.WALL ) {
+		if ( next === map.gridtype.WALL || next === map.gridtype.SAFE ) {
 			return
 		}
 
@@ -168,7 +168,7 @@ const bob = {
 	right: () => {
 		// Can't walk through walls.
 		let next = map.grid[bob.y][bob.x+1].type
-		if ( next === map.gridtype.WALL ) {
+		if ( next === map.gridtype.WALL || next === map.gridtype.SAFE ) {
 			return
 		}
 
@@ -194,7 +194,7 @@ const bob = {
 	 */
 	down: () => {
 		let next = map.grid[bob.y+1][bob.x].type
-		if ( next === map.gridtype.WALL || next === map.gridtype.BOULDER ) {
+		if ( next === map.gridtype.WALL || next === map.gridtype.BOULDER || next === map.gridtype.SAFE ) {
 			return
 		}
 		bob.dx = 0

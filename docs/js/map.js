@@ -1,6 +1,7 @@
 const map = {
 	diamonds: 0,
 	boulders: {},
+	safes: {},
 
 	grid: [],
 	gridtype: {
@@ -8,7 +9,9 @@ const map = {
 		WALL: '#',
 		EARTH: '.',
 		BOULDER: 'O',
-		DIAMOND: '^'
+		DIAMOND: '^',
+		SAFE: 'S',
+		KEY: 'k'
 	},
 
 	/**
@@ -109,6 +112,7 @@ const map = {
 		}
 
 		// All the world is walls, so fill the interior with interesting things.
+		let safes = 0
 		for ( let y=1; y<height-1; y++ ) {
 			for ( let x=1; x<width-1; x++ ) {
 				// Is this a cell we can change?
@@ -130,6 +134,12 @@ const map = {
 					// 20% chance of becoming a diamond
 					if ( random.diceRoll( { oneIn: payload.diamondChance, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.DIAMOND
+					} 
+					
+					// 20% chance of becoming a safe
+					if ( random.diceRoll( { oneIn: payload.safeChance, attempts:1 } ) ) {
+						map.grid[y][x] = map.gridtype.SAFE
+						safes += 1
 					} 
 					
 					// 25% chance of becoming a rock
@@ -187,10 +197,10 @@ const map = {
 		}
 
 		// find a place for bob in the top 20% of the level for 100 tries, then everywhere ...
-		let bc = 0
+		let counter = 0
 		while ( bob.x === 0 && bob.y === 0 ) {
 			let x = random.get(1,width-1)
-			let y = random.get(1,( bc < 100 ? height/payload.startFraction : height-1 ) )
+			let y = random.get(1,( counter < 100 ? height/payload.startFraction : height-1 ) )
 
 			if ( map.grid[y][x] === map.gridtype.EARTH || map.grid[y][x] === map.gridtype.EMPTY ) {
 				bob.x = x
@@ -199,10 +209,32 @@ const map = {
 			}
 
 			// If we fail to place bob in 200 goes we put him in the middle.
-			bc += 1
-			if ( bc === 200 ) {
+			counter += 1
+			if ( counter === 200 ) {
 				bob.x = x
 				bob.y = y
+			}
+		}
+
+		// if we have safes then we need at least one key
+		counter = 0
+		if ( safes > 0 ) {
+			let keys = random.get( 1,3 )
+			while ( keys > 0 ) {
+				let x = random.get(1,width-1)
+				let y = random.get(1,height-1 )
+
+				// Replace an earth or an empty
+				if ( map.grid[y][x] === map.gridtype.EARTH || map.grid[y][x] === map.gridtype.EMPTY ) {
+					map.grid[y][x] = map.gridtype.KEY
+					keys -= 1
+				}
+
+				// Don't loop around this forever - let the level be playable but impossible if a key can't be placed in 100 goes.
+				counter += 1
+				if ( counter === 100 ) {
+					keys = 0
+				}
 			}
 		}
 
@@ -246,6 +278,18 @@ const map = {
 							elem.setAttribute( 'class', 'diamond entity' )
 							map.grid[y][x] = { type: map.gridtype.DIAMOND, id:'entity'+c, elem:elem }
 							map.diamonds += 1
+							break
+						case map.gridtype.SAFE:
+							jsonVal += 'S'
+							elem.setAttribute( 'class', 'safe entity' )
+							map.grid[y][x] = { type: map.gridtype.SAFE, id:'entity'+c, elem:elem }
+							map.safes[x+'_'+y] = {x:x, y:y} 
+							map.diamonds += 1
+							break
+						case map.gridtype.KEY:
+							jsonVal += 'k'
+							elem.setAttribute( 'class', 'key entity' )
+							map.grid[y][x] = { type: map.gridtype.KEY, id:'entity'+c, elem:elem }
 							break
 						case map.gridtype.BOULDER:
 							jsonVal += 'O'
@@ -314,6 +358,18 @@ const map = {
 	},
 
 	/**
+	 * Opens all the safes, turning them into diamonds!
+	 */
+	openSafes: () => {
+		for ( const[key,safe] of Object.entries(map.safes)) {
+			let entity = map.grid[safe.y][safe.x]
+			entity.elem.setAttribute( 'class', 'entity diamond' )
+			entity.type = map.gridtype.DIAMOND
+		}
+		map.safes = {}
+	},
+
+	/**
 	 * Empties a square on the map at the given loc. Send scoring = true to add to bob's score.
 	 */
 	emptyLoc: ( loc, scoring = false ) => {
@@ -327,6 +383,9 @@ const map = {
 				case map.gridtype.DIAMOND:
 					bolder.addToScore( 50 )
 					bolder.decreaseDiamonds()
+					break
+				case map.gridtype.KEY:
+					map.openSafes()
 					break
 			}
 		}

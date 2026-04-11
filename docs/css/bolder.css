@@ -25,6 +25,10 @@ label.gapAfter {
 
 #-json {
 	display: none;
+	background-color: blue;
+	position: absolute;
+	padding: 1rem;
+	font-family: monospace;
 }
 
 button {
@@ -75,6 +79,14 @@ button {
 
 .boulder {
 	background-image: url(../assets/boulder.png);
+}
+
+.safe {
+	background-image: url(../assets/safe.png);
+}
+
+.key {
+	background-image: url(../assets/key.png);
 }
 
 .diamond {

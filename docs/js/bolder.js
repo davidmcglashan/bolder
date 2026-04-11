@@ -13,6 +13,7 @@ const bolder = {
 		{ name: "maxCutaways", label: "Maximum number of cut-aways", type: "number", value: 8, after: true },
 
 		{ name: "diamondChance", label: "Diamond likelihood (1 in ...)", type: "number", value: 5 },
+		{ name: "safeChance", label: "Safe likelihood (1 in ...)", type: "number", value: 20 },
 		{ name: "boulderChance", label: "Boulder likelihood (1 in ...)", type: "number", value: 5 },
 		{ name: "holeChance", label: "Hole likelihood (1 in ...)", type: "number", value: 10 },
 		{ name: "wallChance", label: "Wall likelihood (1 in ...)", type: "number", value: 10, after: true },
@@ -118,4 +119,12 @@ const bolder = {
 		map.diamonds -= 1
 		let elem = document.getElementById( '-diamonds' )
 		elem.innerHTML = 'diamonds: ' + map.diamonds
-	}}
+	},
+
+	json: () => {
+		let elem = document.getElementById( '-json' )
+		elem.style.display = 'block'
+		elem = document.getElementById( '-viewport' )
+		elem.style.display = 'none'
+	}
+}
