@@ -4,8 +4,37 @@ body,a {
 	color: #fff;
 }
 
+div#form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	align-items: flex-end;
+	width: fit-content;
+}
+
 label {
-	display: block;
+	display: flex;
+	gap: 1rem;
+	align-items: end;
+	cursor: pointer;
+}
+
+label.gapAfter {
+	margin-bottom: 1rem;
+}
+
+#-json {
+	display: none;
+}
+
+button {
+	padding: 0.5rem 1.5rem;
+	border: 0px;
+	border-radius: 3px;
+	font-size: 1rem;
+	background-color: #09f;
+	color: #fff;
+	cursor: pointer;
 }
 
 .border {
