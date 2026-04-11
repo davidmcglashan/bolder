@@ -35,10 +35,28 @@ const drawloop = {
 			drawloop.boulderTime -= 75
 		}
 		
+		// If bob is dead, leave him that way for a short time.
+		if ( bob.deathClock > 0 ) {
+			bob.deathClock -= delta/4
+			// Bob is now risen again. Move back to show him.
+			if ( bob.deathClock <= 0 ) {
+				map.emptyLoc( bob )
+
+				bob.viewport.scrollLeft = (bob.x * 64) - bob.offsetX - (bob.delta*bob.dx)
+				bob.viewport.scrollTop = (bob.y * 64) - bob.offsetY - (bob.delta*bob.dy)
+				bob.elem.style.left = (bob.x*64 - (bob.delta*bob.dx)) + 'px'
+				bob.elem.style.top = (bob.y*64 - (bob.delta*bob.dy)) + 'px'
+				bob.elem.style.display = 'block'
+			}
+		}
+
 		// Move bob if he has a delta
 		if ( bob.delta > 0 ) {
 			bob.delta -= delta/4
-
+			if ( bob.delta < 0 ) {
+				bob.delta = 0
+			}
+			
 			// When bob gets a bit of the way through a move, tidy the map up.
 			if ( bob.delta < 32 ) {
 				bob.finishMove()

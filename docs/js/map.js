@@ -25,6 +25,8 @@ const map = {
 		let width = random.get( payload.minWidth, payload.maxWidth )
 		let height = random.get( payload.minHeight, payload.maxHeight )
 		
+		map.boulders['fatal'] = payload.bouldersFatal
+
 		// Fill the map with walls
 		for ( let y = 0; y < height; y++ ) {
 			map.grid[y] = []
@@ -347,11 +349,22 @@ const map = {
 		map.boulderLoc( loc )
 	},
 
+	/**
+	 * Move a boulder down one square. This adds 1 to the score, but can kill bob if he's down there.
+	 */
 	moveBoulderDown: ( loc ) => {
+		// Update the models
 		map.emptyLoc( loc )
 		loc.y += 1
 		map.boulderLoc( loc )
+
+		// Update the score
 		bolder.addToScore( 1 )
+
+		// Did we hit bob?
+		if ( map.boulders['fatal'] && loc.x === bob.x && loc.y+1 === bob.y ) {
+			bob.killBob()
+		}
 	},
 
 	boulderLoc: ( loc ) => {
@@ -363,6 +376,10 @@ const map = {
 
 	moveUnsupportedBoulders: () => {
 		for ( const[key,boulder] of Object.entries(map.boulders)) {
+			if ( key === 'fatal' ) {
+				continue
+			}
+
 			if ( map.boulderCanMoveInto( boulder.x, boulder.y+1 ) ) {
 				map.moveBoulderDown( boulder )
 				continue
@@ -386,12 +403,12 @@ const map = {
 	},
 
 	boulderCanMoveInto: ( x, y ) => {
-		// boulders can't move into where bob is now.
-		if ( x === bob.x && y === bob.y ) {
+		// boulders can't move into where bob is now, assuming he's alive.
+		if ( bob.deathClock <= 0 && x === bob.x && y === bob.y ) {
 			return false
 		}
 		// boulders can't move into where bob was previously if he's still moving from there.
-		if ( x === bob.oldX && y === bob.oldY ) {
+		if ( bob.deathClock <= 0 && x === bob.oldX && y === bob.oldY ) {
 			return false
 		}
 

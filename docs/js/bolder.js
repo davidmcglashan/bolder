@@ -24,8 +24,8 @@ const bolder = {
 
 		{ name: "startFraction", label: "Start in top fraction (1/...)", type: "number", value: 5, after: true },
 
-		{ name: "rocksAreFatal", label: "Falling boulders are fatal", type: "checkbox", value: true },
-		{ name: "spiritsAreFatal", label: "Spirits are fatal", type: "checkbox", value: true },
+		{ name: "bouldersFatal", label: "Falling boulders are fatal", type: "checkbox", value: true },
+		{ name: "spiritsFatal", label: "Spirits are fatal", type: "checkbox", value: true },
 	],
 
 	/**
@@ -35,19 +35,23 @@ const bolder = {
 		let elem = document.getElementById( 'form' )
 
 		bolder.fields.forEach( ( field ) =>  {
+			// Everything has a label.
 			let label = document.createElement( 'label' )
 			elem.appendChild( label )
 			if ( field.after ) {
 				label.setAttribute( 'class', 'gapAfter' )
 			}
 
+			// Labels have text
 			let text = document.createTextNode( field.label )
 			label.appendChild( text )
 
+			// All fields become inputs.
 			let input = document.createElement( 'input' )
 			input.setAttribute( 'name', field.name )
 			input.setAttribute( 'type', field.type )
 
+			// Put the default value from the JSON into the form field so default play is sensible.
 			if ( field.value ) {
 				// Checkboxes need slightly different HTML.
 				if ( field.type === 'checkbox' && field.value ) {
@@ -60,12 +64,24 @@ const bolder = {
 		} )
 	},
 
+	/**
+	 * Submit's the user's form. This builds a small JSON object representing the form's state,
+	 * base64 encodes it and sticks that in the GET of game.html.
+	 */
 	submit: () => {
 		let payload = {}
+
 		let inputs = document.querySelectorAll("input")
 		inputs.forEach( ( input ) => {
-  			payload[input.name] = input.value
+			// Checkboxes used 'checked' for their value, rather than value. Because 1994 ...
+			if ( input.type === 'checkbox' ) {
+				payload[input.name] = input.checked
+			} else {
+				payload[input.name] = input.value
+			}
 		} );
+
+		// Load the game with the encoded form in a parameter.
 		window.location.href = 'game.html?' + btoa(JSON.stringify(payload)) 
 	},
 

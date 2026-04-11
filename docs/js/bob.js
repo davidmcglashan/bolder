@@ -8,9 +8,10 @@ const bob = {
 	startY: 0,
 
 	// This determine bob's movements. The latch is triggered by keypresses and records his direction (or none).
-	// Delta is how far he has to go and is decreased by the drawloop.
+	// Delta is how far he has to go and is decreased by the drawloop. Deathclock counts down when bob dies.
 	moveLatch: 0,
 	delta: 0,
+	deathClock: 0,
 
 	// DOM elements for bob's display. Elem is his main sprite and viewport is the parent element showing the map.
 	elem: null,
@@ -42,7 +43,7 @@ const bob = {
 		// Key downs fire movement events in the game.
 		document.addEventListener("keydown", (event) => {
 			// Prevent repeated keypresses. Fire exactly once when the key is pressed.
-			if ( event.repeat ) { 
+			if ( event.repeat || bob.deathClock > 0 ) { 
 				return
 			}
 
@@ -56,7 +57,7 @@ const bob = {
 		// key up results in an un-latching.
 		document.addEventListener("keyup", (event) => {
 			// Prevent repeated keypresses. Fire exactly once when the key is released.
-			if ( event.repeat ) { 
+			if ( event.repeat || bob.deathClock > 0 ) { 
 				return
 			}			
 
@@ -202,4 +203,27 @@ const bob = {
 		bob.y += 1
 		map.emptyLoc( bob, true )
 	},
+
+	/**
+	 * Kills bob
+	 */
+	killBob: () => {
+		// Can't kill bob if he's already dead!
+		if ( bob.deathClock > 0 ) { 
+			return
+		}
+		bob.deathClock = 500
+
+		// Hide bob and reset all of his state.
+		bob.elem.style.display = 'none'
+		bob.x = bob.startX
+		bob.y = bob.startY
+		bob.oldX = bob.startX
+		bob.oldY = bob.startY
+		bob.delta = 0
+		bob.moveLatch = 0
+
+		// 100 points off for dying!
+		bolder.addToScore( -100 )
+	}
 };
