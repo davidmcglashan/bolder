@@ -28,10 +28,10 @@ const bob = {
 			}
 
 			const keyName = event.key;
-			if ( keyName === "ArrowLeft" || keyName === 'z'  ) { bob.latch( 'left' ) }
-			if ( keyName === "ArrowRight"  || keyName === 'x' ) { bob.latch( 'right' ) }
-			if ( keyName === "ArrowUp" || keyName === 'k'  ) { bob.latch( 'up' ) }
-			if ( keyName === "ArrowDown"  || keyName === 'm' ) { bob.latch( 'down' ) }
+			if ( keyName === 'z'  ) { bob.latch( 'left' ) }
+			if ( keyName === 'x' ) { bob.latch( 'right' ) }
+			if ( keyName === 'k'  ) { bob.latch( 'up' ) }
+			if ( keyName === 'm' ) { bob.latch( 'down' ) }
 		} )
 
 		// Any key up results in an un-latching.
@@ -40,7 +40,12 @@ const bob = {
 			if ( event.repeat ) { 
 				return
 			}			
-			bob.latch()
+
+			const keyName = event.key;
+			if ( keyName === 'z' && bob.moveLatch === 'left' ) { bob.latch() }
+			if ( keyName === 'x' && bob.moveLatch === 'right' ) { bob.latch() }
+			if ( keyName === 'k' && bob.moveLatch === 'up' ) { bob.latch() }
+			if ( keyName === 'm' && bob.moveLatch === 'down') { bob.latch() }
 		} )
 	},
 

@@ -1,12 +1,12 @@
 - daily generator
   - add more parameters to the payload
-    - seed
 	- advanced jazz ...
 		- top %age for bob
 		- rocks are fatal
 		- spirits are fatal
 		- number of TNT
 	- form remembers values in localstorager
+- don't empty square until bob is "half" out of it
 - safes and keys
 - spirits and cages
 - eggs and monsters
@@ -14,8 +14,6 @@
   - fill interior with rectangles and remove straight lines
   - convert earth to boulders and diamonds
 - UI
-  - back to start button
-  - big maps with a viewport
   - score
     - 10 for earth
 	- 50 for diamond
@@ -39,7 +37,6 @@
 - varieties of wall
 - animate bob ...
   - sprites
-  - smooth motion
 - tools to ...
   - build level JSON from flat files
   - export generated levels as JSON and as flats
