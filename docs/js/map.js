@@ -188,7 +188,7 @@ const map = {
 		let bc = 0
 		while ( bob.x === 0 && bob.y === 0 ) {
 			let x = random.get(1,width-1)
-			let y = random.get(1,parseInt( ( bc < 100 ? height/5 : height-1 ) ) )
+			let y = random.get(1,( bc < 100 ? height/payload.startFraction : height-1 ) )
 
 			if ( map.grid[y][x] === map.gridtype.EARTH || map.grid[y][x] === map.gridtype.EMPTY ) {
 				bob.x = x
@@ -309,6 +309,7 @@ const map = {
 					break
 				case map.gridtype.DIAMOND:
 					bolder.addToScore( 50 )
+					bolder.decreaseDiamonds()
 					break
 			}
 		}

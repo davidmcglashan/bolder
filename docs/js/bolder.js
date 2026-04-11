@@ -22,6 +22,8 @@ const bolder = {
 		{ name: "extraWallHole", label: "Extra wall holey-ness (1 in ...)", type: "number", value: 2 },
 		{ name: "extraWallDirChange", label: "Extra wall direction change (1 in ...)", type: "number", value: 4 },
 
+		{ name: "startFraction", label: "Start in top fraction (1/...)", type: "number", value: 5 },
+
 		{ name: "rocksAreFatal", label: "Falling boulders are fatal", type: "checkbox", value: true },
 		{ name: "spiritsAreFatal", label: "Spirits are fatal", type: "checkbox", value: true },
 
@@ -66,6 +68,8 @@ const bolder = {
 			}
 
 			map.buildMapFromSeed( payload )
+			let elem = document.getElementById( '-diamonds' )
+			elem.innerHTML = 'diamonds: ' + map.diamonds
 		}
 		bob.init()
 		drawloop.start()
@@ -78,5 +82,13 @@ const bolder = {
 		bolder.score += inc
 		let elem = document.getElementById( '-score' )
 		elem.innerHTML = 'score: ' + bolder.score
-	}
-}
+	},
+
+	/**
+	 * Adds an increment to Bob's score and updates the UI.
+	 */
+	decreaseDiamonds: () => {
+		map.diamonds -= 1
+		let elem = document.getElementById( '-diamonds' )
+		elem.innerHTML = 'diamonds: ' + map.diamonds
+	}}

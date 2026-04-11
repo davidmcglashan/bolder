@@ -1,11 +1,11 @@
+- better form layout
+  - form remembers values in localstorager
 - daily generator
   - add more parameters to the payload
 	- advanced jazz ...
-		- top %age for bob
-		- rocks are fatal
-		- spirits are fatal
-		- number of TNT
-	- form remembers values in localstorager
+	  - rocks are fatal
+	  - spirits are fatal
+	  - number of TNT
 - don't empty square until bob is "half" out of it
 - safes and keys
 - spirits and cages
@@ -17,7 +17,6 @@
   - score
 	- 100 for killing monster
 	- -1 for every second a monster is alive
-  - zoom
   - see a map of the level
 - TNT
   - placed to the left, right, or under
