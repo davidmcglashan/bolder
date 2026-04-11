@@ -1,12 +1,28 @@
 const bolder = {
 	fields: [
 		{ name: "seed", label: "Level seed", help: "Leave this blank for today's seed", type: "text" },
+
 		{ name: "minWidth", label: "Minimum width", type: "number", value: 25 },
 		{ name: "maxWidth", label: "Maximum width", type: "number", value: 45 },
 		{ name: "minHeight", label: "Minimum height", type: "number", value: 25 },
 		{ name: "maxHeight", label: "Maximum height", type: "number", value: 45 },
-		{ name: "minCutaways", label: "Minimum number of cut-aways", type: "number", value: 0 },
+
+		{ name: "minCutaways", label: "Minimum number of cut-aways", type: "number", value: 2 },
 		{ name: "maxCutaways", label: "Maximum number of cut-aways", type: "number", value: 8 },
+
+		{ name: "diamondChance", label: "Diamond likelihood (1 in ...)", type: "number", value: 5 },
+		{ name: "boulderChance", label: "Boulder likelihood (1 in ...)", type: "number", value: 5 },
+		{ name: "holeChance", label: "Hole likelihood (1 in ...)", type: "number", value: 10 },
+		{ name: "wallChance", label: "Wall likelihood (1 in ...)", type: "number", value: 10 },
+
+		{ name: "extraWallMin", label: "Minimum number of extra walls", type: "number", value: 4 },
+		{ name: "extraWallMax", label: "Maximum number of extra walls", type: "number", value: 8 },
+		{ name: "extraWallHole", label: "Extra wall holey-ness (1 in ...)", type: "number", value: 2 },
+		{ name: "extraWallDirChange", label: "Extra wall direction change (1 in ...)", type: "number", value: 4 },
+
+		{ name: "rocksAreFatal", label: "Falling boulders are fatal", type: "checkbox", value: true },
+		{ name: "spiritsAreFatal", label: "Spirits are fatal", type: "checkbox", value: true },
+
 	],
 
 	buildForm: () => {
@@ -45,20 +61,11 @@ const bolder = {
 			let str = window.location.search
 			if ( str ) {
 				payload = JSON.parse( atob( str.substring(1) ) )
-				console.log( payload )
 			}
 
 			map.buildMapFromSeed( payload )
 		}
-
-		document.addEventListener("keydown", (event) => {
-			const keyName = event.key;
-			if ( keyName === "ArrowUp" || keyName === 'k' ) { map.bobUp() }
-			if ( keyName === "ArrowDown" || keyName === 'm'  ) { map.bobDown() }
-			if ( keyName === "ArrowLeft" || keyName === 'z'  ) { map.bobLeft() }
-			if ( keyName === "ArrowRight"  || keyName === 'x' ) { map.bobRight() }
-		} )
-
+		bob.init()
 		drawloop.start()
 	}
 }

@@ -13,10 +13,15 @@ label {
 	inset: 2rem;
 	border: 1px solid white;
 }
+
 .scaled {
 	position: absolute;
 	inset: 2rem;
 	overflow: hidden;
+}
+
+#-canvas {
+	/* transform: scale(0.25); */
 }
 
 .entity {

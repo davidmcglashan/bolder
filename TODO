@@ -2,18 +2,17 @@
   - add more parameters to the payload
     - seed
 	- advanced jazz ...
-		- # cutaways
-		- %age of diamond, hole, boulder, safe, cage, egg
-		- # long walls
-		- %age long wall gappiness
-		- %age long wall direction change
 		- top %age for bob
 		- rocks are fatal
 		- spirits are fatal
 		- number of TNT
+	- form remembers values in localstorager
 - safes and keys
 - spirits and cages
 - eggs and monsters
+- structured earth 
+  - fill interior with rectangles and remove straight lines
+  - convert earth to boulders and diamonds
 - UI
   - back to start button
   - big maps with a viewport

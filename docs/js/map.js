@@ -20,7 +20,6 @@ const map = {
 	
 	buildMapFromSeed: ( payload ) => {
 		random.SEED = parseInt( payload.seed )
-		console.log ( random.SEED )
 
 		// Initialise the map and set its dimensions.
 		let width = random.get( payload.minWidth, payload.maxWidth )
@@ -98,8 +97,6 @@ const map = {
 						break
 				}
 
-				console.log( x,y,w,h )
-
 				// Fill the map with zeroes where this cutaway is
 				for ( let yy=y; yy<y+h; yy++ ) {
 					for ( let xx=x; xx<x+w; xx++ ) {
@@ -129,22 +126,22 @@ const map = {
 					map.grid[y][x] = map.gridtype.EARTH
 
 					// 20% chance of becoming a diamond
-					if ( random.diceRoll( { oneIn:5, attempts:1 } ) ) {
+					if ( random.diceRoll( { oneIn: payload.diamondChance, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.DIAMOND
 					} 
 					
 					// 25% chance of becoming a rock
-					if ( random.diceRoll( { oneIn:4, attempts:1 } ) ) {
+					if ( random.diceRoll( { oneIn:payload.boulderChance, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.BOULDER
 					} 
 					
 					// 10% chance of becoming a hole
-					if ( map.grid[y-1][x] !== map.gridtype.BOULDER && random.diceRoll( { oneIn:10, attempts:1 } ) ) {
+					if ( map.grid[y-1][x] !== map.gridtype.BOULDER && random.diceRoll( { oneIn:payload.holeChance, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.EMPTY
 					} 
 					
 					// 10% chance of becoming a wall again
-					if ( random.diceRoll( { oneIn:10, attempts:1 } ) ) {
+					if ( random.diceRoll( { oneIn:payload.wallChance, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.WALL
 					} 
 				}
@@ -152,7 +149,7 @@ const map = {
 		}
 		
 		// Draw some arbitrary straight walls.
-		for ( let z=0; z<random.get(4,8); z+=1 ) {
+		for ( let z=0; z<random.get( payload.extraWallMin, payload.extraWallMax); z+=1 ) {
 			// random x, y, dir, length
 			let x = random.get(1,width-1)
 			let y = random.get(1,height-1)
@@ -161,7 +158,7 @@ const map = {
 
 			for ( let i=0; i<len; i+=1 ) {
 				// Add a new wall as long as it's within bounds.
-				if ( x>0 && x<width && y>0 && y<height && map.grid[y][x] !== 0 && !random.diceRoll( { oneIn:2, attempts:1 } )) {
+				if ( x>0 && x<width && y>0 && y<height && map.grid[y][x] !== 0 && !random.diceRoll( { oneIn:payload.extraWallHoles, attempts:1 } )) {
 					map.grid[y][x] = map.gridtype.WALL
 				}
 						
@@ -181,7 +178,7 @@ const map = {
 				}
 
 				// 10% chance of a direction change
-				if ( random.diceRoll( { oneIn:10, attempts:1 } ) ) {
+				if ( random.diceRoll( { oneIn: payload.extraWallDirChange, attempts:1 } ) ) {
 					dir = random.get(0,3)
 				}
 			}
@@ -189,24 +186,26 @@ const map = {
 
 		// find a place for bob in the top 20% of the level for 100 tries, then everywhere ...
 		let bc = 0
-		while ( !map.bob ) {
+		while ( bob.x === 0 && bob.y === 0 ) {
 			let x = random.get(1,width-1)
 			let y = random.get(1,parseInt( ( bc < 100 ? height/5 : height-1 ) ) )
 
 			if ( map.grid[y][x] === map.gridtype.EARTH || map.grid[y][x] === map.gridtype.EMPTY ) {
-				map.bob = { x:x, y:y, id:'bob' }
+				bob.x = x
+				bob.y = y
 				map.grid[y][x] = map.gridtype.EMPTY
 			}
 
 			// If we fail to place bob in 200 goes we put him in the middle.
 			bc += 1
 			if ( bc === 200 ) {
-				map.bob = { x:parseInt(width/2), y: parseInt(height/2), id:'bob' }
+				bob.x = x
+				bob.y = y
 			}
 		}
 
 		// Turn the map grid into a proper model with DOM elements
-		let view = document.getElementById( "-viewport" )
+		let canvas = document.getElementById( "-canvas" )
 		let c = 0
 
 		for ( let y=0; y<height; y++ ) {
@@ -216,7 +215,7 @@ const map = {
 					elem.style.left = x*64 + 'px'
 					elem.style.top = y*64 + 'px'
 					elem.setAttribute( 'id', 'entity'+c )
-					view.appendChild( elem )
+					canvas.appendChild( elem )
 					
 					switch ( map.grid[y][x] ) {
 						case map.gridtype.EMPTY:
@@ -246,17 +245,13 @@ const map = {
 				}
 			}
 		}
-
-		// Get bob in the right place.
-		map.emptyLoc( map.bob )
-		map.moveBob()
 	},
 
 	parseMap( mapObj ) {
 		map.entities = []
 
 		let c = 0
-		let view = document.getElementById( "-viewport" )
+		let canvas = document.getElementById( "-canvas" )
 
 		for ( let y = 0; y < mapObj.height; y++ ) {
 			map.grid[y] = []
@@ -266,7 +261,7 @@ const map = {
 				elem.style.left = x*64 + 'px'
 				elem.style.top = y*64 + 'px'
 				elem.setAttribute( 'id', 'entity'+c )
-				view.appendChild( elem )
+				canvas.appendChild( elem )
 
 				let loc = { type: mapObj.map[c], id:'entity'+c, elem:elem }
 				map.grid[y][x] = loc
@@ -291,96 +286,14 @@ const map = {
 					case 'x':
 						loc.type = map.gridtype.EMPTY
 						elem.setAttribute( 'class', 'entity' )
-						map.bob = { x:x, y:y, id:'bob' }
+						bob.x = x
+						bob.y = y
 						break
 				}
 				c=c+1
 			}
 		}
 		map.moveBob()
-	},
-
-	/**
-	 * Move bob up, if bob will move up.
-	 */
-	bobUp: () => {
-		let next = map.grid[map.bob.y-1][map.bob.x].type
-		if ( next === map.gridtype.WALL || next === map.gridtype.BOULDER ) {
-			return
-		}
-		map.bob.y -= 1
-		map.emptyLoc( map.bob )
-		map.moveBob()
-	},
-
-	/**
-	 * Move bob up, if bob will move up.
-	 */
-	bobLeft: () => {
-		let next = map.grid[map.bob.y][map.bob.x-1].type
-		if ( next === map.gridtype.WALL ) {
-			return
-		}
-
-		// Pushing a boulder depends on what's after
-		if ( next === map.gridtype.BOULDER ) {
-			let after = map.grid[map.bob.y][map.bob.x-2].type
-			if ( after === map.gridtype.EMPTY ) {
-				map.moveBoulderLeft({y:map.bob.y,x:map.bob.x-1})
-			} else {
-				return
-			}
-		}
-
-		map.bob.x -= 1
-		map.emptyLoc( map.bob )
-		map.moveBob()
-	},
-
-	/**
-	 * Move bob up, if bob will move up.
-	 */
-	bobRight: () => {
-		// Can't walk through walls.
-		let next = map.grid[map.bob.y][map.bob.x+1].type
-		if ( next === map.gridtype.WALL ) {
-			return
-		}
-
-		// Pushing a boulder depends on what's after
-		if ( next === map.gridtype.BOULDER ) {
-			let after = map.grid[map.bob.y][map.bob.x+2].type
-			if ( after === map.gridtype.EMPTY ) {
-				map.moveBoulderRight({y:map.bob.y,x:map.bob.x+1})
-			} else {
-				return
-			}
-		}
-
-		map.bob.x += 1
-		map.emptyLoc( map.bob )
-		map.moveBob()
-	},
-
-	/**
-	 * Move bob up, if bob will move up.
-	 */
-	bobDown: () => {
-		let next = map.grid[map.bob.y+1][map.bob.x].type
-		if ( next === map.gridtype.WALL || next === map.gridtype.BOULDER ) {
-			return
-		}
-		map.bob.y += 1
-		map.emptyLoc( map.bob )
-		map.moveBob()
-	},
-
-	moveBob: () => {
-		// Move bob's sprite
-		let elem = document.getElementById( map.bob.id )
-		elem.style.left = map.bob.x*64 + 'px'
-		elem.style.top = map.bob.y*64 + 'px'
-		elem.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });		
 	},
 
 	emptyLoc: ( loc ) => {
@@ -441,7 +354,7 @@ const map = {
 
 	boulderCanMoveInto: ( x, y ) => {
 		// boulders can't move into bob.
-		if ( x === map.bob.x && y === map.bob.y ) {
+		if ( x === bob.x && y === bob.y ) {
 			return false
 		}
 
