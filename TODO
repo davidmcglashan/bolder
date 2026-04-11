@@ -1,36 +1,54 @@
-- better form layout
-  - form remembers values in localstorage or unpacks the GET? param
-- daily generator
-  - add more parameters to the payload
-	- advanced jazz ...
-	  - rocks are fatal
-	  - spirits are fatal
-	  - number of TNT
+game features
+
 - spirits and cages
+  - red and blue spirits
 - eggs and monsters
-- structured earth 
-  - fill interior with rectangles and remove straight lines
-  - convert earth to boulders and diamonds
-- UI
-  - score
-	- 100 for killing monster
-	- -1 for every second a monster is alive
-  - see a map of the level
+  - 100 for killing monster
+  - -1 for every second a monster is alive
+- sloping walls
+  - slopeyness (including diamonds, rocks, etc.) should be a property of the map[][] entity
+  - css class should be property of the map[][] entity
 - TNT
   - placed to the left, right, or under
   - timed then explodes, turning ...
     - walls, diamonds, boulders into earth
     - earth into space
+	- number of TNT parameters
+- structured earth 
+  - fill interior with rectangles and remove straight lines
+  - convert earth to boulders and diamonds
+  - see a map of the level
 - structures
   - safe room
     - turn a diamond into a safe
 	- draw a wall box so that the new safe is on one side
 	- fill with diamonds
 - finish a level
+
+design
+
+- better form layout
+  - form remembers values in localstorage or unpacks the GET? param
+- animate bob ...
+- better sprites for everything
+  - walls & variants
+  - earth & variants
+  - bob
+  - key
+  - safe
+  - diamond
+  - cages
+  - spirits
+  - TNT
+- bob death animation
+
+programming
+
+- comments
+- probably more than a few places to optimise
+- restructure where it makes sense
 - varieties of earth
 - varieties of wall
-- animate bob ...
-  - sprites
 - tools to ...
   - build level JSON from flat files
 - swipe gestures to play on mobile
