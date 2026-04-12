@@ -31,7 +31,7 @@ const drawloop = {
 		// Check all the boulders and drop the unsupported ones.
 		drawloop.boulderTime += delta
 		if ( drawloop.boulderTime > 75 ) {
-			map.moveUnsupportedBoulders()
+			map.pushable.moveUnsupported()
 			drawloop.boulderTime -= 75
 		}
 		
@@ -53,7 +53,7 @@ const drawloop = {
 			bob.deathClock -= delta/4
 			// Bob is now risen again. Move back to show him.
 			if ( bob.deathClock <= 0 ) {
-				map.emptyLoc( bob )
+				map.loc.setToEmpty( bob )
 
 				bob.viewport.scrollLeft = (bob.x * 64) - bob.offsetX - (bob.delta*bob.dx)
 				bob.viewport.scrollTop = (bob.y * 64) - bob.offsetY - (bob.delta*bob.dy)

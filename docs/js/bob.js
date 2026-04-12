@@ -26,7 +26,7 @@ const bob = {
 		bob.startY = bob.y
 		bob.oldX = bob.x
 		bob.oldY = bob.y
-		map.emptyLoc( bob )
+		map.loc.setToEmpty( bob )
 		
 		// Move bob's sprite to its proper location.
 		bob.elem = document.getElementById( '-bob' )
@@ -133,7 +133,7 @@ const bob = {
 		bob.dy = -1
 		bob.delta = 64
 		bob.y -= 1
-		map.emptyLoc( bob, true )
+		map.loc.setToEmpty( bob, true )
 	},
 
 	/**
@@ -149,7 +149,7 @@ const bob = {
 		if ( next === map.gridtype.BOULDER ) {
 			let after = map.grid[bob.y][bob.x-2].type
 			if ( after === map.gridtype.EMPTY ) {
-				map.moveBoulderLeft({y:bob.y,x:bob.x-1})
+				map.pushable.moveLeft({y:bob.y,x:bob.x-1})
 			} else {
 				return
 			}
@@ -159,7 +159,7 @@ const bob = {
 		bob.dy = 0
 		bob.delta = 64
 		bob.x -= 1
-		map.emptyLoc( bob, true )
+		map.loc.setToEmpty( bob, true )
 	},
 
 	/**
@@ -176,7 +176,7 @@ const bob = {
 		if ( next === map.gridtype.BOULDER ) {
 			let after = map.grid[bob.y][bob.x+2].type
 			if ( after === map.gridtype.EMPTY ) {
-				map.moveBoulderRight({y:bob.y,x:bob.x+1})
+				map.pushable.moveRight({y:bob.y,x:bob.x+1})
 			} else {
 				return
 			}
@@ -186,7 +186,7 @@ const bob = {
 		bob.dy = 0
 		bob.delta = 64
 		bob.x += 1
-		map.emptyLoc( bob, true )
+		map.loc.setToEmpty( bob, true )
 	},
 
 	/**
@@ -201,7 +201,7 @@ const bob = {
 		bob.dy = 1
 		bob.delta = 64
 		bob.y += 1
-		map.emptyLoc( bob, true )
+		map.loc.setToEmpty( bob, true )
 	},
 
 	/**

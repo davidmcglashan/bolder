@@ -1,6 +1,6 @@
 const map = {
 	diamonds: 0,
-	boulders: {},
+	pushables: {},
 	safes: {},
 	spirits: [],
 
@@ -14,14 +14,16 @@ const map = {
 		SAFE: 'S',
 		KEY: 'k',
 		CAGE: '/',
-		SPIRIT: '*'
+		SPIRIT: '*',
+		EGG: 'G'
 	},
 
 	dirs: {
 		UP: 0,
 		RIGHT: 1,
 		DOWN: 2,
-		LEFT: 3
+		LEFT: 3,
+		NONE: 4
 	},
 
 	/**
@@ -43,7 +45,7 @@ const map = {
 		let width = random.get( payload.minWidth, payload.maxWidth )
 		let height = random.get( payload.minHeight, payload.maxHeight )
 		
-		map.boulders['fatal'] = payload.bouldersFatal
+		map.pushable.fatal = payload.bouldersFatal
 
 		// Fill the map with walls
 		for ( let y = 0; y < height; y++ ) {
@@ -181,7 +183,7 @@ const map = {
 				if ( x>0 && x<width-1 && y>0 && y<height-1 && map.grid[y][x] !== 0 ) {
 					// Put in a wall or something else?
 					if ( random.diceRoll( { oneIn:payload.extraWallHoles, attempts:1 } ) ) {
-						if ( random.diceRoll( { oneIn: payload.safeChance, attempts:1 } ) ) {
+						if ( random.diceRoll( { oneIn:payload.safeChance, attempts:1 } ) ) {
 							map.grid[y][x] = map.gridtype.SAFE
 							safes += 1
 						} 
@@ -391,7 +393,7 @@ const map = {
 							jsonVal += 'O'
 							elem.setAttribute( 'class', 'boulder entity' )
 							map.grid[y][x] = { type: map.gridtype.BOULDER, elem:elem }
-							map.boulders[x+'_'+y] = {x:x, y:y} 
+							map.pushables[x+'_'+y] = {x:x, y:y} 
 							break
 					}
 					c += 1
@@ -432,7 +434,7 @@ const map = {
 						break
 					case map.gridtype.BOULDER:
 						elem.setAttribute( 'class', 'boulder entity' )
-						map.boulders[x+'_'+y] = {x:x, y:y} 
+						map.pushables[x+'_'+y] = {x:x, y:y} 
 						break
 					case map.gridtype.DIAMOND:
 						elem.setAttribute( 'class', 'diamond entity' )
@@ -570,127 +572,208 @@ const map = {
 	},
 
 	/**
-	 * Empties a square on the map at the given loc. Send scoring = true to add to bob's score.
-	 */
-	emptyLoc: ( loc, scoring = false ) => {
-		let entity = map.grid[loc.y][loc.x]
-
-		if ( scoring ) {
-			switch ( entity.type ) {
-				case map.gridtype.EARTH:
-					bolder.addToScore( 10 )
-					break
-				case map.gridtype.DIAMOND:
-					bolder.addToScore( 50 )
-					bolder.decreaseDiamonds()
-					break
-				case map.gridtype.KEY:
-					map.openSafes()
-					break
+	 * Utility functions for pushables: eggs and boulders.
+     */
+	pushable: {
+		/**
+		 * Can a pushable move ino the square at loc?
+		 */
+		canMoveInto: ( loc ) => {
+			// Pushables can't move into where bob is now, assuming he's alive.
+			if ( bob.deathClock <= 0 && loc.x === bob.x && loc.y === bob.y ) {
+				return false
 			}
-		}
-		entity.elem.setAttribute( 'class', 'entity' )
-		entity.type = map.gridtype.EMPTY
-		
-		// Get rid of the boulder that was here
-		delete( map.boulders[loc.x + '_' + loc.y] )
-	},
+			// Pushables can't move into where bob was previously if he's still moving from there.
+			if ( bob.deathClock <= 0 && loc.x === bob.oldX && loc.y === bob.oldY ) {
+				return false
+			}
 
-	moveBoulderRight: ( loc ) => {
-		map.emptyLoc( loc )
-		loc.x += 1
-		map.boulderLoc( loc )
-	},
+			// Pushables can move into empty spaces.
+			let type = map.grid[loc.y][loc.x].type
+			if ( type === map.gridtype.EMPTY ) {
+				return true
+			}
 
-	moveBoulderLeft: ( loc ) => {
-		map.emptyLoc( loc )
-		loc.x -= 1
-		map.boulderLoc( loc )
+			// Didn't match a rule, so this one can't go there.
+			return false
+		},
+
+		/**
+		 * Move the pushable into the square to its right.
+		 */
+		moveRight: ( loc ) => {
+			map.loc.setToEmpty( loc )
+			loc.x += 1
+			map.loc.setToBoulder( loc )
+			loc.pushDirection = map.dirs.RIGHT
+		},
+
+		/**
+		 * Move the pushable into the square to its left.
+		 */
+		moveLeft: ( loc ) => {
+			map.loc.setToEmpty( loc )
+			loc.x -= 1
+			map.loc.setToBoulder( loc )
+			loc.pushDirection = map.dirs.LEFT
+		},
+
+		/**
+		 * Move a pushable down one square, i.e. let it fall. This adds 1 to the
+		 * score, but can kill bob if he's down there.
+		 */
+		moveDown: ( loc ) => {
+			// Update the models
+			map.loc.setToEmpty( loc )
+			loc.y += 1
+			map.loc.setToBoulder( loc )
+
+			// Update the score
+			bolder.addToScore( 1 )
+
+			// Did we hit bob?
+			if ( map.pushable.fatal && loc.x === bob.x && loc.y+1 === bob.y ) {
+				bob.killBob()
+			}
+		},
+
+		/**
+		 * Are there any unsupported pushables that should fall?
+		 */
+		moveUnsupported: () => {
+			for ( const[key,pp] of Object.entries(map.pushables)) {
+				if ( map.pushable.canMoveInto( map.loc.below( pp ) ) ) {
+					map.pushable.moveDown( pp )
+					continue
+				}
+
+				// Boulders are unsupported if they're on a slopey object with space
+				// on either side ...
+				switch ( map.sloping.get( pp ) ) {
+					case map.dirs.LEFT:
+						map.pushable.moveLeft( pp )
+						continue
+					case map.dirs.RIGHT:
+						map.pushable.moveRight( pp )
+						continue
+				}
+			}
+		},
 	},
 
 	/**
-	 * Move a boulder down one square. This adds 1 to the score, but can kill bob if he's down there.
+	 * Utility functions for pushable objects needing to deal with sloped bricks.
 	 */
-	moveBoulderDown: ( loc ) => {
-		// Update the models
-		map.emptyLoc( loc )
-		loc.y += 1
-		map.boulderLoc( loc )
-
-		// Update the score
-		bolder.addToScore( 1 )
-
-		// Did we hit bob?
-		if ( map.boulders['fatal'] && loc.x === bob.x && loc.y+1 === bob.y ) {
-			bob.killBob()
-		}
-	},
-
-	boulderLoc: ( loc ) => {
-		let entity = map.grid[loc.y][loc.x]
-		entity.elem.setAttribute( 'class', 'entity boulder' )
-		entity.type = map.gridtype.BOULDER
-		map.boulders[loc.x + '_' + loc.y] = loc
-	},
-
-	moveUnsupportedBoulders: () => {
-		for ( const[key,boulder] of Object.entries(map.boulders)) {
-			if ( key === 'fatal' ) {
-				continue
-			}
-
-			if ( map.boulderCanMoveInto( boulder.x, boulder.y+1 ) ) {
-				map.moveBoulderDown( boulder )
-				continue
-			}
-
-			// Boulders are unsupported if they're on a slopey object with space
-			// on either side ...
-			if ( map.slopesLeft( boulder.x, boulder.y+1 ) ) {
-				if ( map.boulderCanMoveInto( boulder.x-1, boulder.y ) && map.boulderCanMoveInto( boulder.x-1, boulder.y+1 ) ) {
-					map.moveBoulderLeft( boulder )
-					continue
+	sloping: {
+		/**
+		 * Returns a direction for loc which is a pushable. The pushable should
+		 * move in that direction in its next action. Direction is calculated from
+		 * the map squares around the loc.
+		 */
+		get: ( loc ) => {
+			// What is the loc sitting on? Some types are slopey.
+			let type = map.grid[loc.y+1][loc.x].type
+			if ( type === map.gridtype.BOULDER || type === map.gridtype.DIAMOND ) {
+				// Left takes precedence if there's no pushDirection in the loc
+				if ( !loc.pushDirection || loc.pushDirection === map.dirs.LEFT ) {
+					if ( 
+						map.pushable.canMoveInto( map.loc.toLeft( loc ) ) 
+						&& map.pushable.canMoveInto( map.loc.toLeftAndBelow( loc ) ) 
+					) {
+						return map.dirs.LEFT
+					}
+					if ( 
+						map.pushable.canMoveInto( map.loc.toRight( loc ) ) 
+						&& map.pushable.canMoveInto( map.loc.toRightAndBelow( loc ) ) 
+					) {
+						return map.dirs.RIGHT
+					}
+				} else {
+					if ( 
+						map.pushable.canMoveInto( map.loc.toRight( loc ) ) 
+						&& map.pushable.canMoveInto( map.loc.toRightAndBelow( loc ) ) 
+					) {
+						return map.dirs.RIGHT
+					}
+					if ( 
+						map.pushable.canMoveInto( map.loc.toLeft( loc ) ) 
+						&& map.pushable.canMoveInto( map.loc.toLeftAndBelow( loc ) ) 
+					) {
+						return map.dirs.LEFT
+					}
 				}
 			}
-			if ( map.slopesRight( boulder.x, boulder.y+1 ) ) {
-				if ( map.boulderCanMoveInto( boulder.x+1, boulder.y ) && map.boulderCanMoveInto( boulder.x+1, boulder.y+1 ) ) {
-					map.moveBoulderRight( boulder )
-					continue
-				}
-			}
-		}
-	},
 
-	boulderCanMoveInto: ( x, y ) => {
-		// boulders can't move into where bob is now, assuming he's alive.
-		if ( bob.deathClock <= 0 && x === bob.x && y === bob.y ) {
-			return false
+			// Didn't return before, so there's no slope.
+			return map.dirs.NONE
 		}
-		// boulders can't move into where bob was previously if he's still moving from there.
-		if ( bob.deathClock <= 0 && x === bob.oldX && y === bob.oldY ) {
-			return false
-		}
-
-		// Boulders can move into empty spaces.
-		let type = map.grid[y][x].type
-		if ( type === map.gridtype.EMPTY ) {
-			return true
-		}
-		return false
-	},
-
-	slopesLeft: ( x, y ) => {
-		let type = map.grid[y][x].type
-		return type === map.gridtype.BOULDER || type === map.gridtype.DIAMOND
-	},
-
-	slopesRight: ( x, y ) => {
-		let type = map.grid[y][x].type
-		return type === map.gridtype.BOULDER || type === map.gridtype.DIAMOND
 	},
 
 	/**
-	 * Utility functions for checking transparency relative to a loc.
+	 * Utility functions for converting locs into other locations.
+	 */
+	loc: {
+		above: ( loc ) => {
+			return { x:loc.x, y:loc.y-1 }
+		},
+		below: ( loc ) => {
+			return { x:loc.x, y:loc.y+1 }
+		},
+		toLeft: ( loc ) => {
+			return { x:loc.x-1, y:loc.y }
+		},
+		toLeftAndBelow: ( loc ) => {
+			return { x:loc.x-1, y:loc.y+1}
+		},
+		toRight: ( loc ) => {
+			return { x:loc.x+1, y:loc.y }
+		},
+		toRightAndBelow: ( loc ) => {
+			return { x:loc.x+1, y:loc.y+1 }
+		},
+
+		/**
+		 * Converts the loc into a boulder. Usually this happens when a boulder
+		 * moves into a loc and replaces an empty.
+		 */
+		setToBoulder: ( loc ) => {
+			let entity = map.grid[loc.y][loc.x]
+			entity.elem.setAttribute( 'class', 'entity boulder' )
+			entity.type = map.gridtype.BOULDER
+			map.pushables[loc.x + '_' + loc.y] = loc
+		},
+
+		/**
+		 * Empties a square on the map at the given loc. Send scoring = true to add to bob's score.
+		 */
+		setToEmpty: ( loc, scoring = false ) => {
+			let entity = map.grid[loc.y][loc.x]
+
+			if ( scoring ) {
+				switch ( entity.type ) {
+					case map.gridtype.EARTH:
+						bolder.addToScore( 10 )
+						break
+					case map.gridtype.DIAMOND:
+						bolder.addToScore( 50 )
+						bolder.decreaseDiamonds()
+						break
+					case map.gridtype.KEY:
+						map.openSafes()
+						break
+				}
+			}
+			entity.elem.setAttribute( 'class', 'entity' )
+			entity.type = map.gridtype.EMPTY
+			
+			// Get rid of the pushable that was here
+			delete( map.pushables[loc.x + '_' + loc.y] )
+		},
+	},
+
+	/**
+	 * Utility functions for checking transparency relative to a loc. This is used
+	 * by spirits to find their way around maps.
 	 */
 	transparent: {
 		is: ( loc ) => {
