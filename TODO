@@ -1,7 +1,13 @@
+bugs
+
+- spirits can somehow run down their deltas outside of the update loop, so they freeze.
+  - might the delta <= 0 check in drawloop - possibly fixed. leave this here and see if it re-occurs
+
 game features
 
-- spirits and cages
-  - red and blue spirits
+- spirits
+  - right handed spirits
+  - make them fatal
 - eggs and monsters
   - 100 for killing monster
   - -1 for every second a monster is alive
@@ -28,6 +34,13 @@ game features
   - safes and cages in extra walls
 - finish a level
 - one use teleporters
+- keys should be slopey
+- boulderUpdate flag which triggers 
+  - when bob moves a boulder
+  - when bob digs earth, diamonds, keys
+  - keys open safes
+  - spirits enter cages
+  - a boulder falls
 
 design
 

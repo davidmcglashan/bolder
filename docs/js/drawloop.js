@@ -39,7 +39,7 @@ const drawloop = {
 		map.spirits.forEach( (spirit) => {
 			if ( spirit.delta > 0 ) {
 				spirit.delta -= delta/4
-				if ( spirit.delta < 0 ) {
+				if ( spirit.delta <= 0 ) {
 					spirit.delta = 0
 					map.routeSpirit( spirit )
 				}
