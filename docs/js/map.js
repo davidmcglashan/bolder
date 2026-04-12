@@ -17,6 +17,13 @@ const map = {
 		SPIRIT: '*'
 	},
 
+	dirs: {
+		UP: 0,
+		RIGHT: 1,
+		DOWN: 2,
+		LEFT: 3
+	},
+
 	/**
 	 * loads the numbered level 
 	 */
@@ -24,6 +31,11 @@ const map = {
 		map.parseMap( levels.maps[ln] )
 	},
 	
+	/**
+	 * Generates a map from a seed value - either the random one or the one
+	 * contained in the payload object. Payload contains the various world
+	 * probabilities.
+	 */
 	buildMapFromSeed: ( payload ) => {
 		random.SEED = parseInt( payload.seed ) | 0
 
@@ -156,7 +168,7 @@ const map = {
 		// Draw some arbitrary straight walls through the world to try and break it up
 		// into rooms or create barriers to progress.
 		let safes = 0
-		let cages = 0
+		let cages = []
 		for ( let z=0; z<random.get( payload.extraWallMin, payload.extraWallMax); z+=1 ) {
 			// random x, y, dir, length
 			let x = random.get(1,width-1)
@@ -177,7 +189,7 @@ const map = {
 						// ... or a cage ... ?
 						else if ( random.diceRoll( { oneIn: payload.cageChance, attempts:1 } ) ) {
 							map.grid[y][x] = map.gridtype.CAGE
-							cages += 1
+							cages.push( {x:x,y:y} )
 						} 
 					} else {
 						map.grid[y][x] = map.gridtype.WALL
@@ -186,16 +198,16 @@ const map = {
 						
 				// Move to the next square.
 				switch ( dir ) {
-					case 0: 
+					case map.dirs.RIGHT: 
 						x+=1
 						break
-					case 1: 
+					case map.dirs.UP: 
 						y-=1
 						break
-					case 2: 
+					case map.dirs.LEFT: 
 						x-=1
 						break
-					case 3: 
+					case map.dirs.DOWN: 
 						y+=1
 						break
 				}
@@ -232,7 +244,7 @@ const map = {
 						// ... or a cage ... ?
 						else if ( random.diceRoll( { oneIn: payload.cageChance, attempts:1 } ) ) {
 							map.grid[y][x] = map.gridtype.CAGE
-							cages += 1
+							cages.push( {x:x,y:y} )
 						} 
 					} 
 				}
@@ -278,6 +290,42 @@ const map = {
 				if ( counter === 100 ) {
 					keys = 0
 				}
+			}
+		}
+
+		// If we have cages then we need a corresponding number of spirits. These are placed
+		// at earths or empties on the map but don't replace those squares. If we can't place
+		// a spirit then the level simply becomes impossible.
+		while ( cages.length > 0 ) {
+			let cage = cages.pop()
+			let canvas = document.getElementById( '-canvas' )
+			counter = 0
+
+			// Find a place for a spirit
+			while ( counter < 100 ) {
+				let x = random.get(1,width-1)
+				let y = random.get(1,height-1 )
+
+				if ( map.grid[y][x] === map.gridtype.EARTH || map.grid[y][x] === map.gridtype.EMPTY ) {
+					let elem = document.createElement( 'div' )
+					elem.setAttribute( 'class', 'spirit' )
+					elem.style.left = x*64 + 'px'
+					elem.style.top = y*64 + 'px'
+					canvas.appendChild( elem )
+
+					map.spirits.push( {
+						x: x,
+						y: y,
+						dx: 0,
+						dy: -1,
+						dir: map.dirs.UP,
+						delta: 64,
+						elem: elem
+					} )
+					break
+				}
+
+				counter += 1
 			}
 		}
 
@@ -400,6 +448,112 @@ const map = {
 				}
 				c=c+1
 			}
+		}
+	},
+
+	/**
+	 * Move the spirits around the map.
+	 */
+	routeSpirit: ( spirit ) => {
+		// Nought to do if the spirit has a delta already
+		if ( spirit.delta > 0 || spirit.isCaged ) {
+			return
+		}
+
+		// if the spirit is actually in a cage right now then all we need do is
+		// turn it into a diamond!
+		let entity = map.grid[spirit.y][spirit.x]
+		if ( entity.type === map.gridtype.CAGE ) {
+			spirit.isCaged = true
+			spirit.elem.style.display = 'none'
+			entity.elem.setAttribute( 'class', 'entity diamond' )
+			entity.type = map.gridtype.DIAMOND
+		}
+
+		spirit.dx = 0
+		spirit.dy = 0
+		spirit.delta = 64
+
+		switch  ( spirit.dir ) {
+			case map.dirs.UP:
+				if ( map.transparent.isToLeft( spirit ) ) {
+					spirit.dir = map.dirs.LEFT
+					spirit.x -= 1
+					spirit.dx = -1
+				} else if ( map.transparent.isAbove( spirit ) ) {
+					spirit.dir = map.dirs.UP
+					spirit.y -= 1
+					spirit.dy = -1
+				} else if ( map.transparent.isToRight( spirit ) ) {
+					spirit.dir = map.dirs.RIGHT
+					spirit.x += 1
+					spirit.dx = 1
+				} else if ( map.transparent.isBelow( spirit ) ) {
+					spirit.dir = map.dirs.DOWN
+					spirit.y += 1
+					spirit.dy = 1
+				}
+				break
+
+			case map.dirs.RIGHT:
+				if ( map.transparent.isAbove( spirit ) ) {
+					spirit.dir = map.dirs.UP
+					spirit.y -= 1
+					spirit.dy = -1
+				} else if ( map.transparent.isToRight( spirit ) ) {
+					spirit.dir = map.dirs.RIGHT
+					spirit.x += 1
+					spirit.dx = 1
+				} else if ( map.transparent.isBelow( spirit ) ) {
+					spirit.dir = map.dirs.DOWN
+					spirit.y += 1
+					spirit.dy = 1
+				} else if ( map.transparent.isToLeft( spirit ) ) {
+					spirit.dir = map.dirs.LEFT
+					spirit.x -= 1
+					spirit.dx = -1
+				}
+				break
+
+			case map.dirs.DOWN:
+				if ( map.transparent.isToRight( spirit ) ) {
+					spirit.dir = map.dirs.RIGHT
+					spirit.x += 1
+					spirit.dx = 1
+				} else if ( map.transparent.isBelow( spirit ) ) {
+					spirit.dir = map.dirs.DOWN
+					spirit.y += 1
+					spirit.dy = 1
+				} else if ( map.transparent.isToLeft( spirit ) ) {
+					spirit.dir = map.dirs.LEFT
+					spirit.x -= 1
+					spirit.dx = -1
+				} else if ( map.transparent.isAbove( spirit ) ) {
+					spirit.dir = map.dirs.UP
+					spirit.y -= 1
+					spirit.dy = -1
+				} 
+				break
+
+			case map.dirs.LEFT:
+				if ( map.transparent.isBelow( spirit ) ) {
+					spirit.dir = map.dirs.DOWN
+					spirit.y += 1
+					spirit.dy = 1
+				} else if ( map.transparent.isToLeft( spirit ) ) {
+					spirit.dir = map.dirs.LEFT
+					spirit.x -= 1
+					spirit.dx = -1
+				} else if ( map.transparent.isAbove( spirit ) ) {
+					spirit.dir = map.dirs.UP
+					spirit.y -= 1
+					spirit.dy = -1
+				} else if ( map.transparent.isToRight( spirit ) ) {
+					spirit.dir = map.dirs.RIGHT
+					spirit.x += 1
+					spirit.dx = 1
+				}
+				break
 		}
 	},
 
@@ -533,5 +687,33 @@ const map = {
 	slopesRight: ( x, y ) => {
 		let type = map.grid[y][x].type
 		return type === map.gridtype.BOULDER || type === map.gridtype.DIAMOND
+	},
+
+	/**
+	 * Utility functions for checking transparency relative to a loc.
+	 */
+	transparent: {
+		is: ( loc ) => {
+			let type = map.grid[loc.y][loc.x].type
+			return type === map.gridtype.EARTH 
+				|| type === map.gridtype.EMPTY
+				|| type === map.gridtype.CAGE
+		},
+		
+		isAbove: ( loc ) => {
+			return map.transparent.is( { x:loc.x, y:loc.y-1 } )
+		},
+		
+		isBelow: ( loc ) => {
+			return map.transparent.is( { x:loc.x, y:loc.y+1 } )
+		},
+		
+		isToLeft: ( loc ) => {
+			return map.transparent.is( { x:loc.x-1, y:loc.y } )
+		},
+		
+		isToRight: ( loc ) => {
+			return map.transparent.is( { x:loc.x+1, y:loc.y } )
+		},
 	}
 }

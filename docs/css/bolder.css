@@ -104,3 +104,9 @@ button {
 	position: absolute;
 }
 
+.spirit {
+	background-image: url(../assets/spirit.png);
+	width: 64px;
+	height: 64px;
+	position: absolute;
+}

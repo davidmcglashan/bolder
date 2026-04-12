@@ -35,6 +35,19 @@ const drawloop = {
 			drawloop.boulderTime -= 75
 		}
 		
+		// Move any spirits along.
+		map.spirits.forEach( (spirit) => {
+			if ( spirit.delta > 0 ) {
+				spirit.delta -= delta/4
+				if ( spirit.delta < 0 ) {
+					spirit.delta = 0
+					map.routeSpirit( spirit )
+				}
+				spirit.elem.style.left = (spirit.x*64 - ((spirit.delta)*spirit.dx)) + 'px'
+				spirit.elem.style.top = (spirit.y*64 - ((spirit.delta)*spirit.dy)) + 'px'
+			}
+		} )
+
 		// If bob is dead, leave him that way for a short time.
 		if ( bob.deathClock > 0 ) {
 			bob.deathClock -= delta/4
