@@ -12,16 +12,17 @@ const bolder = {
 		{ name: "minCutaways", label: "Minimum number of cut-aways", type: "number", value: 2 },
 		{ name: "maxCutaways", label: "Maximum number of cut-aways", type: "number", value: 8, after: true },
 
-		{ name: "diamondChance", label: "Diamond likelihood (1 in ...)", type: "number", value: 5 },
-		{ name: "safeChance", label: "Safe likelihood (1 in ...)", type: "number", value: 20 },
 		{ name: "boulderChance", label: "Boulder likelihood (1 in ...)", type: "number", value: 5 },
 		{ name: "holeChance", label: "Hole likelihood (1 in ...)", type: "number", value: 10 },
-		{ name: "wallChance", label: "Wall likelihood (1 in ...)", type: "number", value: 10, after: true },
+		{ name: "wallChance", label: "Wall likelihood (1 in ...)", type: "number", value: 10 },
+		{ name: "diamondChance", label: "Diamond likelihood (1 in ...)", type: "number", value: 5 },
+		{ name: "safeChance", label: "Safe likelihood (1 in ...)", type: "number", value: 10 },
+		{ name: "cageChance", label: "Cage likelihood (1 in ...)", type: "number", value: 20, after: true },
 
 		{ name: "extraWallMin", label: "Minimum number of extra walls", type: "number", value: 4 },
 		{ name: "extraWallMax", label: "Maximum number of extra walls", type: "number", value: 8 },
-		{ name: "extraWallHole", label: "Extra wall holey-ness (1 in ...)", type: "number", value: 2 },
-		{ name: "extraWallDirChange", label: "Extra wall direction change (1 in ...)", type: "number", value: 4, after: true },
+		{ name: "extraWallHoles", label: "Extra wall holey-ness (1 in ...)", type: "number", value: 5 },
+		{ name: "extraWallDirChange", label: "Extra wall direction change (1 in ...)", type: "number", value: 10, after: true },
 
 		{ name: "startFraction", label: "Start in top fraction (1/...)", type: "number", value: 5, after: true },
 

@@ -2,6 +2,7 @@ const map = {
 	diamonds: 0,
 	boulders: {},
 	safes: {},
+	spirits: [],
 
 	grid: [],
 	gridtype: {
@@ -11,7 +12,9 @@ const map = {
 		BOULDER: 'O',
 		DIAMOND: '^',
 		SAFE: 'S',
-		KEY: 'k'
+		KEY: 'k',
+		CAGE: '/',
+		SPIRIT: '*'
 	},
 
 	/**
@@ -22,7 +25,7 @@ const map = {
 	},
 	
 	buildMapFromSeed: ( payload ) => {
-		random.SEED = parseInt( payload.seed )
+		random.SEED = parseInt( payload.seed ) | 0
 
 		// Initialise the map and set its dimensions.
 		let width = random.get( payload.minWidth, payload.maxWidth )
@@ -112,12 +115,12 @@ const map = {
 		}
 
 		// All the world is walls, so fill the interior with interesting things.
-		let safes = 0
 		for ( let y=1; y<height-1; y++ ) {
 			for ( let x=1; x<width-1; x++ ) {
 				// Is this a cell we can change?
 				if ( map.grid[y][x] === map.gridtype.WALL ) {
-					// Don't change if any neighbouring cell is a zero
+					// Don't change if any neighbouring cell is a zero. This maintains
+					// a 1-wide strip of walls around the world's perimeter.
 					if ( 
 						map.grid[y-1][x-1] === 0
 						|| map.grid[y-1][x] === 0
@@ -129,30 +132,20 @@ const map = {
 						|| map.grid[y+1][x+1] === 0
 					) { continue }
 
+					// Everything in the interior is now earth.
 					map.grid[y][x] = map.gridtype.EARTH
 
-					// 20% chance of becoming a diamond
-					if ( random.diceRoll( { oneIn: payload.diamondChance, attempts:1 } ) ) {
-						map.grid[y][x] = map.gridtype.DIAMOND
-					} 
-					
-					// 20% chance of becoming a safe
-					if ( random.diceRoll( { oneIn: payload.safeChance, attempts:1 } ) ) {
-						map.grid[y][x] = map.gridtype.SAFE
-						safes += 1
-					} 
-					
-					// 25% chance of becoming a rock
+					// Randomly change some earths into boulders ...
 					if ( random.diceRoll( { oneIn:payload.boulderChance, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.BOULDER
 					} 
 					
-					// 10% chance of becoming a hole
+					// ... or gaps and holes (but not underneath boulders to minimise starting falls) ...
 					if ( map.grid[y-1][x] !== map.gridtype.BOULDER && random.diceRoll( { oneIn:payload.holeChance, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.EMPTY
 					} 
 					
-					// 10% chance of becoming a wall again
+					// ... or back into some kind of wall.
 					if ( random.diceRoll( { oneIn:payload.wallChance, attempts:1 } ) ) {
 						map.grid[y][x] = map.gridtype.WALL
 					} 
@@ -160,7 +153,10 @@ const map = {
 			}
 		}
 		
-		// Draw some arbitrary straight walls.
+		// Draw some arbitrary straight walls through the world to try and break it up
+		// into rooms or create barriers to progress.
+		let safes = 0
+		let cages = 0
 		for ( let z=0; z<random.get( payload.extraWallMin, payload.extraWallMax); z+=1 ) {
 			// random x, y, dir, length
 			let x = random.get(1,width-1)
@@ -169,11 +165,26 @@ const map = {
 			let len = random.get(20,40)
 
 			for ( let i=0; i<len; i+=1 ) {
-				// Add a new wall as long as it's within bounds.
-				if ( x>0 && x<width && y>0 && y<height && map.grid[y][x] !== 0 && !random.diceRoll( { oneIn:payload.extraWallHoles, attempts:1 } )) {
-					map.grid[y][x] = map.gridtype.WALL
+				// Add a new wall block as long as it's within bounds.
+				if ( x>0 && x<width-1 && y>0 && y<height-1 && map.grid[y][x] !== 0 ) {
+					// Put in a wall or something else?
+					if ( random.diceRoll( { oneIn:payload.extraWallHoles, attempts:1 } ) ) {
+						if ( random.diceRoll( { oneIn: payload.safeChance, attempts:1 } ) ) {
+							map.grid[y][x] = map.gridtype.SAFE
+							safes += 1
+						} 
+
+						// ... or a cage ... ?
+						else if ( random.diceRoll( { oneIn: payload.cageChance, attempts:1 } ) ) {
+							map.grid[y][x] = map.gridtype.CAGE
+							cages += 1
+						} 
+					} else {
+						map.grid[y][x] = map.gridtype.WALL
+					}
 				}
 						
+				// Move to the next square.
 				switch ( dir ) {
 					case 0: 
 						x+=1
@@ -189,9 +200,41 @@ const map = {
 						break
 				}
 
-				// 10% chance of a direction change
+				// Is there a chance for a direction change.
 				if ( random.diceRoll( { oneIn: payload.extraWallDirChange, attempts:1 } ) ) {
-					dir = random.get(0,3)
+					// A 90 degree turn is achieved by adding or subtracting one.
+					if ( random.get(0,1) === 0 ) {
+						dir = (dir+1) % 4
+					} else {
+						dir = (dir+4) % 4
+					}
+				}
+			}
+		}
+
+		// We have a bunch of walls filled with earth and boulders! Let's put
+		// the shiny game elements in. This is done last to prevent other structural
+		// elements overwriting them.
+		for ( let y=1; y<height-1; y++ ) {
+			for ( let x=1; x<width-1; x++ ) {
+				// Is this a cell we can change?
+				if ( map.grid[y][x] === map.gridtype.EARTH ) {
+		
+					if ( random.diceRoll( { oneIn: payload.diamondChance, attempts:1 } ) ) {
+						map.grid[y][x] = map.gridtype.DIAMOND
+
+						// Turn this diamond into a safe ... ?
+						if ( random.diceRoll( { oneIn: payload.safeChance, attempts:1 } ) ) {
+							map.grid[y][x] = map.gridtype.SAFE
+							safes += 1
+						} 
+
+						// ... or a cage ... ?
+						else if ( random.diceRoll( { oneIn: payload.cageChance, attempts:1 } ) ) {
+							map.grid[y][x] = map.gridtype.CAGE
+							cages += 1
+						} 
+					} 
 				}
 			}
 		}
@@ -250,7 +293,6 @@ const map = {
 					let elem = document.createElement( 'div' )
 					elem.style.left = x*64 + 'px'
 					elem.style.top = y*64 + 'px'
-					elem.setAttribute( 'id', 'entity'+c )
 					canvas.appendChild( elem )
 					
 					switch ( map.grid[y][x] ) {
@@ -261,40 +303,46 @@ const map = {
 								jsonVal += ' '
 							}
 							elem.setAttribute( 'class', 'entity' )
-							map.grid[y][x] = { type: map.gridtype.EMPTY, id:'entity'+c, elem:elem }
+							map.grid[y][x] = { type: map.gridtype.EMPTY, elem:elem }
 							break
 						case map.gridtype.WALL:
 							jsonVal += '#'
 							elem.setAttribute( 'class', 'wall entity' )
-							map.grid[y][x] = { type: map.gridtype.WALL, id:'entity'+c, elem:elem }
+							map.grid[y][x] = { type: map.gridtype.WALL, elem:elem }
 							break
 						case map.gridtype.EARTH:
 							jsonVal += '.'
 							elem.setAttribute( 'class', 'earth entity' )
-							map.grid[y][x] = { type: map.gridtype.EARTH, id:'entity'+c, elem:elem }
+							map.grid[y][x] = { type: map.gridtype.EARTH, elem:elem }
 							break
 						case map.gridtype.DIAMOND:
 							jsonVal += '^'
 							elem.setAttribute( 'class', 'diamond entity' )
-							map.grid[y][x] = { type: map.gridtype.DIAMOND, id:'entity'+c, elem:elem }
+							map.grid[y][x] = { type: map.gridtype.DIAMOND, elem:elem }
 							map.diamonds += 1
 							break
 						case map.gridtype.SAFE:
 							jsonVal += 'S'
 							elem.setAttribute( 'class', 'safe entity' )
-							map.grid[y][x] = { type: map.gridtype.SAFE, id:'entity'+c, elem:elem }
+							map.grid[y][x] = { type: map.gridtype.SAFE, elem:elem }
 							map.safes[x+'_'+y] = {x:x, y:y} 
+							map.diamonds += 1
+							break
+						case map.gridtype.CAGE:
+							jsonVal += '/'
+							elem.setAttribute( 'class', 'cage entity' )
+							map.grid[y][x] = { type: map.gridtype.CAGE, elem:elem }
 							map.diamonds += 1
 							break
 						case map.gridtype.KEY:
 							jsonVal += 'k'
 							elem.setAttribute( 'class', 'key entity' )
-							map.grid[y][x] = { type: map.gridtype.KEY, id:'entity'+c, elem:elem }
+							map.grid[y][x] = { type: map.gridtype.KEY, elem:elem }
 							break
 						case map.gridtype.BOULDER:
 							jsonVal += 'O'
 							elem.setAttribute( 'class', 'boulder entity' )
-							map.grid[y][x] = { type: map.gridtype.BOULDER, id:'entity'+c, elem:elem }
+							map.grid[y][x] = { type: map.gridtype.BOULDER, elem:elem }
 							map.boulders[x+'_'+y] = {x:x, y:y} 
 							break
 					}
@@ -322,10 +370,9 @@ const map = {
 				let elem = document.createElement( 'div' )
 				elem.style.left = x*64 + 'px'
 				elem.style.top = y*64 + 'px'
-				elem.setAttribute( 'id', 'entity'+c )
 				canvas.appendChild( elem )
 
-				let loc = { type: mapObj.map[c], id:'entity'+c, elem:elem }
+				let loc = { type: mapObj.map[c], elem:elem }
 				map.grid[y][x] = loc
 
 				switch( mapObj.map[c] ) {
@@ -347,7 +394,6 @@ const map = {
 					// 'x' is Bob, so set him up.
 					case 'x':
 						loc.type = map.gridtype.EMPTY
-						elem.setAttribute( 'class', 'entity' )
 						bob.x = x
 						bob.y = y
 						break

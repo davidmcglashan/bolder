@@ -93,6 +93,10 @@ button {
 	background-image: url(../assets/diamond.png);
 }
 
+.cage {
+	background-image: url(../assets/cage.png);
+}
+
 .bob {
 	background-image: url(../assets/bob.png);
 	width: 64px;
