@@ -39,10 +39,20 @@ const drawloop = {
 		map.spirits.forEach( (spirit) => {
 			if ( spirit.delta > 0 ) {
 				spirit.delta -= delta/4
+				spirit.checkDelta -= delta/4
+
+				// If the check delta has run out then we can perform a collision detection.
+				if ( spirit.checkDelta <= 0 ) {
+					spirit.checkDelta = 16
+					map.checkSpiritCollision( spirit )
+				}
+
+				// If the delta has run out then it's time for a new one
 				if ( spirit.delta <= 0 ) {
 					spirit.delta = 0
 					map.routeSpirit( spirit )
 				}
+
 				spirit.elem.style.left = (spirit.x*64 - ((spirit.delta)*spirit.dx)) + 'px'
 				spirit.elem.style.top = (spirit.y*64 - ((spirit.delta)*spirit.dy)) + 'px'
 			}

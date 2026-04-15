@@ -46,6 +46,7 @@ const map = {
 		let height = random.get( payload.minHeight, payload.maxHeight )
 		
 		map.pushable.fatal = payload.bouldersFatal
+		map.spiritsFatal = payload.spiritsFatal
 
 		// Fill the map with walls
 		for ( let y = 0; y < height; y++ ) {
@@ -454,6 +455,24 @@ const map = {
 	},
 
 	/**
+	 * Detect if the passed-in spirit has collided with bob.
+	 */
+	checkSpiritCollision: ( spirit ) => {
+		// Nothing to do with caged spirits
+		if ( !map.spiritsFatal || spirit.isCaged ) {
+			return
+		}
+
+		// A collision occurs if the spirit x,y coincides with either of bob's.
+		if  ( 
+			( spirit.x === bob.x && spirit.y === bob.y )
+			|| ( spirit.x === bob.oldX && spirit.y === bob.oldY )
+		) {
+			bob.killBob()
+		}
+	},
+
+	/**
 	 * Move the spirits around the map.
 	 */
 	routeSpirit: ( spirit ) => {
@@ -475,6 +494,7 @@ const map = {
 		spirit.dx = 0
 		spirit.dy = 0
 		spirit.delta = 64
+		spirit.checkDelta = 16
 
 		switch  ( spirit.dir ) {
 			case map.dirs.UP:
