@@ -1,5 +1,8 @@
 bugs
 
+- safes, cages, and diamonds can be drawn on the outer perimeter when they're used to plug
+  gaps in extra walls
+
 - spirits can somehow run down their deltas outside of the update loop, so they freeze.
   - might the delta <= 0 check in drawloop - possibly fixed. leave this here and see if it re-occurs
 
@@ -7,7 +10,6 @@ game features
 
 - spirits
   - right handed spirits
-  - make them fatal
 - eggs and monsters
   - 100 for killing monster
   - -1 for every second a monster is alive

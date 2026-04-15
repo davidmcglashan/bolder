@@ -97,6 +97,13 @@ button {
 	background-image: url(../assets/cage.png);
 }
 
+.egg {
+	background-image: url(../assets/egg.png);
+}
+.egg-cracked {
+	background-image: url(../assets/egg-cracked.png);
+}
+
 .bob {
 	background-image: url(../assets/bob.png);
 	width: 64px;

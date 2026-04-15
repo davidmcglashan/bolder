@@ -249,6 +249,12 @@ const map = {
 							map.grid[y][x] = map.gridtype.CAGE
 							cages.push( {x:x,y:y} )
 						} 
+
+						// ... or an egg ... ?
+						else if ( random.diceRoll( { oneIn: payload.eggChance, attempts:1 } ) ) {
+							map.grid[y][x] = map.gridtype.EGG
+							map.pushables[x+'_'+y] = {x:x,y:y}
+						} 
 					} 
 				}
 			}
@@ -394,6 +400,12 @@ const map = {
 							jsonVal += 'O'
 							elem.setAttribute( 'class', 'boulder entity' )
 							map.grid[y][x] = { type: map.gridtype.BOULDER, elem:elem }
+							map.pushables[x+'_'+y] = {x:x, y:y} 
+							break
+						case map.gridtype.EGG:
+							jsonVal += 'G'
+							elem.setAttribute( 'class', 'egg entity' )
+							map.grid[y][x] = { type: map.gridtype.EGG, elem:elem }
 							map.pushables[x+'_'+y] = {x:x, y:y} 
 							break
 					}
@@ -622,9 +634,11 @@ const map = {
 		 * Move the pushable into the square to its right.
 		 */
 		moveRight: ( loc ) => {
+			let type = map.grid[loc.y][loc.x].type
 			map.loc.setToEmpty( loc )
 			loc.x += 1
-			map.loc.setToBoulder( loc )
+			loc.type = type
+			map.loc.setToPushable( loc )
 			loc.pushDirection = map.dirs.RIGHT
 		},
 
@@ -632,9 +646,11 @@ const map = {
 		 * Move the pushable into the square to its left.
 		 */
 		moveLeft: ( loc ) => {
+			let type = map.grid[loc.y][loc.x].type
 			map.loc.setToEmpty( loc )
 			loc.x -= 1
-			map.loc.setToBoulder( loc )
+			loc.type = type
+			map.loc.setToPushable( loc )
 			loc.pushDirection = map.dirs.LEFT
 		},
 
@@ -643,10 +659,13 @@ const map = {
 		 * score, but can kill bob if he's down there.
 		 */
 		moveDown: ( loc ) => {
+			let type = map.grid[loc.y][loc.x].type
+
 			// Update the models
 			map.loc.setToEmpty( loc )
 			loc.y += 1
-			map.loc.setToBoulder( loc )
+			loc.type = type
+			map.loc.setToPushable( loc )
 
 			// Update the score
 			bolder.addToScore( 1 )
@@ -693,7 +712,11 @@ const map = {
 		get: ( loc ) => {
 			// What is the loc sitting on? Some types are slopey.
 			let type = map.grid[loc.y+1][loc.x].type
-			if ( type === map.gridtype.BOULDER || type === map.gridtype.DIAMOND ) {
+			if ( 	type === map.gridtype.BOULDER
+				 || type === map.gridtype.DIAMOND
+				 || type === map.gridtype.KEY
+				 || type === map.gridtype.EGG
+			) {
 				// Left takes precedence if there's no pushDirection in the loc
 				if ( !loc.pushDirection || loc.pushDirection === map.dirs.LEFT ) {
 					if ( 
@@ -756,10 +779,17 @@ const map = {
 		 * Converts the loc into a boulder. Usually this happens when a boulder
 		 * moves into a loc and replaces an empty.
 		 */
-		setToBoulder: ( loc ) => {
+		setToPushable: ( loc ) => {
 			let entity = map.grid[loc.y][loc.x]
-			entity.elem.setAttribute( 'class', 'entity boulder' )
-			entity.type = map.gridtype.BOULDER
+			switch ( loc.type ) {
+				case map.gridtype.BOULDER:
+					entity.elem.setAttribute( 'class', 'entity boulder' )
+					break
+				case map.gridtype.EGG:
+					entity.elem.setAttribute( 'class', 'entity egg' )
+					break
+			}
+			entity.type = loc.type
 			map.pushables[loc.x + '_' + loc.y] = loc
 		},
 

@@ -18,6 +18,7 @@ const bolder = {
 		{ name: "diamondChance", label: "Diamond likelihood (1 in ...)", type: "number", value: 5 },
 		{ name: "safeChance", label: "Safe likelihood (1 in ...)", type: "number", value: 10 },
 		{ name: "cageChance", label: "Cage likelihood (1 in ...)", type: "number", value: 20, after: true },
+		{ name: "eggChance", label: "Cage likelihood (1 in ...)", type: "number", value: 30, after: true },
 
 		{ name: "extraWallMin", label: "Minimum number of extra walls", type: "number", value: 4 },
 		{ name: "extraWallMax", label: "Maximum number of extra walls", type: "number", value: 8 },
