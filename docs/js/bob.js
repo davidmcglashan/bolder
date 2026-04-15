@@ -26,6 +26,8 @@ const bob = {
 		bob.startY = bob.y
 		bob.oldX = bob.x
 		bob.oldY = bob.y
+		bob.dx = 0
+		bob.dy = 0
 		map.loc.setToEmpty( bob )
 		
 		// Move bob's sprite to its proper location.
