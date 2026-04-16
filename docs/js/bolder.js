@@ -23,7 +23,6 @@ const bolder = {
 		{ name: "extraWallMin", label: "Minimum number of extra walls", type: "number", value: 4 },
 		{ name: "extraWallMax", label: "Maximum number of extra walls", type: "number", value: 8 },
 		{ name: "extraWallHoles", label: "Extra wall holey-ness (1 in ...)", type: "number", value: 5 },
-		{ name: "extraWallDirChange", label: "Extra wall direction change (1 in ...)", type: "number", value: 10, after: true },
 
 		{ name: "startFraction", label: "Start in top fraction (1/...)", type: "number", value: 5, after: true },
 

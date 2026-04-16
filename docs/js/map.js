@@ -173,30 +173,49 @@ const map = {
 		let safes = 0
 		let cages = []
 		for ( let z=0; z<random.get( payload.extraWallMin, payload.extraWallMax); z+=1 ) {
-			// random x, y, dir, length
-			let x = random.get(1,width-1)
-			let y = random.get(1,height-1)
-			let dir = random.get(0,3)
-			let len = random.get(20,40)
+			let x = 0
+			let y = 0
+			let dir = 0
 
-			for ( let i=0; i<len; i+=1 ) {
-				// Add a new wall block as long as it's within bounds.
-				if ( x>0 && x<width-1 && y>0 && y<height-1 && map.grid[y][x] !== 0 ) {
-					// Put in a wall or something else?
-					if ( random.diceRoll( { oneIn:payload.extraWallHoles, attempts:1 } ) ) {
-						if ( random.diceRoll( { oneIn:payload.safeChance, attempts:1 } ) ) {
-							map.grid[y][x] = map.gridtype.SAFE
-							safes += 1
-						} 
+			// have five attempts to ...
+			// - pick a random x,y,dir and draw from there to the edge
+			let placed = false
+			for ( let a=0; a<5; a++ ) {
+				// random x, y, dir, length
+				x = random.get(1,width-1)
+				y = random.get(1,height-1)
+				dir = random.get(0,3)
 
-						// ... or a cage ... ?
-						else if ( random.diceRoll( { oneIn: payload.cageChance, attempts:1 } ) ) {
-							map.grid[y][x] = map.gridtype.CAGE
-							cages.push( {x:x,y:y} )
-						} 
-					} else {
-						map.grid[y][x] = map.gridtype.WALL
-					}
+				// If we're not in the map, try again.
+				if ( map.grid[y][x] !== 0 ) {
+					placed = true
+					break
+				}
+			}
+
+			// We didn't place, so forget this wall.
+			if ( !placed ) {
+				continue
+			}
+
+			// Loop while we build the wall.
+			while ( placed ) {
+				// Put in a wall or something else?
+				if ( random.diceRoll( { oneIn:payload.extraWallHoles, attempts:1 } ) ) {
+					if ( random.diceRoll( { oneIn:payload.safeChance, attempts:1 } ) ) {
+						map.grid[y][x] = map.gridtype.SAFE
+						safes += 1
+					} 
+
+					// ... or a cage ... ?
+					else if ( random.diceRoll( { oneIn: payload.cageChance, attempts:1 } ) ) {
+						map.grid[y][x] = map.gridtype.CAGE
+						cages.push( {x:x,y:y} )
+					} 
+
+					// Doing nothing here will result in empty space in the wall.
+				} else {
+					map.grid[y][x] = map.gridtype.WALL
 				}
 						
 				// Move to the next square.
@@ -215,14 +234,8 @@ const map = {
 						break
 				}
 
-				// Is there a chance for a direction change.
-				if ( random.diceRoll( { oneIn: payload.extraWallDirChange, attempts:1 } ) ) {
-					// A 90 degree turn is achieved by adding or subtracting one.
-					if ( random.get(0,1) === 0 ) {
-						dir = (dir+1) % 4
-					} else {
-						dir = (dir+4) % 4
-					}
+				if ( x < 0 || y < 0 || x >= width || y >= height || map.grid[y][x] === 0 ) {
+					placed = false;
 				}
 			}
 		}

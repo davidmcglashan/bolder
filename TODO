@@ -43,7 +43,12 @@ game features
   - keys open safes
   - spirits enter cages
   - a boulder falls
-
+- v2 map builder
+  - random WxH box filled with stuff
+  - has a random exit
+  - a tunnel of random length
+  - then another WxH random box
+  
 design
 
 - better form layout
