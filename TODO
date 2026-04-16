@@ -1,4 +1,5 @@
 bugs
+----
 
 - safes, cages, and diamonds can be drawn on the outer perimeter when they're used to plug
   gaps in extra walls
@@ -7,6 +8,7 @@ bugs
   - might the delta <= 0 check in drawloop - possibly fixed. leave this here and see if it re-occurs
 
 game features
+-------------
 
 - spirits
   - right handed spirits
@@ -14,8 +16,6 @@ game features
   - 100 for killing monster
   - -1 for every second a monster is alive
 - sloping walls
-  - slopeyness (including diamonds, rocks, etc.) should be a property of the map[][] entity
-  - css class should be property of the map[][] entity
 - TNT
   - placed to the left, right, or under
   - timed then explodes, turning ...
@@ -36,7 +36,6 @@ game features
   - safes and cages in extra walls
 - finish a level
 - one use teleporters
-- keys should be slopey
 - boulderUpdate flag which triggers 
   - when bob moves a boulder
   - when bob digs earth, diamonds, keys
@@ -48,12 +47,10 @@ game features
   - has a random exit
   - a tunnel of random length
   - then another WxH random box
-  
-design
 
-- better form layout
-  - form remembers values in localstorage or unpacks the GET? param
-  - Enter in seed box to start level
+design
+------
+
 - animate bob ...
 - better sprites for everything
   - walls & variants
@@ -66,9 +63,12 @@ design
   - spirits
   - TNT
 - bob death animation
+- maps aren't very good when they're narrow
 
 programming
+-----------
 
+- css class should be property of the map[][] entity
 - comments
 - probably more than a few places to optimise
 - restructure where it makes sense

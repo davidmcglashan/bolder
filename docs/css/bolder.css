@@ -4,7 +4,37 @@ body,a {
 	color: #fff;
 }
 
+.index {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2rem;
+}
+	.index>label>input {
+		width: 10rem;
+	}
+	.index>label {
+		font-size: 120%;
+	}
+
+h1 {
+  font-family: "Rubik 80s Fade", system-ui;
+  font-weight: 100;
+  font-style: normal;
+  font-size: 5rem;
+  line-height: 0rem;
+  margin-top: 6rem;
+}
+
 div#form {
+	border-top: 1px solid #888;
+	padding-top: 4rem;
+	margin-top: 1rem;
+	display: flex;
+	gap: 4rem;
+}
+
+div#form > div {
 	display: flex;
 	flex-direction: column;
 	gap: 0.25rem;
@@ -15,12 +45,23 @@ div#form {
 label {
 	display: flex;
 	gap: 1rem;
-	align-items: end;
+	align-items: baseline;
 	cursor: pointer;
 }
 
 label.gapAfter {
 	margin-bottom: 1rem;
+}
+
+input {
+	background-color: transparent;
+	border: 1px solid white;
+	padding: 0.25rem;
+	color: white;
+	font-family: inherit;
+	font-size: inherit;
+	border-radius: 4px;
+	width: 5rem;
 }
 
 #-json {

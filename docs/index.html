@@ -5,12 +5,20 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Rubik+80s+Fade&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="css/bolder.css">
 		<script type="text/javascript" src="js/bolder.js"></script>
+		<script type="text/javascript" src="js/random.js"></script>
 	</head>
-	<body>
+	<body class="index">
+		<h1>bolder</h1>
+		<label>
+			Level seed
+			<input name="seed" type="text" id="seed">
+			<button onclick="bolder.submit()">Play</button>
+		</label>
 		<div id="form"></div>
-		<button onclick="bolder.submit()">Play</button>
+		<a href="index.html">Reset form</a>
 	</body>
 	<script>
 		bolder.buildForm()

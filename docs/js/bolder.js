@@ -2,29 +2,27 @@ const bolder = {
 	score: 0,
 
 	fields: [
-		{ name: "seed", label: "Level seed", help: "Leave this blank for today's seed", type: "text", after: true },
-
 		{ name: "minWidth", label: "Minimum width", type: "number", value: 25 },
 		{ name: "maxWidth", label: "Maximum width", type: "number", value: 45 },
 		{ name: "minHeight", label: "Minimum height", type: "number", value: 25 },
-		{ name: "maxHeight", label: "Maximum height", type: "number", value: 45, after: true },
+		{ name: "maxHeight", label: "Maximum height", type: "number", value: 45, after: 'gap' },
 
 		{ name: "minCutaways", label: "Minimum number of cut-aways", type: "number", value: 2 },
-		{ name: "maxCutaways", label: "Maximum number of cut-aways", type: "number", value: 8, after: true },
-
+		{ name: "maxCutaways", label: "Maximum number of cut-aways", type: "number", value: 8, after: 'gap' },
+		
+		{ name: "extraWallMin", label: "Minimum number of extra walls", type: "number", value: 4 },
+		{ name: "extraWallMax", label: "Maximum number of extra walls", type: "number", value: 8 },
+		{ name: "extraWallHoles", label: "Extra wall holey-ness (1 in ...)", type: "number", value: 5, after: 'gap' },
+		{ name: "startFraction", label: "Start in top fraction (1/...)", type: "number", value: 5, after: 'column' },
+		
 		{ name: "boulderChance", label: "Boulder likelihood (1 in ...)", type: "number", value: 5 },
 		{ name: "holeChance", label: "Hole likelihood (1 in ...)", type: "number", value: 10 },
 		{ name: "wallChance", label: "Wall likelihood (1 in ...)", type: "number", value: 10 },
 		{ name: "diamondChance", label: "Diamond likelihood (1 in ...)", type: "number", value: 5 },
 		{ name: "safeChance", label: "Safe likelihood (1 in ...)", type: "number", value: 10 },
 		{ name: "cageChance", label: "Cage likelihood (1 in ...)", type: "number", value: 20 },
-		{ name: "eggChance", label: "Egg likelihood (1 in ...)", type: "number", value: 15, after: true },
+		{ name: "eggChance", label: "Egg likelihood (1 in ...)", type: "number", value: 15, after: 'column' },
 
-		{ name: "extraWallMin", label: "Minimum number of extra walls", type: "number", value: 4 },
-		{ name: "extraWallMax", label: "Maximum number of extra walls", type: "number", value: 8 },
-		{ name: "extraWallHoles", label: "Extra wall holey-ness (1 in ...)", type: "number", value: 5 },
-
-		{ name: "startFraction", label: "Start in top fraction (1/...)", type: "number", value: 5, after: true },
 
 		{ name: "bouldersFatal", label: "Falling boulders are fatal", type: "checkbox", value: true },
 		{ name: "spiritsFatal", label: "Spirits are fatal", type: "checkbox", value: true },
@@ -34,14 +32,29 @@ const bolder = {
 	 * Builds the form on the index page with all the payload parameters as <input>s.
 	 */
 	buildForm: () => {
-		let elem = document.getElementById( 'form' )
+		let form = document.getElementById( 'form' )
+		let elem = null
+		
+		// If there was a payload in the URL use that to put values in the form elems
+		let payload = null		
+		let str = window.location.search
+		if ( str ) {
+			payload = JSON.parse( atob( str.substring(1) ) )	
+		}
 
 		bolder.fields.forEach( ( field ) =>  {
+			if ( elem === null ) {
+				elem = document.createElement( 'div' )
+				form.appendChild( elem )
+			}
+
 			// Everything has a label.
 			let label = document.createElement( 'label' )
 			elem.appendChild( label )
-			if ( field.after ) {
+			if ( field.after === 'gap' ) {
 				label.setAttribute( 'class', 'gapAfter' )
+			} else if ( field.after === 'column' ) {
+				elem = null
 			}
 
 			// Labels have text
@@ -59,11 +72,16 @@ const bolder = {
 				if ( field.type === 'checkbox' && field.value ) {
 					input.setAttribute( 'checked', 'checked' )
 				} else {
-					input.setAttribute( 'value', field.value )
+					input.setAttribute( 'value', payload ? payload[field.name] : field.value )
+					input.setAttribute( 'placeholder', field.value )
 				}
 			}
 			label.appendChild( input )
 		} )
+
+		// Put today's date in the seed box
+		elem = document.getElementById( 'seed' )
+		elem.setAttribute( 'value', payload ? payload['seed'] : random.getSeed() )
 	},
 
 	/**
@@ -79,7 +97,19 @@ const bolder = {
 			if ( input.type === 'checkbox' ) {
 				payload[input.name] = input.checked
 			} else {
-				payload[input.name] = input.value
+				// If the form proivdes a value put it in.
+				if ( input.value > 0 ) {
+					payload[input.name] = input.value
+				} 
+				
+				// Otherwise, use the default from the fields JSON.
+				else {
+					bolder.fields.forEach( ( field ) =>  {
+						if ( field.name === input.name ) {
+							payload[input.name] = field.value
+						}
+					} )
+				}
 			}
 		} );
 
@@ -91,14 +121,18 @@ const bolder = {
 		if ( level ) {
 			map.loadMap( level )
 		} else {
+			// Unpack the payload
 			let str = window.location.search
 			if ( str ) {
 				payload = JSON.parse( atob( str.substring(1) ) )
 			}
 
+			// Build the map and update the UI
 			map.buildMapFromSeed( payload )
 			let elem = document.getElementById( '-diamonds' )
 			elem.innerHTML = 'diamonds: ' + map.diamonds
+			elem = document.getElementById( '-home' )
+			elem.setAttribute( 'href', 'index.html' + str )
 		}
 		bob.init()
 		drawloop.start()
