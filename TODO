@@ -48,6 +48,7 @@ design
 
 - better form layout
   - form remembers values in localstorage or unpacks the GET? param
+  - Enter in seed box to start level
 - animate bob ...
 - better sprites for everything
   - walls & variants
@@ -71,5 +72,4 @@ programming
 - tools to ...
   - build level JSON from flat files
 - swipe gestures to play on mobile
-- hosting & other github stuff
 - versions
