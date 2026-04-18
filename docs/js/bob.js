@@ -244,5 +244,15 @@ const bob = {
 
 		// 100 points off for dying!
 		bolder.addToScore( -100 )
+	},
+
+	/**
+	 * Adjust the viewport to centre on bob.
+	 */
+	centreDisplay: () => {
+		bob.viewport.scrollLeft = (bob.x * 64) - bob.offsetX - (bob.delta*bob.dx)
+		bob.viewport.scrollTop = (bob.y * 64) - bob.offsetY - (bob.delta*bob.dy)
+		bob.elem.style.left = (bob.x*64 - (bob.delta*bob.dx)) + 'px'
+		bob.elem.style.top = (bob.y*64 - (bob.delta*bob.dy)) + 'px'
 	}
 };

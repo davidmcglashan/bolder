@@ -134,6 +134,20 @@ const bolder = {
 			elem = document.getElementById( '-home' )
 			elem.setAttribute( 'href', 'index.html' + str )
 		}
+				
+		// Key downs fire movement events in the game.
+		document.addEventListener("keydown", (event) => {
+			// Prevent repeated keypresses. Fire exactly once when the key is pressed.
+			if ( event.repeat ) { 
+				return
+			}
+
+			const keyName = event.key;
+			if ( keyName === 'p' ) { 
+				bolder.map()
+			}
+		} )
+
 		bob.init()
 		drawloop.start()
 	},
@@ -181,12 +195,17 @@ const bolder = {
 		drawloop.pause()
 		document.getElementById( '-body' ).classList.toggle( 'paused' )
 
-		let viewport = document.getElementById( '-viewport' )
-		let canvas = document.getElementById( '-canvas' )
-
-		let offsetX = ( viewport.getBoundingClientRect().width - ( map.width*64*0.3 ) ) / 2
-		let offsetY = ( viewport.getBoundingClientRect().height - ( map.height*64*0.3 ) ) / 2
-		canvas.style.left = offsetX + 'px'
-		canvas.style.top = offsetY + 'px'
+		// Centre the map nicely in the display.
+		if ( drawloop.paused ) {
+			let viewport = document.getElementById( '-viewport' )
+			let canvas = document.getElementById( '-canvas' )
+	
+			let offsetX = ( viewport.getBoundingClientRect().width - ( map.width*64*0.3 ) ) / 2
+			let offsetY = ( viewport.getBoundingClientRect().height - ( map.height*64*0.3 ) ) / 2
+			canvas.style.left = offsetX + 'px'
+			canvas.style.top = offsetY + 'px'
+		} else {
+			bob.centreDisplay()
+		}
 	}
 }
