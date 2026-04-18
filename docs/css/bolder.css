@@ -186,3 +186,10 @@ button {
 	height: 64px;
 	position: absolute;
 }
+
+.monster {
+	background-image: url(../assets/monster.png);
+	width: 64px;
+	height: 64px;
+	position: absolute;
+}

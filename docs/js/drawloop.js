@@ -47,7 +47,7 @@ const drawloop = {
 		// Check all the boulders and drop the unsupported ones.
 		drawloop.boulderTime += delta
 		if ( drawloop.boulderTime > 75 ) {
-			map.pushable.moveUnsupported()
+			map.pushable.tick()
 			drawloop.boulderTime -= 75
 		}
 		
@@ -60,17 +60,40 @@ const drawloop = {
 				// If the check delta has run out then we can perform a collision detection.
 				if ( spirit.checkDelta <= 0 ) {
 					spirit.checkDelta = 16
-					map.checkSpiritCollision( spirit )
+					map.spirit.checkCollision( spirit )
 				}
 
 				// If the delta has run out then it's time for a new one
 				if ( spirit.delta <= 0 ) {
 					spirit.delta = 0
-					map.routeSpirit( spirit )
+					map.spirit.route( spirit )
 				}
 
 				spirit.elem.style.left = (spirit.x*64 - ((spirit.delta)*spirit.dx)) + 'px'
 				spirit.elem.style.top = (spirit.y*64 - ((spirit.delta)*spirit.dy)) + 'px'
+			}
+		} )
+		
+		// Move any monsters along.
+		map.monsters.forEach( (monster) => {
+			if ( monster.delta > 0 ) {
+				monster.delta -= delta/4
+				monster.checkDelta -= delta/4
+
+				// If the check delta has run out then we can perform a collision detection.
+				if ( monster.checkDelta <= 0 ) {
+					monster.checkDelta = 16
+					//map.monster.checkCollision( monster )
+				}
+
+				// If the delta has run out then it's time for a new one
+				if ( monster.delta <= 0 ) {
+					monster.delta = 0
+					map.monster.route( monster )
+				}
+
+				monster.elem.style.left = (monster.x*64 - ((monster.delta)*monster.dx)) + 'px'
+				monster.elem.style.top = (monster.y*64 - ((monster.delta)*monster.dy)) + 'px'
 			}
 		} )
 

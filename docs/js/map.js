@@ -3,6 +3,7 @@ const map = {
 	pushables: {},
 	safes: {},
 	spirits: [],
+	monsters: [],
 
 	grid: [],
 	gridtype: {
@@ -479,129 +480,154 @@ const map = {
 		}
 	},
 
-	/**
-	 * Detect if the passed-in spirit has collided with bob.
-	 */
-	checkSpiritCollision: ( spirit ) => {
-		// Nothing to do with caged spirits
-		if ( !map.spiritsFatal || spirit.isCaged ) {
-			return
-		}
+	spirit: {
+		/**
+		 * Detect if the passed-in spirit has collided with bob.
+		 */
+		checkCollision: ( spirit ) => {
+			// Nothing to do with caged spirits
+			if ( !map.spiritsFatal || spirit.isCaged ) {
+				return
+			}
 
-		// A collision occurs if the spirit x,y coincides with either of bob's.
-		if  ( 
-			( spirit.x === bob.x && spirit.y === bob.y )
-			|| ( spirit.x === bob.oldX && spirit.y === bob.oldY )
-		) {
-			bob.killBob()
-		}
-	},
+			// A collision occurs if the spirit x,y coincides with either of bob's.
+			if  ( 
+				( spirit.x === bob.x && spirit.y === bob.y )
+				|| ( spirit.x === bob.oldX && spirit.y === bob.oldY )
+			) {
+				bob.killBob()
+			}
+		},
 
-	/**
-	 * Move the spirits around the map.
-	 */
-	routeSpirit: ( spirit ) => {
-		// Nought to do if the spirit has a delta already
-		if ( spirit.delta > 0 || spirit.isCaged ) {
-			return
-		}
+		/**
+		 * Move the spirits around the map.
+		 */
+		route: ( spirit ) => {
+			// Nought to do if the spirit has a delta already
+			if ( spirit.delta > 0 || spirit.isCaged ) {
+				return
+			}
 
-		// if the spirit is actually in a cage right now then all we need do is
-		// turn it into a diamond!
-		let entity = map.grid[spirit.y][spirit.x]
-		if ( entity.type === map.gridtype.CAGE ) {
-			spirit.isCaged = true
-			spirit.elem.style.display = 'none'
-			entity.elem.setAttribute( 'class', 'entity diamond' )
-			entity.type = map.gridtype.DIAMOND
-		}
+			// if the spirit is actually in a cage right now then all we need do is
+			// turn it into a diamond!
+			let entity = map.grid[spirit.y][spirit.x]
+			if ( entity.type === map.gridtype.CAGE ) {
+				spirit.isCaged = true
+				spirit.elem.style.display = 'none'
+				entity.elem.setAttribute( 'class', 'entity diamond' )
+				entity.type = map.gridtype.DIAMOND
+			}
 
-		spirit.dx = 0
-		spirit.dy = 0
-		spirit.delta = 64
-		spirit.checkDelta = 16
+			spirit.dx = 0
+			spirit.dy = 0
+			spirit.delta = 64
+			spirit.checkDelta = 16
 
-		switch  ( spirit.dir ) {
-			case map.dirs.UP:
-				if ( map.transparent.isToLeft( spirit ) ) {
-					spirit.dir = map.dirs.LEFT
-					spirit.x -= 1
-					spirit.dx = -1
-				} else if ( map.transparent.isAbove( spirit ) ) {
-					spirit.dir = map.dirs.UP
-					spirit.y -= 1
-					spirit.dy = -1
-				} else if ( map.transparent.isToRight( spirit ) ) {
-					spirit.dir = map.dirs.RIGHT
-					spirit.x += 1
-					spirit.dx = 1
-				} else if ( map.transparent.isBelow( spirit ) ) {
-					spirit.dir = map.dirs.DOWN
-					spirit.y += 1
-					spirit.dy = 1
-				}
-				break
+			switch  ( spirit.dir ) {
+				case map.dirs.UP:
+					if ( map.spirit.isTransparentToLeft( spirit ) ) {
+						spirit.dir = map.dirs.LEFT
+						spirit.x -= 1
+						spirit.dx = -1
+					} else if ( map.spirit.isTransparentAbove( spirit ) ) {
+						spirit.dir = map.dirs.UP
+						spirit.y -= 1
+						spirit.dy = -1
+					} else if ( map.spirit.isTransparentToRight( spirit ) ) {
+						spirit.dir = map.dirs.RIGHT
+						spirit.x += 1
+						spirit.dx = 1
+					} else if ( map.spirit.isTransparentBelow( spirit ) ) {
+						spirit.dir = map.dirs.DOWN
+						spirit.y += 1
+						spirit.dy = 1
+					}
+					break
 
-			case map.dirs.RIGHT:
-				if ( map.transparent.isAbove( spirit ) ) {
-					spirit.dir = map.dirs.UP
-					spirit.y -= 1
-					spirit.dy = -1
-				} else if ( map.transparent.isToRight( spirit ) ) {
-					spirit.dir = map.dirs.RIGHT
-					spirit.x += 1
-					spirit.dx = 1
-				} else if ( map.transparent.isBelow( spirit ) ) {
-					spirit.dir = map.dirs.DOWN
-					spirit.y += 1
-					spirit.dy = 1
-				} else if ( map.transparent.isToLeft( spirit ) ) {
-					spirit.dir = map.dirs.LEFT
-					spirit.x -= 1
-					spirit.dx = -1
-				}
-				break
+				case map.dirs.RIGHT:
+					if ( map.spirit.isTransparentAbove( spirit ) ) {
+						spirit.dir = map.dirs.UP
+						spirit.y -= 1
+						spirit.dy = -1
+					} else if ( map.spirit.isTransparentToRight( spirit ) ) {
+						spirit.dir = map.dirs.RIGHT
+						spirit.x += 1
+						spirit.dx = 1
+					} else if ( map.spirit.isTransparentBelow( spirit ) ) {
+						spirit.dir = map.dirs.DOWN
+						spirit.y += 1
+						spirit.dy = 1
+					} else if ( map.spirit.isTransparentToLeft( spirit ) ) {
+						spirit.dir = map.dirs.LEFT
+						spirit.x -= 1
+						spirit.dx = -1
+					}
+					break
 
-			case map.dirs.DOWN:
-				if ( map.transparent.isToRight( spirit ) ) {
-					spirit.dir = map.dirs.RIGHT
-					spirit.x += 1
-					spirit.dx = 1
-				} else if ( map.transparent.isBelow( spirit ) ) {
-					spirit.dir = map.dirs.DOWN
-					spirit.y += 1
-					spirit.dy = 1
-				} else if ( map.transparent.isToLeft( spirit ) ) {
-					spirit.dir = map.dirs.LEFT
-					spirit.x -= 1
-					spirit.dx = -1
-				} else if ( map.transparent.isAbove( spirit ) ) {
-					spirit.dir = map.dirs.UP
-					spirit.y -= 1
-					spirit.dy = -1
-				} 
-				break
+				case map.dirs.DOWN:
+					if ( map.spirit.isTransparentToRight( spirit ) ) {
+						spirit.dir = map.dirs.RIGHT
+						spirit.x += 1
+						spirit.dx = 1
+					} else if ( map.spirit.isTransparentBelow( spirit ) ) {
+						spirit.dir = map.dirs.DOWN
+						spirit.y += 1
+						spirit.dy = 1
+					} else if ( map.spirit.isTransparentToLeft( spirit ) ) {
+						spirit.dir = map.dirs.LEFT
+						spirit.x -= 1
+						spirit.dx = -1
+					} else if ( map.spirit.isTransparentAbove( spirit ) ) {
+						spirit.dir = map.dirs.UP
+						spirit.y -= 1
+						spirit.dy = -1
+					} 
+					break
 
-			case map.dirs.LEFT:
-				if ( map.transparent.isBelow( spirit ) ) {
-					spirit.dir = map.dirs.DOWN
-					spirit.y += 1
-					spirit.dy = 1
-				} else if ( map.transparent.isToLeft( spirit ) ) {
-					spirit.dir = map.dirs.LEFT
-					spirit.x -= 1
-					spirit.dx = -1
-				} else if ( map.transparent.isAbove( spirit ) ) {
-					spirit.dir = map.dirs.UP
-					spirit.y -= 1
-					spirit.dy = -1
-				} else if ( map.transparent.isToRight( spirit ) ) {
-					spirit.dir = map.dirs.RIGHT
-					spirit.x += 1
-					spirit.dx = 1
-				}
-				break
-		}
+				case map.dirs.LEFT:
+					if ( map.spirit.isTransparentBelow( spirit ) ) {
+						spirit.dir = map.dirs.DOWN
+						spirit.y += 1
+						spirit.dy = 1
+					} else if ( map.spirit.isTransparentToLeft( spirit ) ) {
+						spirit.dir = map.dirs.LEFT
+						spirit.x -= 1
+						spirit.dx = -1
+					} else if ( map.spirit.isTransparentAbove( spirit ) ) {
+						spirit.dir = map.dirs.UP
+						spirit.y -= 1
+						spirit.dy = -1
+					} else if ( map.spirit.isTransparentToRight( spirit ) ) {
+						spirit.dir = map.dirs.RIGHT
+						spirit.x += 1
+						spirit.dx = 1
+					}
+					break
+			}
+		},
+
+		isTransparent: ( loc ) => {
+			let type = map.grid[loc.y][loc.x].type
+			return type === map.gridtype.EARTH 
+				|| type === map.gridtype.EMPTY
+				|| type === map.gridtype.CAGE
+		},
+		
+		isTransparentAbove: ( loc ) => {
+			return map.spirit.isTransparent( { x:loc.x, y:loc.y-1 } )
+		},
+		
+		isTransparentBelow: ( loc ) => {
+			return map.spirit.isTransparent( { x:loc.x, y:loc.y+1 } )
+		},
+		
+		isTransparentToLeft: ( loc ) => {
+			return map.spirit.isTransparent( { x:loc.x-1, y:loc.y } )
+		},
+		
+		isTransparentToRight: ( loc ) => {
+			return map.spirit.isTransparent( { x:loc.x+1, y:loc.y } )
+		},
 	},
 
 	/**
@@ -700,15 +726,31 @@ const map = {
 
 			// Is the pushable an egg? In which case we crack it!
 			if ( pushable.type === map.gridtype.EGG ) {
-				pushable.crackTimer = 5000
+				pushable.crackTimer = 30
+				let grid = map.grid[pushable.y][pushable.x]
+				grid.elem.setAttribute( 'class', 'egg-cracked entity' )
 			}
 		},
 
 		/**
-		 * Are there any unsupported pushables that should fall?
+		 * Update tick for pushables:
+		 * - Are there any unsupported pushables that should fall?
+		 * - Are there any eggs which are cracked and need to hatch?
 		 */
-		moveUnsupported: () => {
-			for ( const[key,pp] of Object.entries(map.pushables)) {
+		tick: () => {
+			for ( const[key,pp] of Object.entries(map.pushables) ) {
+				// If this is a cracked egg decrement the counter until it hatches.
+				if ( pp.crackTimer ) {
+					pp.crackTimer -= 1
+
+					// Hatch the egg if its counter gets below zero.
+					if ( pp.crackTimer === 0 ) {
+						map.loc.setToEmpty( pp )
+						delete( map.pushables[(pp.x)+'_'+pp.y] )
+						map.monster.hatch( pp )
+					}
+				}
+
 				if ( map.pushable.canMoveInto( map.loc.below( pp ) ) ) {
 					map.pushable.moveDown( pp )
 					continue
@@ -816,7 +858,7 @@ const map = {
 					grid.elem.setAttribute( 'class', 'entity boulder' )
 					break
 				case map.gridtype.EGG:
-					grid.elem.setAttribute( 'class', 'entity egg' )
+					grid.elem.setAttribute( 'class', loc.crackTimer>0 ? 'entity egg-cracked': 'entity egg' )
 					break
 			}
 		},
@@ -847,31 +889,85 @@ const map = {
 	},
 
 	/**
-	 * Utility functions for checking transparency relative to a loc. This is used
-	 * by spirits to find their way around maps.
+	 * Functions for monsters!
 	 */
-	transparent: {
-		is: ( loc ) => {
+	monster: {
+		/**
+		 * Hatch a new monster at the given loc.
+		 */
+		hatch: ( loc ) => {
+			let elem = document.createElement( 'div' )
+			elem.setAttribute( 'class', 'monster' )
+			elem.style.left = loc.x*64 + 'px'
+			elem.style.top = loc.y*64 + 'px'
+
+			let canvas = document.getElementById( '-canvas' )
+			canvas.appendChild( elem )
+
+			map.monsters.push( {
+				x: loc.x,
+				y: loc.y,
+				dx: 0,
+				dy: -1,
+				delta: 64,
+				elem: elem
+			} )
+		},
+
+		/**
+		 * 
+		 */
+		route: ( monster ) => {
+			// Nought to do if the monster has a delta already
+			if ( monster.delta > 0 ) {
+				return
+			}
+
+			monster.dx = 0
+			monster.dy = 0
+			monster.delta = 64
+			monster.checkDelta = 16
+
+			// Monster's naively move toward bob, x first and then y. If bob isn't alive they wait ...
+			if ( bob.deathClock > 0 ) {
+				return
+			} else if ( monster.x > bob.x && map.monster.isTransparentToLeft( monster ) ) {
+				monster.x -= 1
+				monster.dx = -1
+			} else if ( monster.x < bob.x && map.monster.isTransparentToRight( monster ) ) {
+				monster.x += 1
+				monster.dx = 1
+			} else if ( monster.y > bob.y && map.monster.isTransparentAbove( monster ) ) {
+				monster.y -= 1
+				monster.dy = -1
+			} else if ( monster.y < bob.y && map.monster.isTransparentBelow( monster ) ) {
+				monster.y += 1
+				monster.dy = 1
+			} 
+		},
+
+		/**
+		 * Transparency convenience methods.
+		 */
+		isTransparent: ( loc ) => {
 			let type = map.grid[loc.y][loc.x].type
-			return type === map.gridtype.EARTH 
-				|| type === map.gridtype.EMPTY
-				|| type === map.gridtype.CAGE
+			return type === map.gridtype.EMPTY 
 		},
 		
-		isAbove: ( loc ) => {
-			return map.transparent.is( { x:loc.x, y:loc.y-1 } )
+		isTransparentAbove: ( loc ) => {
+			return map.monster.isTransparent( { x:loc.x, y:loc.y-1 } )
 		},
 		
-		isBelow: ( loc ) => {
-			return map.transparent.is( { x:loc.x, y:loc.y+1 } )
+		isTransparentBelow: ( loc ) => {
+			return map.monster.isTransparent( { x:loc.x, y:loc.y+1 } )
 		},
 		
-		isToLeft: ( loc ) => {
-			return map.transparent.is( { x:loc.x-1, y:loc.y } )
+		isTransparentToLeft: ( loc ) => {
+			return map.monster.isTransparent( { x:loc.x-1, y:loc.y } )
 		},
 		
-		isToRight: ( loc ) => {
-			return map.transparent.is( { x:loc.x+1, y:loc.y } )
+		isTransparentToRight: ( loc ) => {
+			return map.monster.isTransparent( { x:loc.x+1, y:loc.y } )
 		},
 	}
 }
