@@ -413,13 +413,13 @@ const map = {
 							jsonVal += 'O'
 							elem.setAttribute( 'class', 'boulder entity' )
 							map.grid[y][x] = { type: map.gridtype.BOULDER, elem:elem }
-							map.pushables[x+'_'+y] = {x:x, y:y} 
+							map.pushables[x+'_'+y] = {x:x, y:y, type: map.gridtype.BOULDER} 
 							break
 						case map.gridtype.EGG:
 							jsonVal += 'G'
 							elem.setAttribute( 'class', 'egg entity' )
 							map.grid[y][x] = { type: map.gridtype.EGG, elem:elem }
-							map.pushables[x+'_'+y] = {x:x, y:y} 
+							map.pushables[x+'_'+y] = {x:x, y:y, type: map.gridtype.EGG, crackTimer:0} 
 							break
 					}
 					c += 1
@@ -646,46 +646,61 @@ const map = {
 		/**
 		 * Move the pushable into the square to its right.
 		 */
-		moveRight: ( loc ) => {
-			let type = map.grid[loc.y][loc.x].type
-			map.loc.setToEmpty( loc )
-			loc.x += 1
-			loc.type = type
-			map.loc.setToPushable( loc )
-			loc.pushDirection = map.dirs.RIGHT
+		moveRight: ( pushable ) => {
+			// Clear the grid cell the pushable is in.
+			map.loc.setToEmpty( pushable )
+			delete( map.pushables[(pushable.x)+'_'+pushable.y] )
+
+			// Move the pushable and update the new grid cell
+			pushable.x += 1
+			pushable.pushDirection = map.dirs.RIGHT
+
+			map.pushables[pushable.x+'_'+pushable.y] = pushable
+			map.loc.setToPushable( pushable )
 		},
 
 		/**
 		 * Move the pushable into the square to its left.
 		 */
-		moveLeft: ( loc ) => {
-			let type = map.grid[loc.y][loc.x].type
-			map.loc.setToEmpty( loc )
-			loc.x -= 1
-			loc.type = type
-			map.loc.setToPushable( loc )
-			loc.pushDirection = map.dirs.LEFT
+		moveLeft: ( pushable ) => {
+			// Clear the grid cell the pushable is in.
+			map.loc.setToEmpty( pushable )
+			delete( map.pushables[(pushable.x)+'_'+pushable.y] )
+
+			// Move the pushable and update the new grid cell
+			pushable.x -= 1
+			pushable.pushDirection = map.dirs.LEFT
+
+			map.pushables[pushable.x+'_'+pushable.y] = pushable
+			map.loc.setToPushable( pushable )
 		},
 
 		/**
 		 * Move a pushable down one square, i.e. let it fall. This adds 1 to the
 		 * score, but can kill bob if he's down there.
 		 */
-		moveDown: ( loc ) => {
-			let type = map.grid[loc.y][loc.x].type
+		moveDown: ( pushable ) => {
+			// Clear the grid cell the pushable is in.
+			map.loc.setToEmpty( pushable )
+			delete( map.pushables[(pushable.x)+'_'+pushable.y] )
 
-			// Update the models
-			map.loc.setToEmpty( loc )
-			loc.y += 1
-			loc.type = type
-			map.loc.setToPushable( loc )
+			// Move the pushable and update the new grid cell
+			pushable.y += 1
+
+			map.pushables[pushable.x+'_'+pushable.y] = pushable
+			map.loc.setToPushable( pushable )
 
 			// Update the score
 			bolder.addToScore( 1 )
 
 			// Did we hit bob?
-			if ( map.pushable.fatal && loc.x === bob.x && loc.y+1 === bob.y ) {
+			if ( map.pushable.fatal && pushable.x === bob.x && pushable.y+1 === bob.y ) {
 				bob.killBob()
+			}
+
+			// Is the pushable an egg? In which case we crack it!
+			if ( pushable.type === map.gridtype.EGG ) {
+				pushable.crackTimer = 5000
 			}
 		},
 
@@ -789,21 +804,21 @@ const map = {
 		},
 
 		/**
-		 * Converts the loc into a boulder. Usually this happens when a boulder
+		 * Converts the loc into a pushable. Usually this happens when a pushable
 		 * moves into a loc and replaces an empty.
 		 */
 		setToPushable: ( loc ) => {
-			let entity = map.grid[loc.y][loc.x]
+			let grid = map.grid[loc.y][loc.x]
+			grid.type = loc.type
+
 			switch ( loc.type ) {
 				case map.gridtype.BOULDER:
-					entity.elem.setAttribute( 'class', 'entity boulder' )
+					grid.elem.setAttribute( 'class', 'entity boulder' )
 					break
 				case map.gridtype.EGG:
-					entity.elem.setAttribute( 'class', 'entity egg' )
+					grid.elem.setAttribute( 'class', 'entity egg' )
 					break
 			}
-			entity.type = loc.type
-			map.pushables[loc.x + '_' + loc.y] = loc
 		},
 
 		/**
@@ -828,9 +843,6 @@ const map = {
 			}
 			entity.elem.setAttribute( 'class', 'entity' )
 			entity.type = map.gridtype.EMPTY
-			
-			// Get rid of the pushable that was here
-			delete( map.pushables[loc.x + '_' + loc.y] )
 		},
 	},
 

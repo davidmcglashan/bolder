@@ -151,7 +151,7 @@ const bob = {
 		if ( bob.canPush( next ) ) {
 			let after = map.grid[bob.y][bob.x-2].type
 			if ( after === map.gridtype.EMPTY ) {
-				map.pushable.moveLeft({y:bob.y,x:bob.x-1})
+				map.pushable.moveLeft( map.pushables[ (bob.x-1) + '_' + bob.y] )
 			} else {
 				return
 			}
@@ -178,7 +178,8 @@ const bob = {
 		if ( bob.canPush( next ) ) {
 			let after = map.grid[bob.y][bob.x+2].type
 			if ( after === map.gridtype.EMPTY ) {
-				map.pushable.moveRight({y:bob.y,x:bob.x+1})
+				let pushable = map.pushables[ (bob.x+1) + '_' + bob.y]
+				map.pushable.moveRight( map.pushables[ (bob.x+1) + '_' + bob.y] )
 			} else {
 				return
 			}
