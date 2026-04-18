@@ -82,28 +82,56 @@ button {
 	cursor: pointer;
 }
 
-.border {
+#-border {
 	position: absolute;
-	inset: 2rem;
+	inset: 2.5rem 1rem 1rem;
 	border: 1px solid white;
 }
 
-.scaled {
+#-viewport {
 	position: absolute;
-	inset: 2rem;
+	inset: 1rem;
 	overflow: hidden;
 }
 
-#-canvas {
-	/* transform: scale(0.25); */
-}
-
+/**
+ * Toolbar shows links and the game state e.g. score across the top of the page.
+ */
 .toolbar {
 	display: flex;
-	gap: 3rem;
-	padding-left: 2rem;
+	padding: 0rem 1rem;
+	justify-content: space-between;
 }
 
+/**
+ * When the game is paused the toolbar and dynamic game entities are hidden.
+ */
+.paused .toolbar .hideOnPause,
+.paused .bob,
+.paused .spirit {
+	display: none;
+}
+	.showOnPause {
+		display: none;
+	}
+	.paused .showOnPause {
+		display: block;
+	}
+
+/**
+ * Scale the canvas when paused so the player can peek the map.
+ */
+.paused #-canvas {
+	transform: scale(0.3);
+	position: absolute;
+}
+.paused #-border {
+	border: 1px solid transparent;
+}
+
+/**
+ * All game entities generally have the same square form and a different background image.
+ */
 .entity {
 	width: 64px;
 	height: 64px;

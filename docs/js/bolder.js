@@ -171,5 +171,22 @@ const bolder = {
 		elem.style.display = 'block'
 		elem = document.getElementById( '-viewport' )
 		elem.style.display = 'none'
+	},
+
+	/**
+	 * Opens the map version of the full level.
+	 */
+	map: () => {
+		// Pause the drawloop and put a 'paused' class on <body>. CSS will take care of the UI.
+		drawloop.pause()
+		document.getElementById( '-body' ).classList.toggle( 'paused' )
+
+		let viewport = document.getElementById( '-viewport' )
+		let canvas = document.getElementById( '-canvas' )
+
+		let offsetX = ( viewport.getBoundingClientRect().width - ( map.width*64*0.3 ) ) / 2
+		let offsetY = ( viewport.getBoundingClientRect().height - ( map.height*64*0.3 ) ) / 2
+		canvas.style.left = offsetX + 'px'
+		canvas.style.top = offsetY + 'px'
 	}
 }

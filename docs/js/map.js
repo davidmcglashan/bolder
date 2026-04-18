@@ -42,16 +42,16 @@ const map = {
 		random.SEED = parseInt( payload.seed ) | 0
 
 		// Initialise the map and set its dimensions.
-		let width = random.get( payload.minWidth, payload.maxWidth )
-		let height = random.get( payload.minHeight, payload.maxHeight )
+		map.width = random.get( payload.minWidth, payload.maxWidth )
+		map.height = random.get( payload.minHeight, payload.maxHeight )
 		
 		map.pushable.fatal = payload.bouldersFatal
 		map.spiritsFatal = payload.spiritsFatal
 
 		// Fill the map with walls
-		for ( let y = 0; y < height; y++ ) {
+		for ( let y = 0; y < map.height; y++ ) {
 			map.grid[y] = []
-			for ( let x = 0; x < width; x++ ) {
+			for ( let x = 0; x < map.width; x++ ) {
 				map.grid[y][x] = map.gridtype.WALL
 			}
 		}
@@ -60,7 +60,7 @@ const map = {
 		// - generate cutaway number between 2..4
 		// - choose a 0..7 location for it
 		// - derive x,y,w,h based on loc and rng
-		if ( width > 10 && height > 10 ) {
+		if ( map.width > 10 && map.height > 10 ) {
 			for ( let cw=0; cw < random.get( payload.minCutaways, payload.maxCutaways ); cw += 1 ) {
 				let loc = random.get(0,7)
 				let x,y,w,h,z
@@ -69,54 +69,54 @@ const map = {
 					case 0:
 						x = 0
 						y = 0
-						w = random.get(2,width/3)
-						h = random.get(2,height/3)
+						w = random.get(2,map.width/3)
+						h = random.get(2,map.height/3)
 						break
 					case 1:
-						z = random.get(1,width/4)
-						w = random.get(2,width/3)
-						x = parseInt(width/2 - z)
+						z = random.get(1,map.width/4)
+						w = random.get(2,map.width/3)
+						x = parseInt(map.width/2 - z)
 						y = 0
-						h = random.get(2,height/3)
+						h = random.get(2,map.height/3)
 						break
 					case 2:
-						w = random.get(2,width/3)
-						x = width-w
+						w = random.get(2,map.width/3)
+						x = map.width-w
 						y = 0
-						h = random.get(2,height/3)
+						h = random.get(2,map.height/3)
 						break
 					case 3:
-						z = random.get(1,width/4)
-						y = parseInt(height/2 - z)
-						h = random.get(2,height/3)
+						z = random.get(1,map.width/4)
+						y = parseInt(map.height/2 - z)
+						h = random.get(2,map.height/3)
 						x = 0
-						w = random.get(2,width/3)
+						w = random.get(2,map.width/3)
 						break
 					case 4:
-						z = random.get(1,width/4)
-						y = parseInt(height/2 - z)
-						h = random.get(2,height/3)
-						w = random.get(2,width/3)
-						x = width-w
+						z = random.get(1,map.width/4)
+						y = parseInt(map.height/2 - z)
+						h = random.get(2,map.height/3)
+						w = random.get(2,map.width/3)
+						x = map.width-w
 						break
 					case 5:
-						h = random.get(2,height/3)
-						y = height-h
+						h = random.get(2,map.height/3)
+						y = map.height-h
 						x = 0
-						w = random.get(2,width/3)
+						w = random.get(2,map.width/3)
 						break
 					case 6:
-						z = random.get(1,width/4)
-						w = random.get(2,width/3)
-						x = parseInt(width/2 - z)
-						h = random.get(2,height/3)
-						y = height-h
+						z = random.get(1,map.width/4)
+						w = random.get(2,map.width/3)
+						x = parseInt(map.width/2 - z)
+						h = random.get(2,map.height/3)
+						y = map.height-h
 						break
 					case 7:
-						w = random.get(2,width/3)
-						x = width-w
-						h = random.get(2,height/3)
-						y = height-h
+						w = random.get(2,map.width/3)
+						x = map.width-w
+						h = random.get(2,map.height/3)
+						y = map.height-h
 						break
 				}
 
@@ -130,8 +130,8 @@ const map = {
 		}
 
 		// All the world is walls, so fill the interior with interesting things.
-		for ( let y=1; y<height-1; y++ ) {
-			for ( let x=1; x<width-1; x++ ) {
+		for ( let y=1; y<map.height-1; y++ ) {
+			for ( let x=1; x<map.width-1; x++ ) {
 				// Is this a cell we can change?
 				if ( map.grid[y][x] === map.gridtype.WALL ) {
 					// Don't change if any neighbouring cell is a zero. This maintains
@@ -182,8 +182,8 @@ const map = {
 			let placed = false
 			for ( let a=0; a<5; a++ ) {
 				// random x, y, dir, length
-				x = random.get(1,width-1)
-				y = random.get(1,height-1)
+				x = random.get(1,map.width-1)
+				y = random.get(1,map.height-1)
 				dir = random.get(0,3)
 
 				// If we're not in the map, try again.
@@ -234,7 +234,7 @@ const map = {
 						break
 				}
 
-				if ( x < 0 || y < 0 || x >= width || y >= height || map.grid[y][x] === 0 ) {
+				if ( x < 0 || y < 0 || x >= map.width || y >= map.height || map.grid[y][x] === 0 ) {
 					placed = false;
 				}
 			}
@@ -243,8 +243,8 @@ const map = {
 		// We have a bunch of walls filled with earth and boulders! Let's put
 		// the shiny game elements in. This is done last to prevent other structural
 		// elements overwriting them.
-		for ( let y=1; y<height-1; y++ ) {
-			for ( let x=1; x<width-1; x++ ) {
+		for ( let y=1; y<map.height-1; y++ ) {
+			for ( let x=1; x<map.width-1; x++ ) {
 				// Is this a cell we can change?
 				if ( map.grid[y][x] === map.gridtype.EARTH ) {
 		
@@ -276,8 +276,8 @@ const map = {
 		// find a place for bob in the top 20% of the level for 100 tries, then everywhere ...
 		let counter = 0
 		while ( bob.x === 0 && bob.y === 0 ) {
-			let x = random.get(1,width-1)
-			let y = random.get(1,( counter < 100 ? height/payload.startFraction : height-1 ) )
+			let x = random.get(1,map.width-1)
+			let y = random.get(1,( counter < 100 ? map.height/payload.startFraction : map.height-1 ) )
 
 			if ( map.grid[y][x] === map.gridtype.EARTH || map.grid[y][x] === map.gridtype.EMPTY ) {
 				bob.x = x
@@ -298,8 +298,8 @@ const map = {
 		if ( safes > 0 ) {
 			let keys = random.get( 1,3 )
 			while ( keys > 0 ) {
-				let x = random.get(1,width-1)
-				let y = random.get(1,height-1 )
+				let x = random.get(1,map.width-1)
+				let y = random.get(1,map.height-1 )
 
 				// Replace an earth or an empty
 				if ( map.grid[y][x] === map.gridtype.EARTH || map.grid[y][x] === map.gridtype.EMPTY ) {
@@ -325,8 +325,8 @@ const map = {
 
 			// Find a place for a spirit
 			while ( counter < 100 ) {
-				let x = random.get(1,width-1)
-				let y = random.get(1,height-1 )
+				let x = random.get(1,map.width-1)
+				let y = random.get(1,map.height-1 )
 
 				if ( map.grid[y][x] === map.gridtype.EARTH || map.grid[y][x] === map.gridtype.EMPTY ) {
 					let elem = document.createElement( 'div' )
@@ -354,11 +354,11 @@ const map = {
 		// Turn the map grid into a proper model with DOM elements
 		let canvas = document.getElementById( "-canvas" )
 		let jsonElem = document.getElementById( "-json" )
-		let jsonVal = '{"map":{"width":' + width + ',"height":' + height + ',"map":"'
+		let jsonVal = '{"map":{"width":' + map.width + ',"height":' + map.height + ',"map":"'
 		let c = 0
 
-		for ( let y=0; y<height; y++ ) {
-			for ( let x=0; x<=width; x++ ) {
+		for ( let y=0; y<map.height; y++ ) {
+			for ( let x=0; x<=map.width; x++ ) {
 				if ( map.grid[y][x] !== 0 ) {
 					let elem = document.createElement( 'div' )
 					elem.style.left = x*64 + 'px'

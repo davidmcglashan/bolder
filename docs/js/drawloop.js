@@ -1,6 +1,7 @@
 const drawloop = {
 	previousTime: 0,
 	boulderTime: 0,
+	paused: false,
 
 	/**
 	 * Start the drawloop.
@@ -16,7 +17,17 @@ const drawloop = {
 	 */
 	recordStartTime: ( time ) => {
 		drawloop.previousTime = time
-		window.requestAnimationFrame( drawloop.loop );
+		window.requestAnimationFrame( drawloop.loop )
+	},
+
+	/**
+	 * Toggles the pause state of the game.
+	 */
+	pause: () => {
+		drawloop.paused = !drawloop.paused
+		if ( !drawloop.paused ) {
+			drawloop.start()
+		}
 	},
 
 	/**
@@ -24,6 +35,11 @@ const drawloop = {
 	 * done in the tick loop according to numbers.
 	 */ 
 	loop: ( time ) => {
+		// Abort if the game has been paused.
+		if ( drawloop.paused ) {
+			return
+		}
+
 		// Calculate the delta since the last frame.
 		delta = time - drawloop.previousTime;
 		drawloop.previousTime = time;
@@ -69,7 +85,7 @@ const drawloop = {
 				bob.viewport.scrollTop = (bob.y * 64) - bob.offsetY - (bob.delta*bob.dy)
 				bob.elem.style.left = (bob.x*64 - (bob.delta*bob.dx)) + 'px'
 				bob.elem.style.top = (bob.y*64 - (bob.delta*bob.dy)) + 'px'
-				bob.elem.style.display = 'block'
+				bob.elem.style.display = null
 			}
 		}
 

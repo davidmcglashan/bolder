@@ -13,18 +13,22 @@
 		<script type="text/javascript" src="js/random.js"></script>
 		<script type="text/javascript" src="js/bob.js"></script>
 	</head>
-	<body>
-		<div class="toolbar">
-			<a id="-home" href="index.html">&lt;&lt; Home</a>
-			<span id="-score">score: 0</span>
-			<span id="-diamonds">diamonds: 0</span>
-			<a href="javascript:void(0);" onclick="bolder.stuck()">Stuck?!</a>
-			<a href="javascript:void(0);" onclick="bolder.json()">JSON</a>
-		</div>
-		<div class="border">
-			<div id="-viewport" class="scaled">
-				<div id="-canvas"></div>
-				<div id="-bob" class="bob"></div>
+	<body id="-body">
+		<div id="-main">
+			<div class="toolbar">
+				<a id="-home" href="index.html">&lt;&lt; Home</a>
+				<span id="-score">score: 0</span>
+				<span id="-diamonds">diamonds: 0</span>
+				<a class="hideOnPause" href="javascript:void(0);" onclick="bolder.stuck()">Stuck?!</a>
+				<a class="hideOnPause" href="javascript:void(0);" onclick="bolder.json()">JSON</a>
+				<a class="hideOnPause" href="javascript:void(0);" onclick="bolder.map()">Map</a>
+				<a class="showOnPause" href="javascript:void(0);" onclick="bolder.map()">Resume</a>
+			</div>
+			<div id="-border">
+				<div id="-viewport">
+					<div id="-canvas"></div>
+					<div id="-bob" class="bob"></div>
+				</div>
 			</div>
 		</div>
 		<div id="-json"></div>
