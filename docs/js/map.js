@@ -513,7 +513,7 @@ const map = {
 			let entity = map.grid[spirit.y][spirit.x]
 			if ( entity.type === map.gridtype.CAGE ) {
 				spirit.isCaged = true
-				spirit.elem.style.display = 'none'
+				spirit.elem.remove()
 				entity.elem.setAttribute( 'class', 'entity diamond' )
 				entity.type = map.gridtype.DIAMOND
 			}
@@ -861,6 +861,13 @@ const map = {
 					grid.elem.setAttribute( 'class', loc.crackTimer>0 ? 'entity egg-cracked': 'entity egg' )
 					break
 			}
+
+			// If this loc is occupied by a monster then kill it!
+			map.monsters.forEach( (monster) => {
+				if ( monster.x === loc.x && monster.y === loc.y ) {
+					map.monster.kill( monster )
+				}
+			} )
 		},
 
 		/**
@@ -905,13 +912,23 @@ const map = {
 			canvas.appendChild( elem )
 
 			map.monsters.push( {
+				alive: true,
 				x: loc.x,
 				y: loc.y,
 				dx: 0,
-				dy: -1,
-				delta: 64,
+				dy: 0,
+				delta: 1,
 				elem: elem
 			} )
+		},
+
+		/**
+		 * Kills the monster
+		 */
+		kill: ( monster ) => {
+			monster.elem.remove()
+			monster.alive = false
+			bolder.addToScore( 100 )
 		},
 
 		/**
@@ -919,7 +936,7 @@ const map = {
 		 */
 		route: ( monster ) => {
 			// Nought to do if the monster has a delta already
-			if ( monster.delta > 0 ) {
+			if ( monster.delta > 0 || !monster.alive ) {
 				return
 			}
 
