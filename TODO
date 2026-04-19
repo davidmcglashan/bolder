@@ -10,8 +10,6 @@ bugs
 game features
 -------------
 
-- sloping walls
-  - varieties of wall
 - structured earth 
   - fill interior with rectangles and remove straight lines
   - convert earth to boulders and diamonds
@@ -49,17 +47,14 @@ design
   - diamond
   - cages
   - spirits
-  - TNT
+  - eggs & variants
+  - monsters & variants
 - bob death animation
-- maps aren't very good when they're narrow
 
 programming
 -----------
 
-- map.loc is badly named - should be map.displaygrid or map.dgrid
-  - dgrid is just type, elem, variant, slopiness
-  - dgrids have optional pushable: parameter when boulders and eggs come to stay
-
+- maps aren't very good when they're narrow
 - pushing might be improved by animating bob and then moving the boulder on 3/4ths of his delta
 - collision detection might be improved by looking at deltas to gauge distance
 - css class should be property of the map[][] entity

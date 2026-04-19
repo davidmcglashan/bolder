@@ -30,6 +30,8 @@ const map = {
 		'G': 'egg'
 	},
 
+	wallVariants: [ '', 'ltop', 'btop', 'rtop', 'nbl', 'nbr' ],
+
 	dirs: {
 		UP: 0,
 		RIGHT: 1,
@@ -207,21 +209,36 @@ const map = {
 			// Loop while we build the wall.
 			while ( placed ) {
 				// Put in a wall or something else?
-				if ( random.diceRoll( { oneIn:payload.extraWallHoles, attempts:1 } ) ) {
-					if ( random.diceRoll( { oneIn:payload.safeChance, attempts:1 } ) ) {
-						map.dgrid[y][x] = map.gridtype.SAFE
-						safes += 1
-					} 
+				map.dgrid[y][x] = map.gridtype.WALL
 
-					// ... or a cage ... ?
-					else if ( random.diceRoll( { oneIn: payload.cageChance, attempts:1 } ) ) {
-						map.dgrid[y][x] = map.gridtype.CAGE
-						cages.push( {x:x,y:y} )
-					} 
-
-					// Doing nothing here will result in empty space in the wall.
+				// Or something else?
+				if (
+					x === 0 || y === 0 || x === map.width-1 || y === map.height-1 
+					|| map.dgrid[y-1][x-1] === 0
+					|| map.dgrid[y-1][x] === 0
+					|| map.dgrid[y-1][x+1] === 0
+					|| map.dgrid[y][x-1] === 0
+					|| map.dgrid[y][x+1] === 0
+					|| map.dgrid[y+1][x-1] === 0
+					|| map.dgrid[y+1][x] === 0
+					|| map.dgrid[y+1][x+1] === 0
+				) {
+					// Do nothing: we're neighbouring the abyss!
 				} else {
-					map.dgrid[y][x] = map.gridtype.WALL
+					if ( random.diceRoll( { oneIn:payload.extraWallHoles, attempts:1 } ) ) {
+						map.dgrid[y][x] = map.gridtype.EMPTY
+
+						if ( random.diceRoll( { oneIn:payload.safeChance, attempts:1 } ) ) {
+							map.dgrid[y][x] = map.gridtype.SAFE
+							safes += 1
+						} 
+	
+						// ... or a cage ... ?
+						else if ( random.diceRoll( { oneIn: payload.cageChance, attempts:1 } ) ) {
+							map.dgrid[y][x] = map.gridtype.CAGE
+							cages.push( {x:x,y:y} )
+						} 
+					}
 				}
 						
 				// Move to the next square.
@@ -381,6 +398,29 @@ const map = {
 							v = random.get( 0,3 )
 							if ( v ) {
 								dgrid.variant = 'r' + v
+							}
+							break
+
+						// Walls can have one of their defined variants
+						case map.gridtype.WALL:
+							// Don't change wall variants for walls neighbouring the abyss ...
+							if (
+								x === 0 || y === 0 || x === map.width-1 || y === map.height-1 
+								|| map.dgrid[y-1][x-1] === 0
+								|| map.dgrid[y-1][x] === 0
+								|| map.dgrid[y-1][x+1] === 0
+								|| map.dgrid[y][x-1] === 0
+								|| map.dgrid[y][x+1] === 0
+								|| map.dgrid[y+1][x-1] === 0
+								|| map.dgrid[y+1][x] === 0
+								|| map.dgrid[y+1][x+1] === 0
+							) {
+								break
+							}
+
+							v = random.get( 0, map.wallVariants.length )
+							if ( v ) {
+								dgrid.variant = map.wallVariants[v]
 							}
 							break
 
@@ -743,39 +783,62 @@ const map = {
 		 */
 		get: ( pushable ) => {
 			// What is the pushable sitting on? Some types are slopey.
-			let type = map.dgrid[pushable.y+1][pushable.x].type
-			if ( 	type === map.gridtype.BOULDER
-				 || type === map.gridtype.DIAMOND
-				 || type === map.gridtype.KEY
-				 || type === map.gridtype.EGG
-			) {
-				// Left takes precedence if there's no pushDirection in the loc
-				if ( !pushable.pushDirection || pushable.pushDirection === map.dirs.LEFT ) {
-					if ( 
-						map.pushable.canMoveInto( map.loc.toLeft( pushable ) ) 
-						&& map.pushable.canMoveInto( map.loc.toLeftAndBelow( pushable ) ) 
-					) {
-						return map.dirs.LEFT
-					}
-					if ( 
-						map.pushable.canMoveInto( map.loc.toRight( pushable ) ) 
-						&& map.pushable.canMoveInto( map.loc.toRightAndBelow( pushable ) ) 
-					) {
-						return map.dirs.RIGHT
-					}
-				} else {
-					if ( 
-						map.pushable.canMoveInto( map.loc.toRight( pushable ) ) 
-						&& map.pushable.canMoveInto( map.loc.toRightAndBelow( pushable ) ) 
-					) {
-						return map.dirs.RIGHT
-					}
-					if ( 
-						map.pushable.canMoveInto( map.loc.toLeft( pushable ) ) 
-						&& map.pushable.canMoveInto( map.loc.toLeftAndBelow( pushable ) ) 
-					) {
-						return map.dirs.LEFT
-					}
+			let dgrid = map.dgrid[pushable.y+1][pushable.x]
+			let slopesLeft = 
+					dgrid.type === map.gridtype.BOULDER
+				 || dgrid.type === map.gridtype.DIAMOND
+				 || dgrid.type === map.gridtype.KEY
+				 || dgrid.type === map.gridtype.EGG
+			let slopesRight = slopesLeft
+
+			// Some walls variants slope only one way.
+			if ( dgrid.type === map.gridtype.WALL && dgrid.variant ) {
+				slopesLeft = dgrid.variant[0] === 'l' || dgrid.variant[0] === 'b'
+				slopesRight = dgrid.variant[0] === 'r' || dgrid.variant[0] === 'b'
+			}
+
+			// Abort if there's no check to be made in either direction.
+			if ( !(slopesLeft || slopesRight) ) {
+				return map.dirs.NONE
+			}
+
+			// If our objects slopes to the left, AND it was pushed that way, try moving it left. 
+			if ( slopesLeft && ( !pushable.pushDirection || pushable.pushDirection === map.dirs.LEFT ) ) {
+				// Try to the left first
+				if ( 
+					map.pushable.canMoveInto( map.loc.toLeft( pushable ) ) 
+					&& map.pushable.canMoveInto( map.loc.toLeftAndBelow( pushable ) ) 
+				) {
+					return map.dirs.LEFT
+				}
+			}
+
+			// If our objects slopes to the right, AND it was pushed that way, try moving it right. 
+			if ( slopesRight && pushable.pushDirection === map.dirs.RIGHT ) {
+				if ( 
+					map.pushable.canMoveInto( map.loc.toRight( pushable ) ) 
+					&& map.pushable.canMoveInto( map.loc.toRightAndBelow( pushable ) ) 
+				) {
+					return map.dirs.RIGHT
+				}
+			}
+
+			// Try again without push direction
+			if ( slopesLeft ) {
+				// Try to the left first
+				if ( 
+					map.pushable.canMoveInto( map.loc.toLeft( pushable ) ) 
+					&& map.pushable.canMoveInto( map.loc.toLeftAndBelow( pushable ) ) 
+				) {
+					return map.dirs.LEFT
+				}
+			} 
+			if ( slopesRight ) {
+				if ( 
+					map.pushable.canMoveInto( map.loc.toRight( pushable ) ) 
+					&& map.pushable.canMoveInto( map.loc.toRightAndBelow( pushable ) ) 
+				) {
+					return map.dirs.RIGHT
 				}
 			}
 

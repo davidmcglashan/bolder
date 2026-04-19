@@ -144,17 +144,20 @@ button {
 .wall {
 	background-image: url(../assets/wall.png);
 }
-	.wall.tl {
-		background-image: url(../assets/wall-tl.png);
+	.wall-ltop {
+		background-image: url(../assets/wall-ltop.png);
 	}
-	.wall.tr {
-		background-image: url(../assets/wall-tr.png);
+	.wall-btop {
+		background-image: url(../assets/wall-btop.png);
 	}
-	.wall.bl {
-		background-image: url(../assets/wall-bl.png);
+	.wall-rtop {
+		background-image: url(../assets/wall-rtop.png);
 	}
-	.wall.br {
-		background-image: url(../assets/wall-br.png);
+	.wall-nbl {
+		background-image: url(../assets/wall-nbl.png);
+	}
+	.wall-nbr {
+		background-image: url(../assets/wall-nbr.png);
 	}
 
 .earth {
