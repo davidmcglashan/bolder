@@ -77,8 +77,9 @@ const drawloop = {
 		// Move any monsters along.
 		map.monsters.forEach( (monster) => {
 			if ( monster.delta > 0 ) {
-				monster.delta -= delta/4
-				monster.checkDelta -= delta/4
+				let step = map.monstersSlow ? 6 : 4
+				monster.delta -= delta/step
+				monster.checkDelta -= delta/step
 
 				// If the check delta has run out then we can perform a collision detection.
 				if ( monster.checkDelta <= 0 ) {

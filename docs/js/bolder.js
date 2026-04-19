@@ -23,9 +23,10 @@ const bolder = {
 		{ name: "cageChance", label: "Cage likelihood (1 in ...)", type: "number", value: 20 },
 		{ name: "eggChance", label: "Egg likelihood (1 in ...)", type: "number", value: 15, after: 'column' },
 
-
 		{ name: "bouldersFatal", label: "Falling boulders are fatal", type: "checkbox", value: true },
 		{ name: "spiritsFatal", label: "Spirits are fatal", type: "checkbox", value: true },
+		{ name: "monstersSlow", label: "Monsters are slow", type: "checkbox", value: false },
+		{ name: "monstersDirt", label: "Monsters move through dirt", type: "checkbox", value: false },
 	],
 
 	/**
@@ -66,16 +67,17 @@ const bolder = {
 			input.setAttribute( 'name', field.name )
 			input.setAttribute( 'type', field.type )
 
-			// Put the default value from the JSON into the form field so default play is sensible.
-			if ( field.value ) {
-				// Checkboxes need slightly different HTML.
-				if ( field.type === 'checkbox' && field.value ) {
+			// Put the values in. Checkboxes need slightly different HTML.
+			if ( field.type === 'checkbox' ) {
+				let val = payload ? payload[field.name] : field.value
+				if ( val ) {
 					input.setAttribute( 'checked', 'checked' )
-				} else {
-					input.setAttribute( 'value', payload ? payload[field.name] : field.value )
-					input.setAttribute( 'placeholder', field.value )
 				}
+			} else {
+				input.setAttribute( 'value', payload ? payload[field.name] : field.value )
+				input.setAttribute( 'placeholder', field.value )
 			}
+
 			label.appendChild( input )
 		} )
 

@@ -10,20 +10,8 @@ bugs
 game features
 -------------
 
-- spirits
-  - right handed spirits
-- eggs and monsters
-  - 100 for killing monster
-  - -1 for every second a monster is alive
-  - monsters are slow
-  - monsters can move through earth
 - sloping walls
-- TNT
-  - placed to the left, right, or under
-  - timed then explodes, turning ...
-    - walls, diamonds, boulders into earth
-    - earth into space
-	- number of TNT parameters
+  - varieties of wall
 - structured earth 
   - fill interior with rectangles and remove straight lines
   - convert earth to boulders and diamonds
@@ -36,7 +24,6 @@ game features
   - brackets - C, L or U shaped structures with curvy corners - done in special brick like Repton polkas
   - safes and cages in extra walls
 - finish a level
-- one use teleporters
 - boulderUpdate flag which triggers 
   - when bob moves a boulder
   - when bob digs earth, diamonds, keys
@@ -74,8 +61,19 @@ programming
 - probably more than a few places to optimise
 - restructure where it makes sense
 - varieties of earth
-- varieties of wall
 - tools to ...
   - build level JSON from flat files
 - swipe gestures to play on mobile
 - versions
+
+ideas 
+-----
+
+- TNT
+  - placed to the left, right, or under
+  - timed then explodes, turning ...
+    - walls, diamonds, boulders into earth
+    - earth into space
+	- number of TNT parameters
+- right handed spirits
+- one use teleporters

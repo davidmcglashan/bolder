@@ -48,6 +48,8 @@ const map = {
 		
 		map.pushable.fatal = payload.bouldersFatal
 		map.spiritsFatal = payload.spiritsFatal
+		map.monstersSlow = payload.monstersSlow
+		map.monstersDirt = payload.monstersDirt
 
 		// Fill the map with walls
 		for ( let y = 0; y < map.height; y++ ) {
@@ -968,7 +970,12 @@ const map = {
 		 */
 		isTransparent: ( loc ) => {
 			let type = map.grid[loc.y][loc.x].type
-			return type === map.gridtype.EMPTY 
+
+			if ( map.monstersDirt ) {
+				return type === map.gridtype.EMPTY || type === map.gridtype.EARTH
+			} else {
+				return type === map.gridtype.EMPTY 
+			}
 		},
 		
 		isTransparentAbove: ( loc ) => {
