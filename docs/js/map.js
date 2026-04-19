@@ -26,13 +26,6 @@ const map = {
 		LEFT: 3,
 		NONE: 4
 	},
-
-	/**
-	 * loads the numbered level 
-	 */
-	loadMap: ( ln ) => {
-		map.parseMap( levels.maps[ln] )
-	},
 	
 	/**
 	 * Generates a map from a seed value - either the random one or the one
@@ -434,52 +427,6 @@ const map = {
 
 		jsonVal += '"}}'
 		jsonElem.innerHTML = jsonVal
-	},
-
-	parseMap( mapObj ) {
-		map.entities = []
-
-		let c = 0
-		let canvas = document.getElementById( "-canvas" )
-
-		for ( let y = 0; y < mapObj.height; y++ ) {
-			map.grid[y] = []
-
-			for ( let x = 0; x < mapObj.height; x++ ) {
-				let elem = document.createElement( 'div' )
-				elem.style.left = x*64 + 'px'
-				elem.style.top = y*64 + 'px'
-				canvas.appendChild( elem )
-
-				let loc = { type: mapObj.map[c], elem:elem }
-				map.grid[y][x] = loc
-
-				switch( mapObj.map[c] ) {
-					case map.gridtype.WALL:
-						elem.setAttribute( 'class', 'wall entity' )
-						break
-					case map.gridtype.EARTH:
-						elem.setAttribute( 'class', 'earth entity' )
-						break
-					case map.gridtype.BOULDER:
-						elem.setAttribute( 'class', 'boulder entity' )
-						map.pushables[x+'_'+y] = {x:x, y:y} 
-						break
-					case map.gridtype.DIAMOND:
-						elem.setAttribute( 'class', 'diamond entity' )
-						map.diamonds += 1
-						break
-					
-					// 'x' is Bob, so set him up.
-					case 'x':
-						loc.type = map.gridtype.EMPTY
-						bob.x = x
-						bob.y = y
-						break
-				}
-				c=c+1
-			}
-		}
 	},
 
 	spirit: {
