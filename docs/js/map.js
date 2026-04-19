@@ -5,7 +5,7 @@ const map = {
 	spirits: [],
 	monsters: [],
 
-	grid: [],
+	dgrid: [],
 	gridtype: {
 		EMPTY: ' ',
 		WALL: '#',
@@ -17,6 +17,17 @@ const map = {
 		CAGE: '/',
 		SPIRIT: '*',
 		EGG: 'G'
+	},
+	cssClasses: {
+		'#': 'wall',
+		'.': 'earth',
+		'O': 'boulder',
+		'^': 'diamond',
+		'S': 'safe',
+		'k': 'key',
+		'/': 'cage',
+		'*': 'spirit',
+		'G': 'egg'
 	},
 
 	dirs: {
@@ -46,9 +57,9 @@ const map = {
 
 		// Fill the map with walls
 		for ( let y = 0; y < map.height; y++ ) {
-			map.grid[y] = []
+			map.dgrid[y] = []
 			for ( let x = 0; x < map.width; x++ ) {
-				map.grid[y][x] = map.gridtype.WALL
+				map.dgrid[y][x] = map.gridtype.WALL
 			}
 		}
 
@@ -58,10 +69,9 @@ const map = {
 		// - derive x,y,w,h based on loc and rng
 		if ( map.width > 10 && map.height > 10 ) {
 			for ( let cw=0; cw < random.get( payload.minCutaways, payload.maxCutaways ); cw += 1 ) {
-				let loc = random.get(0,7)
 				let x,y,w,h,z
 
-				switch ( loc ) {
+				switch ( random.get(0,7) ) {
 					case 0:
 						x = 0
 						y = 0
@@ -119,7 +129,7 @@ const map = {
 				// Fill the map with zeroes where this cutaway is
 				for ( let yy=y; yy<y+h; yy++ ) {
 					for ( let xx=x; xx<x+w; xx++ ) {
-						map.grid[yy][xx] = 0
+						map.dgrid[yy][xx] = 0
 					}
 				}
 			}
@@ -129,36 +139,36 @@ const map = {
 		for ( let y=1; y<map.height-1; y++ ) {
 			for ( let x=1; x<map.width-1; x++ ) {
 				// Is this a cell we can change?
-				if ( map.grid[y][x] === map.gridtype.WALL ) {
+				if ( map.dgrid[y][x] === map.gridtype.WALL ) {
 					// Don't change if any neighbouring cell is a zero. This maintains
 					// a 1-wide strip of walls around the world's perimeter.
 					if ( 
-						map.grid[y-1][x-1] === 0
-						|| map.grid[y-1][x] === 0
-						|| map.grid[y-1][x+1] === 0
-						|| map.grid[y][x-1] === 0
-						|| map.grid[y][x+1] === 0
-						|| map.grid[y+1][x-1] === 0
-						|| map.grid[y+1][x] === 0
-						|| map.grid[y+1][x+1] === 0
+						map.dgrid[y-1][x-1] === 0
+						|| map.dgrid[y-1][x] === 0
+						|| map.dgrid[y-1][x+1] === 0
+						|| map.dgrid[y][x-1] === 0
+						|| map.dgrid[y][x+1] === 0
+						|| map.dgrid[y+1][x-1] === 0
+						|| map.dgrid[y+1][x] === 0
+						|| map.dgrid[y+1][x+1] === 0
 					) { continue }
 
 					// Everything in the interior is now earth.
-					map.grid[y][x] = map.gridtype.EARTH
+					map.dgrid[y][x] = map.gridtype.EARTH
 
 					// Randomly change some earths into boulders ...
 					if ( random.diceRoll( { oneIn:payload.boulderChance, attempts:1 } ) ) {
-						map.grid[y][x] = map.gridtype.BOULDER
+						map.dgrid[y][x] = map.gridtype.BOULDER
 					} 
 					
 					// ... or gaps and holes (but not underneath boulders to minimise starting falls) ...
-					if ( map.grid[y-1][x] !== map.gridtype.BOULDER && random.diceRoll( { oneIn:payload.holeChance, attempts:1 } ) ) {
-						map.grid[y][x] = map.gridtype.EMPTY
+					if ( map.dgrid[y-1][x] !== map.gridtype.BOULDER && random.diceRoll( { oneIn:payload.holeChance, attempts:1 } ) ) {
+						map.dgrid[y][x] = map.gridtype.EMPTY
 					} 
 					
 					// ... or back into some kind of wall.
 					if ( random.diceRoll( { oneIn:payload.wallChance, attempts:1 } ) ) {
-						map.grid[y][x] = map.gridtype.WALL
+						map.dgrid[y][x] = map.gridtype.WALL
 					} 
 				}
 			}
@@ -183,7 +193,7 @@ const map = {
 				dir = random.get(0,3)
 
 				// If we're not in the map, try again.
-				if ( map.grid[y][x] !== 0 ) {
+				if ( map.dgrid[y][x] !== 0 ) {
 					placed = true
 					break
 				}
@@ -199,19 +209,19 @@ const map = {
 				// Put in a wall or something else?
 				if ( random.diceRoll( { oneIn:payload.extraWallHoles, attempts:1 } ) ) {
 					if ( random.diceRoll( { oneIn:payload.safeChance, attempts:1 } ) ) {
-						map.grid[y][x] = map.gridtype.SAFE
+						map.dgrid[y][x] = map.gridtype.SAFE
 						safes += 1
 					} 
 
 					// ... or a cage ... ?
 					else if ( random.diceRoll( { oneIn: payload.cageChance, attempts:1 } ) ) {
-						map.grid[y][x] = map.gridtype.CAGE
+						map.dgrid[y][x] = map.gridtype.CAGE
 						cages.push( {x:x,y:y} )
 					} 
 
 					// Doing nothing here will result in empty space in the wall.
 				} else {
-					map.grid[y][x] = map.gridtype.WALL
+					map.dgrid[y][x] = map.gridtype.WALL
 				}
 						
 				// Move to the next square.
@@ -230,7 +240,7 @@ const map = {
 						break
 				}
 
-				if ( x < 0 || y < 0 || x >= map.width || y >= map.height || map.grid[y][x] === 0 ) {
+				if ( x < 0 || y < 0 || x >= map.width || y >= map.height || map.dgrid[y][x] === 0 ) {
 					placed = false;
 				}
 			}
@@ -242,26 +252,26 @@ const map = {
 		for ( let y=1; y<map.height-1; y++ ) {
 			for ( let x=1; x<map.width-1; x++ ) {
 				// Is this a cell we can change?
-				if ( map.grid[y][x] === map.gridtype.EARTH ) {
+				if ( map.dgrid[y][x] === map.gridtype.EARTH ) {
 		
 					if ( random.diceRoll( { oneIn: payload.diamondChance, attempts:1 } ) ) {
-						map.grid[y][x] = map.gridtype.DIAMOND
+						map.dgrid[y][x] = map.gridtype.DIAMOND
 
 						// Turn this diamond into a safe ... ?
 						if ( random.diceRoll( { oneIn: payload.safeChance, attempts:1 } ) ) {
-							map.grid[y][x] = map.gridtype.SAFE
+							map.dgrid[y][x] = map.gridtype.SAFE
 							safes += 1
 						} 
 
 						// ... or a cage ... ?
 						else if ( random.diceRoll( { oneIn: payload.cageChance, attempts:1 } ) ) {
-							map.grid[y][x] = map.gridtype.CAGE
+							map.dgrid[y][x] = map.gridtype.CAGE
 							cages.push( {x:x,y:y} )
 						} 
 
 						// ... or an egg ... ?
 						else if ( random.diceRoll( { oneIn: payload.eggChance, attempts:1 } ) ) {
-							map.grid[y][x] = map.gridtype.EGG
+							map.dgrid[y][x] = map.gridtype.EGG
 							map.pushables[x+'_'+y] = {x:x,y:y}
 						} 
 					} 
@@ -275,10 +285,10 @@ const map = {
 			let x = random.get(1,map.width-1)
 			let y = random.get(1,( counter < 100 ? map.height/payload.startFraction : map.height-1 ) )
 
-			if ( map.grid[y][x] === map.gridtype.EARTH || map.grid[y][x] === map.gridtype.EMPTY ) {
+			if ( map.dgrid[y][x] === map.gridtype.EARTH || map.dgrid[y][x] === map.gridtype.EMPTY ) {
 				bob.x = x
 				bob.y = y
-				map.grid[y][x] = map.gridtype.EMPTY
+				map.dgrid[y][x] = map.gridtype.EMPTY
 			}
 
 			// If we fail to place bob in 200 goes we put him in the middle.
@@ -298,8 +308,8 @@ const map = {
 				let y = random.get(1,map.height-1 )
 
 				// Replace an earth or an empty
-				if ( map.grid[y][x] === map.gridtype.EARTH || map.grid[y][x] === map.gridtype.EMPTY ) {
-					map.grid[y][x] = map.gridtype.KEY
+				if ( map.dgrid[y][x] === map.gridtype.EARTH || map.dgrid[y][x] === map.gridtype.EMPTY ) {
+					map.dgrid[y][x] = map.gridtype.KEY
 					keys -= 1
 				}
 
@@ -324,7 +334,7 @@ const map = {
 				let x = random.get(1,map.width-1)
 				let y = random.get(1,map.height-1 )
 
-				if ( map.grid[y][x] === map.gridtype.EARTH || map.grid[y][x] === map.gridtype.EMPTY ) {
+				if ( map.dgrid[y][x] === map.gridtype.EARTH || map.dgrid[y][x] === map.gridtype.EMPTY ) {
 					let elem = document.createElement( 'div' )
 					elem.setAttribute( 'class', 'spirit' )
 					elem.style.left = x*64 + 'px'
@@ -349,84 +359,68 @@ const map = {
 
 		// Turn the map grid into a proper model with DOM elements
 		let canvas = document.getElementById( "-canvas" )
-		let jsonElem = document.getElementById( "-json" )
-		let jsonVal = '{"map":{"width":' + map.width + ',"height":' + map.height + ',"map":"'
-		let c = 0
+		let pushable = null
 
 		for ( let y=0; y<map.height; y++ ) {
 			for ( let x=0; x<=map.width; x++ ) {
-				if ( map.grid[y][x] !== 0 ) {
+				if ( map.dgrid[y][x] !== 0 ) {
 					let elem = document.createElement( 'div' )
 					elem.style.left = x*64 + 'px'
 					elem.style.top = y*64 + 'px'
 					canvas.appendChild( elem )
-					
-					switch ( map.grid[y][x] ) {
-						case map.gridtype.EMPTY:
-							if ( x === bob.x & y === bob.y ) {
-								jsonVal += 'x'
-							} else {
-								jsonVal += ' '
-							}
-							elem.setAttribute( 'class', 'entity' )
-							map.grid[y][x] = { type: map.gridtype.EMPTY, elem:elem }
-							break
-						case map.gridtype.WALL:
-							jsonVal += '#'
-							elem.setAttribute( 'class', 'wall entity' )
-							map.grid[y][x] = { type: map.gridtype.WALL, elem:elem }
-							break
-						case map.gridtype.EARTH:
-							jsonVal += '.'
-							elem.setAttribute( 'class', 'earth entity' )
-							map.grid[y][x] = { type: map.gridtype.EARTH, elem:elem }
-							break
+
+					// The dgrid houses the type and the elem
+					let dgrid = { type: map.dgrid[y][x], elem:elem }
+					map.dgrid[y][x] = dgrid
+
+					// Some dgrids require additional setup
+					switch ( dgrid.type ) {
 						case map.gridtype.DIAMOND:
-							jsonVal += '^'
-							elem.setAttribute( 'class', 'diamond entity' )
-							map.grid[y][x] = { type: map.gridtype.DIAMOND, elem:elem }
 							map.diamonds += 1
 							break
 						case map.gridtype.SAFE:
-							jsonVal += 'S'
-							elem.setAttribute( 'class', 'safe entity' )
-							map.grid[y][x] = { type: map.gridtype.SAFE, elem:elem }
 							map.safes[x+'_'+y] = {x:x, y:y} 
 							map.diamonds += 1
 							break
 						case map.gridtype.CAGE:
-							jsonVal += '/'
-							elem.setAttribute( 'class', 'cage entity' )
-							map.grid[y][x] = { type: map.gridtype.CAGE, elem:elem }
 							map.diamonds += 1
 							break
-						case map.gridtype.KEY:
-							jsonVal += 'k'
-							elem.setAttribute( 'class', 'key entity' )
-							map.grid[y][x] = { type: map.gridtype.KEY, elem:elem }
-							break
 						case map.gridtype.BOULDER:
-							jsonVal += 'O'
-							elem.setAttribute( 'class', 'boulder entity' )
-							map.grid[y][x] = { type: map.gridtype.BOULDER, elem:elem }
-							map.pushables[x+'_'+y] = {x:x, y:y, type: map.gridtype.BOULDER} 
+							pushable = {x:x, y:y, type: map.gridtype.BOULDER} 
+							map.pushables[x+'_'+y] = pushable
+							dgrid.pushable = pushable
 							break
 						case map.gridtype.EGG:
-							jsonVal += 'G'
-							elem.setAttribute( 'class', 'egg entity' )
-							map.grid[y][x] = { type: map.gridtype.EGG, elem:elem }
-							map.pushables[x+'_'+y] = {x:x, y:y, type: map.gridtype.EGG, crackTimer:0} 
+							pushable = {x:x, y:y, type: map.gridtype.EGG, crackTimer:0} 
+							map.pushables[x+'_'+y] = pushable
+							dgrid.pushable = pushable
 							break
 					}
-					c += 1
-				} else {
-					jsonVal += '!'
+
+					// Fully set up, we can eet its DOM element and CSS class correctly.
+					map.updateType( dgrid )
 				}
 			}
 		}
+	},
 
-		jsonVal += '"}}'
-		jsonElem.innerHTML = jsonVal
+	/**
+	 * Forces and update for the correct type on a dgrid. You can pass in the type
+	 * to set it on the dgrid first. This is then reflected in the CSS.
+	 */
+	updateType: ( dgrid, type = null ) => {
+		// If we got a type passed in we can set it on the dgrid first.
+		if ( type ) {
+			dgrid.type = type
+		}
+
+		let css = map.cssClasses[ dgrid.type ]
+		dgrid.elem.setAttribute( 'class', 'entity ' + css )
+
+		// Eggs also have a cracked state
+		if ( dgrid.type === map.gridtype.EGG && dgrid.pushable.crackTimer > 0 ) {
+			dgrid.elem.setAttribute( 'class', 'entity egg-cracked' )
+		}
 	},
 
 	spirit: {
@@ -459,12 +453,11 @@ const map = {
 
 			// if the spirit is actually in a cage right now then all we need do is
 			// turn it into a diamond!
-			let entity = map.grid[spirit.y][spirit.x]
-			if ( entity.type === map.gridtype.CAGE ) {
+			let dgrid = map.dgrid[spirit.y][spirit.x]
+			if ( dgrid.type === map.gridtype.CAGE ) {
 				spirit.isCaged = true
 				spirit.elem.remove()
-				entity.elem.setAttribute( 'class', 'entity diamond' )
-				entity.type = map.gridtype.DIAMOND
+				map.updateType( dgrid, map.gridtype.DIAMOND )
 			}
 
 			spirit.dx = 0
@@ -556,7 +549,7 @@ const map = {
 		},
 
 		isTransparent: ( loc ) => {
-			let type = map.grid[loc.y][loc.x].type
+			let type = map.dgrid[loc.y][loc.x].type
 			return type === map.gridtype.EARTH 
 				|| type === map.gridtype.EMPTY
 				|| type === map.gridtype.CAGE
@@ -584,9 +577,7 @@ const map = {
 	 */
 	openSafes: () => {
 		for ( const[key,safe] of Object.entries(map.safes)) {
-			let entity = map.grid[safe.y][safe.x]
-			entity.elem.setAttribute( 'class', 'entity diamond' )
-			entity.type = map.gridtype.DIAMOND
+			map.updateType( map.dgrid[safe.y][safe.x], map.gridtype.DIAMOND )
 		}
 		map.safes = {}
 	},
@@ -609,7 +600,7 @@ const map = {
 			}
 
 			// Pushables can move into empty spaces.
-			let type = map.grid[loc.y][loc.x].type
+			let type = map.dgrid[loc.y][loc.x].type
 			if ( type === map.gridtype.EMPTY ) {
 				return true
 			}
@@ -676,8 +667,7 @@ const map = {
 			// Is the pushable an egg? In which case we crack it!
 			if ( pushable.type === map.gridtype.EGG ) {
 				pushable.crackTimer = 30
-				let grid = map.grid[pushable.y][pushable.x]
-				grid.elem.setAttribute( 'class', 'egg-cracked entity' )
+				map.updateType( map.dgrid[pushable.y][pushable.x] )
 			}
 		},
 
@@ -728,38 +718,38 @@ const map = {
 		 * move in that direction in its next action. Direction is calculated from
 		 * the map squares around the loc.
 		 */
-		get: ( loc ) => {
-			// What is the loc sitting on? Some types are slopey.
-			let type = map.grid[loc.y+1][loc.x].type
+		get: ( pushable ) => {
+			// What is the pushable sitting on? Some types are slopey.
+			let type = map.dgrid[pushable.y+1][pushable.x].type
 			if ( 	type === map.gridtype.BOULDER
 				 || type === map.gridtype.DIAMOND
 				 || type === map.gridtype.KEY
 				 || type === map.gridtype.EGG
 			) {
 				// Left takes precedence if there's no pushDirection in the loc
-				if ( !loc.pushDirection || loc.pushDirection === map.dirs.LEFT ) {
+				if ( !pushable.pushDirection || pushable.pushDirection === map.dirs.LEFT ) {
 					if ( 
-						map.pushable.canMoveInto( map.loc.toLeft( loc ) ) 
-						&& map.pushable.canMoveInto( map.loc.toLeftAndBelow( loc ) ) 
+						map.pushable.canMoveInto( map.loc.toLeft( pushable ) ) 
+						&& map.pushable.canMoveInto( map.loc.toLeftAndBelow( pushable ) ) 
 					) {
 						return map.dirs.LEFT
 					}
 					if ( 
-						map.pushable.canMoveInto( map.loc.toRight( loc ) ) 
-						&& map.pushable.canMoveInto( map.loc.toRightAndBelow( loc ) ) 
+						map.pushable.canMoveInto( map.loc.toRight( pushable ) ) 
+						&& map.pushable.canMoveInto( map.loc.toRightAndBelow( pushable ) ) 
 					) {
 						return map.dirs.RIGHT
 					}
 				} else {
 					if ( 
-						map.pushable.canMoveInto( map.loc.toRight( loc ) ) 
-						&& map.pushable.canMoveInto( map.loc.toRightAndBelow( loc ) ) 
+						map.pushable.canMoveInto( map.loc.toRight( pushable ) ) 
+						&& map.pushable.canMoveInto( map.loc.toRightAndBelow( pushable ) ) 
 					) {
 						return map.dirs.RIGHT
 					}
 					if ( 
-						map.pushable.canMoveInto( map.loc.toLeft( loc ) ) 
-						&& map.pushable.canMoveInto( map.loc.toLeftAndBelow( loc ) ) 
+						map.pushable.canMoveInto( map.loc.toLeft( pushable ) ) 
+						&& map.pushable.canMoveInto( map.loc.toLeftAndBelow( pushable ) ) 
 					) {
 						return map.dirs.LEFT
 					}
@@ -772,7 +762,7 @@ const map = {
 	},
 
 	/**
-	 * Utility functions for converting locs into other locations.
+	 * Utility functions for getting new locs based on other locations.
 	 */
 	loc: {
 		above: ( loc ) => {
@@ -799,17 +789,9 @@ const map = {
 		 * moves into a loc and replaces an empty.
 		 */
 		setToPushable: ( loc ) => {
-			let grid = map.grid[loc.y][loc.x]
-			grid.type = loc.type
-
-			switch ( loc.type ) {
-				case map.gridtype.BOULDER:
-					grid.elem.setAttribute( 'class', 'entity boulder' )
-					break
-				case map.gridtype.EGG:
-					grid.elem.setAttribute( 'class', loc.crackTimer>0 ? 'entity egg-cracked': 'entity egg' )
-					break
-			}
+			let dgrid = map.dgrid[loc.y][loc.x]
+			dgrid.pushable = loc
+			map.updateType( dgrid, loc.type )
 
 			// If this loc is occupied by a monster then kill it!
 			map.monsters.forEach( (monster) => {
@@ -823,10 +805,10 @@ const map = {
 		 * Empties a square on the map at the given loc. Send scoring = true to add to bob's score.
 		 */
 		setToEmpty: ( loc, scoring = false ) => {
-			let entity = map.grid[loc.y][loc.x]
+			let dgrid = map.dgrid[loc.y][loc.x]
 
 			if ( scoring ) {
-				switch ( entity.type ) {
+				switch ( dgrid.type ) {
 					case map.gridtype.EARTH:
 						bolder.addToScore( 10 )
 						break
@@ -839,8 +821,10 @@ const map = {
 						break
 				}
 			}
-			entity.elem.setAttribute( 'class', 'entity' )
-			entity.type = map.gridtype.EMPTY
+
+			// Clear the dgrid of all of its extra state.
+			delete( dgrid.pushable )
+			map.updateType( dgrid, map.gridtype.EMPTY )
 		},
 	},
 
@@ -934,7 +918,7 @@ const map = {
 		 * Transparency convenience methods.
 		 */
 		isTransparent: ( loc ) => {
-			let type = map.grid[loc.y][loc.x].type
+			let type = map.dgrid[loc.y][loc.x].type
 
 			if ( map.monstersDirt ) {
 				return type === map.gridtype.EMPTY || type === map.gridtype.EARTH

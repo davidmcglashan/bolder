@@ -127,7 +127,7 @@ const bob = {
 	 * Move bob up, if bob will move up.
 	 */
 	up: () => {
-		let next = map.grid[bob.y-1][bob.x].type
+		let next = map.dgrid[bob.y-1][bob.x].type
 		if ( bob.isBlockedBy( next ) || bob.canPush( next ) ) {
 			return
 		}
@@ -142,14 +142,14 @@ const bob = {
 	 * Move bob left, if bob will move left. This can result in a boulder being pushed.
 	 */
 	left: () => {
-		let next = map.grid[bob.y][bob.x-1].type
+		let next = map.dgrid[bob.y][bob.x-1].type
 		if ( bob.isBlockedBy( next ) ) {
 			return
 		}
 
 		// Pushing a boulder depends on what's after
 		if ( bob.canPush( next ) ) {
-			let after = map.grid[bob.y][bob.x-2].type
+			let after = map.dgrid[bob.y][bob.x-2].type
 			if ( after === map.gridtype.EMPTY ) {
 				map.pushable.moveLeft( map.pushables[ (bob.x-1) + '_' + bob.y] )
 			} else {
@@ -169,14 +169,14 @@ const bob = {
 	 */
 	right: () => {
 		// Can't walk through walls.
-		let next = map.grid[bob.y][bob.x+1].type
+		let next = map.dgrid[bob.y][bob.x+1].type
 		if ( bob.isBlockedBy( next ) ) {
 			return
 		}
 
 		// Pushing a boulder depends on what's after
 		if ( bob.canPush( next ) ) {
-			let after = map.grid[bob.y][bob.x+2].type
+			let after = map.dgrid[bob.y][bob.x+2].type
 			if ( after === map.gridtype.EMPTY ) {
 				let pushable = map.pushables[ (bob.x+1) + '_' + bob.y]
 				map.pushable.moveRight( map.pushables[ (bob.x+1) + '_' + bob.y] )
@@ -196,7 +196,7 @@ const bob = {
 	 * Move bob left, if bob will move down.
 	 */
 	down: () => {
-		let next = map.grid[bob.y+1][bob.x].type
+		let next = map.dgrid[bob.y+1][bob.x].type
 		if ( bob.isBlockedBy( next ) || bob.canPush( next ) ) {
 			return
 		}
