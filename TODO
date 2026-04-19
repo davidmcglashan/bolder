@@ -56,6 +56,10 @@ design
 programming
 -----------
 
+- map.loc is badly named - should be map.displaygrid or map.dgrid
+  - dgrid is just type, elem, variant, slopiness
+  - dgrids have optional pushable: parameter when boulders and eggs come to stay
+
 - pushing might be improved by animating bob and then moving the boulder on 3/4ths of his delta
 - collision detection might be improved by looking at deltas to gauge distance
 - css class should be property of the map[][] entity
@@ -67,6 +71,7 @@ programming
   - build level JSON from flat files
 - swipe gestures to play on mobile
 - versions
+- repair all the JSON stuff and make it more dynamic (and parseable)
 
 ideas 
 -----

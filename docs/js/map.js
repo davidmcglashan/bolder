@@ -360,6 +360,7 @@ const map = {
 		// Turn the map grid into a proper model with DOM elements
 		let canvas = document.getElementById( "-canvas" )
 		let pushable = null
+		let v = 0
 
 		for ( let y=0; y<map.height; y++ ) {
 			for ( let x=0; x<=map.width; x++ ) {
@@ -375,21 +376,39 @@ const map = {
 
 					// Some dgrids require additional setup
 					switch ( dgrid.type ) {
+						// Earth can have one of three variants
+						case map.gridtype.EARTH:
+							v = random.get( 0,3 )
+							if ( v ) {
+								dgrid.variant = 'r' + v
+							}
+							break
+
 						case map.gridtype.DIAMOND:
 							map.diamonds += 1
 							break
+
 						case map.gridtype.SAFE:
 							map.safes[x+'_'+y] = {x:x, y:y} 
 							map.diamonds += 1
 							break
+
 						case map.gridtype.CAGE:
 							map.diamonds += 1
 							break
+
 						case map.gridtype.BOULDER:
 							pushable = {x:x, y:y, type: map.gridtype.BOULDER} 
 							map.pushables[x+'_'+y] = pushable
 							dgrid.pushable = pushable
+
+							v = random.get( 0,3 )
+							if ( v ) {
+								pushable.variant = 'r' + v
+								dgrid.variant = 'r' + v
+							}
 							break
+
 						case map.gridtype.EGG:
 							pushable = {x:x, y:y, type: map.gridtype.EGG, crackTimer:0} 
 							map.pushables[x+'_'+y] = pushable
@@ -415,7 +434,11 @@ const map = {
 		}
 
 		let css = map.cssClasses[ dgrid.type ]
-		dgrid.elem.setAttribute( 'class', 'entity ' + css )
+		if ( dgrid.variant ) {
+			dgrid.elem.setAttribute( 'class', 'entity ' + css + '-' + dgrid.variant )
+		} else {
+			dgrid.elem.setAttribute( 'class', 'entity ' + css )
+		}
 
 		// Eggs also have a cracked state
 		if ( dgrid.type === map.gridtype.EGG && dgrid.pushable.crackTimer > 0 ) {
@@ -791,6 +814,7 @@ const map = {
 		setToPushable: ( loc ) => {
 			let dgrid = map.dgrid[loc.y][loc.x]
 			dgrid.pushable = loc
+			dgrid.variant = loc.variant
 			map.updateType( dgrid, loc.type )
 
 			// If this loc is occupied by a monster then kill it!
@@ -824,6 +848,7 @@ const map = {
 
 			// Clear the dgrid of all of its extra state.
 			delete( dgrid.pushable )
+			delete( dgrid.variant )
 			map.updateType( dgrid, map.gridtype.EMPTY )
 		},
 	},

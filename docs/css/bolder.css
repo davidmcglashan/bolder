@@ -160,10 +160,28 @@ button {
 .earth {
 	background-image: url(../assets/earth.png);
 }
+	.earth-r1 {
+		background-image: url(../assets/earth-r1.png);
+	}
+	.earth-r2 {
+		background-image: url(../assets/earth-r2.png);
+	}
+	.earth-r3 {
+		background-image: url(../assets/earth-r3.png);
+	}
 
 .boulder {
 	background-image: url(../assets/boulder.png);
 }
+	.boulder-r1 {
+		background-image: url(../assets/boulder-r1.png);
+	}
+	.boulder-r2 {
+		background-image: url(../assets/boulder-r2.png);
+	}
+	.boulder-r3 {
+		background-image: url(../assets/boulder-r3.png);
+	}
 
 .safe {
 	background-image: url(../assets/safe.png);
