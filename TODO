@@ -56,6 +56,8 @@ design
 programming
 -----------
 
+- pushing might be improved by animating bob and then moving the boulder on 3/4ths of his delta
+- collision detection might be improved by looking at deltas to gauge distance
 - css class should be property of the map[][] entity
 - comments
 - probably more than a few places to optimise

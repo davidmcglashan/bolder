@@ -138,9 +138,24 @@ button {
 	position: absolute;
 }
 
+/**
+ * Walls and all their variants.
+ */
 .wall {
 	background-image: url(../assets/wall.png);
 }
+	.wall.tl {
+		background-image: url(../assets/wall-tl.png);
+	}
+	.wall.tr {
+		background-image: url(../assets/wall-tr.png);
+	}
+	.wall.bl {
+		background-image: url(../assets/wall-bl.png);
+	}
+	.wall.br {
+		background-image: url(../assets/wall-br.png);
+	}
 
 .earth {
 	background-image: url(../assets/earth.png);

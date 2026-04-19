@@ -119,23 +119,19 @@ const bolder = {
 		window.location.href = 'game.html?' + btoa(JSON.stringify(payload)) 
 	},
 
-	go: ( level ) => {
-		if ( level ) {
-			map.loadMap( level )
-		} else {
-			// Unpack the payload
-			let str = window.location.search
-			if ( str ) {
-				payload = JSON.parse( atob( str.substring(1) ) )
-			}
-
-			// Build the map and update the UI
-			map.buildMapFromSeed( payload )
-			let elem = document.getElementById( '-diamonds' )
-			elem.innerHTML = 'diamonds: ' + map.diamonds
-			elem = document.getElementById( '-home' )
-			elem.setAttribute( 'href', 'index.html' + str )
+	go: ( ) => {
+		// Unpack the payload
+		let str = window.location.search
+		if ( str ) {
+			payload = JSON.parse( atob( str.substring(1) ) )
 		}
+
+		// Build the map and update the UI
+		map.buildMapFromSeed( payload )
+		let elem = document.getElementById( '-diamonds' )
+		elem.innerHTML = 'diamonds: ' + map.diamonds
+		elem = document.getElementById( '-home' )
+		elem.setAttribute( 'href', 'index.html' + str )
 				
 		// Key downs fire movement events in the game.
 		document.addEventListener("keydown", (event) => {
