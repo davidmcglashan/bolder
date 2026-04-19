@@ -84,7 +84,7 @@ const drawloop = {
 				// If the check delta has run out then we can perform a collision detection.
 				if ( monster.checkDelta <= 0 ) {
 					monster.checkDelta = 16
-					//map.monster.checkCollision( monster )
+					map.monster.checkCollision( monster )
 				}
 
 				// If the delta has run out then it's time for a new one

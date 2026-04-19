@@ -925,6 +925,24 @@ const map = {
 		},
 
 		/**
+		 * Detect if the passed-in monster has collided with bob.
+		 */
+		checkCollision: ( monster ) => {
+			// Nothing to do with dead monsters
+			if ( !monster.alive ) {
+				return
+			}
+
+			// A collision occurs if the monster x,y coincides with either of bob's.
+			if  ( 
+				( monster.x === bob.x && monster.y === bob.y )
+				|| ( monster.x === bob.oldX && monster.y === bob.oldY )
+			) {
+				bob.killBob()
+			}
+		},
+
+		/**
 		 * Kills the monster
 		 */
 		kill: ( monster ) => {
