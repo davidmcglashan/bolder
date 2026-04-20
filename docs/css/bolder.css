@@ -159,6 +159,30 @@ button {
 	.wall-nbr {
 		background-image: url(../assets/wall-nbr.png);
 	}
+	.wall-lboxnw {
+		background-image: url(../assets/wall-lboxnw.png);
+	}
+	.wall-nboxn {
+		background-image: url(../assets/wall-nboxn.png);
+	}
+	.wall-rboxne {
+		background-image: url(../assets/wall-rboxne.png);
+	}
+	.wall-nboxw {
+		background-image: url(../assets/wall-nboxw.png);
+	}
+	.wall-nboxe {
+		background-image: url(../assets/wall-nboxe.png);
+	}
+	.wall-nboxsw {
+		background-image: url(../assets/wall-nboxsw.png);
+	}
+	.wall-nboxs {
+		background-image: url(../assets/wall-nboxs.png);
+	}
+	.wall-nboxse {
+		background-image: url(../assets/wall-nboxse.png);
+	}
 
 .earth {
 	background-image: url(../assets/earth.png);

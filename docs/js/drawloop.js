@@ -77,7 +77,7 @@ const drawloop = {
 		// Move any monsters along.
 		map.monsters.forEach( (monster) => {
 			if ( monster.delta > 0 ) {
-				let step = map.monstersSlow ? 6 : 4
+				let step = map.options.monstersSlow ? 6 : 4
 				monster.delta -= delta/step
 				monster.checkDelta -= delta/step
 

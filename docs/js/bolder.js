@@ -10,8 +10,8 @@ const bolder = {
 		{ name: "minCutaways", label: "Minimum number of cut-aways", type: "number", value: 2 },
 		{ name: "maxCutaways", label: "Maximum number of cut-aways", type: "number", value: 8, after: 'gap' },
 		
-		{ name: "extraWallMin", label: "Minimum number of extra walls", type: "number", value: 4 },
-		{ name: "extraWallMax", label: "Maximum number of extra walls", type: "number", value: 8 },
+		{ name: "extraWallMin", label: "Minimum number of extra walls", type: "number", value: 6 },
+		{ name: "extraWallMax", label: "Maximum number of extra walls", type: "number", value: 14 },
 		{ name: "extraWallHoles", label: "Extra wall holey-ness (1 in ...)", type: "number", value: 5, after: 'gap' },
 		{ name: "startFraction", label: "Start in top fraction (1/...)", type: "number", value: 5, after: 'column' },
 		
@@ -127,7 +127,7 @@ const bolder = {
 		}
 
 		// Build the map and update the UI
-		map.buildMapFromSeed( payload )
+		map.gen.start( payload )
 		let elem = document.getElementById( '-diamonds' )
 		elem.innerHTML = 'diamonds: ' + map.diamonds
 		elem = document.getElementById( '-home' )

@@ -3,7 +3,6 @@ bugs
 
 game features
 -------------
-
 - structured earth 
   - fill interior with rectangles and remove straight lines
   - convert earth to boulders and diamonds
@@ -30,7 +29,6 @@ game features
 
 design
 ------
-
 - animate bob ...
 - better sprites for everything
   - walls & variants
@@ -47,8 +45,6 @@ design
 
 programming
 -----------
-
-- maps aren't very good when they're narrow
 - pushing might be improved by animating bob and then moving the boulder on 3/4ths of his delta
 - collision detection might be improved by looking at deltas to gauge distance
 - css class should be property of the map[][] entity
@@ -64,7 +60,6 @@ programming
 
 ideas 
 -----
-
 - TNT
   - placed to the left, right, or under
   - timed then explodes, turning ...
