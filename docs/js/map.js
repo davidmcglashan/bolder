@@ -70,6 +70,7 @@ const map = {
 			map.gen.cutaways()
 			map.gen.outline()
 			map.gen.buildStructures()
+			map.gen.brackets()
 			//map.gen.interiorWalls()
 			map.gen.fillTheInterior()
 
@@ -181,6 +182,119 @@ const map = {
 						|| map.dgrid[y+1][x+1] === 0
 					) { 
 						map.dgrid[y][x] = {type:map.gridtype.WALL}
+					}
+				}
+			}
+		},
+
+		/**
+		 * Brackets are C, U, or L shaped-structures strewn through out the level
+		 */
+		brackets: () => {
+			for ( let z=0; z<10; z+=1 ) {
+				map.gen.buildBracket()
+			}
+		},
+
+		buildBracket: () => {
+			let width = random.get(3,5)
+			let height = random.get(3,5)
+			let bracket = []
+			let variant = random.get(0,2) === 0
+
+			// Build the bracket into its own array.
+			for ( let y=0; y<height; y++ ) {
+				bracket[y] = []
+				for ( let x=0; x<width; x++ ) {
+					// All the edges are walls.
+					if ( y === 0 ) {
+						bracket[y][x] = {type:map.gridtype.WALL, variant:'nboxn'}
+					} else if ( x === 0 ) {
+						bracket[y][x] = {type:map.gridtype.WALL, variant:'nboxw'}
+					} else if ( y === height-1 ) {
+						bracket[y][x] = {type:map.gridtype.WALL, variant:'nboxs'}
+					} else if ( x === width-1 ) {
+						bracket[y][x] = {type:map.gridtype.WALL, variant:'nboxe'}
+					}
+				}
+			}
+
+			// Adjust the corners
+			bracket[0][0].variant = 'lboxnw'
+			bracket[0][width-1].variant = 'rboxne'
+			bracket[height-1][0].variant = 'nboxsw'
+			bracket[height-1][width-1].variant = 'nboxse'
+
+			// Becoming true here means we'll turn that side of the box off.
+			let top = random.get( 0,1 )
+			let bottom = random.get( 0,1 )
+			let left = random.get( 0,1 )
+			let right = random.get( 0,1 )
+
+			// Prevent the sillier configurations from happening.
+			while ( top + bottom + left + right === 4 || top + bottom + left + right === 0 || ( top+bottom === 2 && left+right === 0 )  || ( top+bottom === 0 && left+right === 2 )) {
+				top = random.get( 0,1 )
+				bottom = random.get( 0,1 )
+				left = random.get( 0,1 )
+				right = random.get( 0,1 )
+			}
+
+			// Remove any adjoining corners.
+			if ( top && left ) {
+				bracket[0][0] = 0
+			}
+			if ( top && right ) {
+				bracket[0][width-1] = 0
+			}
+			if ( bottom && left ) {
+				bracket[height-1][0] = 0
+			}
+			if ( bottom && right ) {
+				bracket[height-1][width-1] = 0
+			}
+
+			// Copy the bracket onto the map. 5 goes at this - the only criteria are that it 
+			// fits within the map's bounds and the every cell underneath it is empty.
+			for ( let a=0; a<5; a++ ) {
+				let ox = random.get(0,map.width-width)
+				let oy = random.get(0,map.height-height)
+				let canPlace = true
+
+				// See if the gaps align with earths and empties
+				check: for ( let y=0; y<height; y++ ) {
+					for ( let x=0; x<width; x++ ) {
+						if ( bracket[y][x] !== 0 ) {
+							let type = map.dgrid[y+oy][x+ox].type
+							if ( type !== map.gridtype.EMPTY  ) {
+								canPlace = false
+								break check
+							}
+						}
+					}
+				}
+
+				if ( canPlace ) {
+					for ( let y=0; y<height; y++ ) {
+						for ( let x=0; x<width; x++ ) {
+							if ( top && y === 0 && x>0 && x<width-1 ) {
+								continue
+							}
+							if ( bottom && y === height-1 && x>0 && x<width-1 ) {
+								continue
+							}
+							if ( left && x === 0 && y>0 && y<height-1 ) {
+								continue
+							}
+							if ( right && x === width-1 && y>0 && y<height-1 ) {
+								continue
+							}
+							if ( bracket[y][x] ) {
+								map.dgrid[y+oy][x+ox] = bracket[y][x]
+								map.dgrid[y+oy][x+ox].preserve = true
+								if ( variant ) 
+									delete( map.dgrid[y+oy][x+ox].variant )
+							}
+						}
 					}
 				}
 			}
@@ -326,6 +440,7 @@ const map = {
 			let width = random.get(4,8)
 			let height = random.get(4,8)
 			let fill = random.get(0,2) === 0
+			let variant = random.get(0,2) === 0
 			let struc = []
 			
 			// Build the structure into its own array.
@@ -392,6 +507,11 @@ const map = {
 				// See if the gaps align with earths and empties
 				check: for ( let y=0; y<height; y++ ) {
 					for ( let x=0; x<width; x++ ) {
+						let type = map.dgrid[y+oy][x+ox].type
+						if ( type !== map.gridtype.EMPTY  ) {
+							canPlace = false
+							break check
+						}
 						if ( struc[y][x] === 0 ) {
 							let type = map.dgrid[y+oy][x+ox].type
 							if ( type !== map.gridtype.EMPTY && type !== map.gridtype.EARTH ) {
@@ -408,10 +528,16 @@ const map = {
 							if ( struc[y][x] !== 0 ) {
 								map.dgrid[y+oy][x+ox] = struc[y][x]
 								map.dgrid[y+oy][x+ox].preserve = true
+								if ( variant ) {
+									delete( map.dgrid[y+oy][x+ox].variant )
+								}
 							} else {
 								map.dgrid[y+oy][x+ox] = { 
 									type: random.get(0,1) === 0 ? map.gridtype.EMPTY : map.gridtype.EARTH,
 									preserve:true 
+								}
+								if ( variant ) {
+									delete( map.dgrid[y+oy][x+ox].variant )
 								}
 							}
 						}
@@ -1135,12 +1261,15 @@ const map = {
 		 * Kills the monster
 		 */
 		kill: ( monster ) => {
-			monster.elem.remove()
-			monster.alive = false
-			bolder.addToScore( 100 )
-			map.monsterCount -= 1
-			let elem = document.getElementById( '-monsters' )
-			elem.innerHTML = 'monsters: ' + map.monsterCount
+			if ( !monster.alive ) {
+				monster.elem.remove()
+				monster.alive = false
+				bolder.addToScore( 100 )
+				
+				map.monsterCount -= 1
+				let elem = document.getElementById( '-monsters' )
+				elem.innerHTML = 'monsters: ' + map.monsterCount
+			}
 		},
 
 		/**
