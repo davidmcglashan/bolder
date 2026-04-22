@@ -130,6 +130,8 @@ const bolder = {
 		map.gen.start( payload )
 		let elem = document.getElementById( '-diamonds' )
 		elem.innerHTML = 'diamonds: ' + map.diamonds
+		elem = document.getElementById( '-monsters' )
+		elem.innerHTML = 'monsters: ' + map.monsterCount
 		elem = document.getElementById( '-home' )
 		elem.setAttribute( 'href', 'index.html' + str )
 				

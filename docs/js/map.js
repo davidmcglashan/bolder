@@ -4,6 +4,7 @@ const map = {
 	safes: {},
 	spirits: [],
 	monsters: [],
+	monsterCount: 0,
 
 	dgrid: [],
 	gridtype: {
@@ -620,6 +621,7 @@ const map = {
 								pushable = {x:x, y:y, type: map.gridtype.EGG, crackTimer:0} 
 								map.pushables[x+'_'+y] = pushable
 								dgrid.pushable = pushable
+								map.monsterCount += 1
 								break
 						}
 
@@ -1136,6 +1138,9 @@ const map = {
 			monster.elem.remove()
 			monster.alive = false
 			bolder.addToScore( 100 )
+			map.monsterCount -= 1
+			let elem = document.getElementById( '-monsters' )
+			elem.innerHTML = 'monsters: ' + map.monsterCount
 		},
 
 		/**

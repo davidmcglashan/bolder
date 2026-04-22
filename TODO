@@ -7,12 +7,8 @@ game features
   - fill interior with rectangles and remove straight lines
   - convert earth to boulders and diamonds
 - structures
-  - safe room
-    - turn a diamond into a safe
-	- draw a wall box so that the new safe is on one side
-	- fill with diamonds
-  - extra walls get curvy corners
   - brackets - C, L or U shaped structures with curvy corners - done in special brick like Repton polkas
+  - extra walls get curvy corners
   - safes and cages in extra walls
 - finish a level
 - boulderUpdate flag which triggers 
