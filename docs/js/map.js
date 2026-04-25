@@ -36,19 +36,49 @@ const map = {
 	},
 
 	wallVariants: { 
-		q: 'ltop', 
-		w: 'btop', 
-		e: 'rtop', 
-		a: 'nbl', 
-		d: 'nbr', 
-		S: 'alt', 
-		W: 'btop-alt', 
-		Q: 'ltop-alt', 
-		E: 'rtop-alt', 
-		A: 'nbl-alt', 
-		D: 'nbr-alt' 
-	},
+		// Grey brick
+		q: 'l-aaa-nw',
+		w: 'b-aaa-n',
+		e: 'r-aaa-ne',
+		a: 'l-aaa-w',
+		d: 'r-aaa-e',
+		z: 'x-aaa-sw',
+		x: 'x-aaa-s',
+		c: 'x-aaa-se',
 
+		// Grey brick with yellow edging
+		Q: 'l-aao-nw',
+		W: 'x-aao-n',
+		E: 'r-aao-ne',
+		A: 'x-aao-w',
+		D: 'x-aao-e',
+		Z: 'x-aao-sw',
+		X: 'x-aao-s',
+		C: 'x-aao-se',
+
+		// Red brick
+		r: 'l-bbb-nw',
+		t: 'b-bbb-n',
+		y: 'r-bbb-ne',
+		f: 'l-bbb-w',
+		g: 'x-bbb',
+		h: 'r-bbb-e',
+		v: 'x-bbb-sw',
+		b: 'x-bbb-s',
+		n: 'x-bbb-se',
+
+		// Red brick
+		R: 'l-bbo-nw',
+		T: 'x-bbo-n',
+		Y: 'r-bbo-ne',
+		F: 'x-bbo-w',
+		G: 'x-bbb',
+		H: 'x-bbo-e',
+		V: 'x-bbo-sw',
+		B: 'x-bbo-s',
+		N: 'x-bbo-se',
+	},
+	
 	dirs: {
 		UP: 0,
 		RIGHT: 1,
@@ -279,22 +309,22 @@ const map = {
 				for ( let x=0; x<width; x++ ) {
 					// All the edges are walls.
 					if ( y === 0 ) {
-						bracket[y][x] = {type:map.gridtype.WALL, variant:'nboxn'}
+						bracket[y][x] = {type:map.gridtype.WALL, variant:'x-aao-n'}
 					} else if ( x === 0 ) {
-						bracket[y][x] = {type:map.gridtype.WALL, variant:'nboxw'}
+						bracket[y][x] = {type:map.gridtype.WALL, variant:'x-aao-w'}
 					} else if ( y === height-1 ) {
-						bracket[y][x] = {type:map.gridtype.WALL, variant:'nboxs'}
+						bracket[y][x] = {type:map.gridtype.WALL, variant:'x-aao-s'}
 					} else if ( x === width-1 ) {
-						bracket[y][x] = {type:map.gridtype.WALL, variant:'nboxe'}
+						bracket[y][x] = {type:map.gridtype.WALL, variant:'x-aao-e'}
 					}
 				}
 			}
 
 			// Adjust the corners
-			bracket[0][0].variant = 'lboxnw'
-			bracket[0][width-1].variant = 'rboxne'
-			bracket[height-1][0].variant = 'nboxsw'
-			bracket[height-1][width-1].variant = 'nboxse'
+			bracket[0][0].variant = 'l-aao-nw'
+			bracket[0][width-1].variant = 'r-aao-ne'
+			bracket[height-1][0].variant = 'x-aao-sw'
+			bracket[height-1][width-1].variant = 'x-aao-se'
 
 			// Becoming true here means we'll turn that side of the box off.
 			let top = random.get( 0,1 )
@@ -520,13 +550,13 @@ const map = {
 				for ( let x=0; x<width; x++ ) {
 					// All the edges are walls.
 					if ( y === 0 ) {
-						struc[y][x] = {type:map.gridtype.WALL, variant:'nboxn'}
+						struc[y][x] = {type:map.gridtype.WALL, variant:'x-aao-n'}
 					} else if ( x === 0 ) {
-						struc[y][x] = {type:map.gridtype.WALL, variant:'nboxw'}
+						struc[y][x] = {type:map.gridtype.WALL, variant:'x-aao-w'}
 					} else if ( y === height-1 ) {
-						struc[y][x] = {type:map.gridtype.WALL, variant:'nboxs'}
+						struc[y][x] = {type:map.gridtype.WALL, variant:'x-aao-s'}
 					} else if ( x === width-1 ) {
-						struc[y][x] = {type:map.gridtype.WALL, variant:'nboxe'}
+						struc[y][x] = {type:map.gridtype.WALL, variant:'x-aao-e'}
 					} else if ( fill ) {
 						struc[y][x] = {type:map.gridtype.DIAMOND}
 					} else {
@@ -553,10 +583,10 @@ const map = {
 			}
 
 			// Adjust the corners
-			struc[0][0].variant = 'lboxnw'
-			struc[0][width-1].variant = 'rboxne'
-			struc[height-1][0].variant = 'nboxsw'
-			struc[height-1][width-1].variant = 'nboxse'
+			struc[0][0].variant = 'l-aao-nw'
+			struc[0][width-1].variant = 'r-aao-ne'
+			struc[height-1][0].variant = 'x-aao-sw'
+			struc[height-1][width-1].variant = 'x-aao-se'
 
 			// Remove a non-corner wall or two
 			for ( let i=0; i < random.get(2,parseInt(width*height/5)); i++ ) {

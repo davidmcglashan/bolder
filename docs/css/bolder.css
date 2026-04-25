@@ -145,62 +145,115 @@ button {
 .wall {
 	background-image: url(../assets/wall.png);
 }
-	.wall-alt {
-		background-image: url(../assets/wall-alt.png);
+	.wall-l-aaa-nw {
+		background-image: url(../assets/wall-l-aaa-nw.png);
 	}
-	.wall-btop-alt {
-		background-image: url(../assets/wall-btop-alt.png);
+	.wall-b-aaa-n {
+		background-image: url(../assets/wall-b-aaa-n.png);
 	}
-	.wall-ltop-alt {
-		background-image: url(../assets/wall-ltop-alt.png);
+	.wall-r-aaa-ne {
+		background-image: url(../assets/wall-r-aaa-ne.png);
 	}
-	.wall-rtop-alt {
-		background-image: url(../assets/wall-rtop-alt.png);
+
+	.wall-l-aaa-w {
+		background-image: url(../assets/wall-l-aaa-w.png);
 	}
-	.wall-nbr-alt {
-		background-image: url(../assets/wall-nbr-alt.png);
+	.wall-r-aaa-e {
+		background-image: url(../assets/wall-r-aaa-e.png);
 	}
-	.wall-nbl-alt {
-		background-image: url(../assets/wall-nbl-alt.png);
+
+	.wall-x-aaa-sw {
+		background-image: url(../assets/wall-x-aaa-sw.png);
 	}
-	.wall-ltop {
-		background-image: url(../assets/wall-ltop.png);
+	.wall-x-aaa-s {
+		background-image: url(../assets/wall-x-aaa-s.png);
 	}
-	.wall-btop {
-		background-image: url(../assets/wall-btop.png);
+	.wall-x-aaa-se {
+		background-image: url(../assets/wall-x-aaa-se.png);
 	}
-	.wall-rtop {
-		background-image: url(../assets/wall-rtop.png);
+
+	.wall-l-aao-nw {
+		background-image: url(../assets/wall-l-aao-nw.png);
 	}
-	.wall-nbl {
-		background-image: url(../assets/wall-nbl.png);
+	.wall-x-aao-n {
+		background-image: url(../assets/wall-x-aao-n.png);
 	}
-	.wall-nbr {
-		background-image: url(../assets/wall-nbr.png);
+	.wall-r-aao-ne {
+		background-image: url(../assets/wall-r-aao-ne.png);
 	}
-	.wall-lboxnw {
-		background-image: url(../assets/wall-lboxnw.png);
+
+	.wall-x-aao-w {
+		background-image: url(../assets/wall-x-aao-w.png);
 	}
-	.wall-nboxn {
-		background-image: url(../assets/wall-nboxn.png);
+	.wall-x-aao-e {
+		background-image: url(../assets/wall-x-aao-e.png);
 	}
-	.wall-rboxne {
-		background-image: url(../assets/wall-rboxne.png);
+
+	.wall-x-aao-sw {
+		background-image: url(../assets/wall-x-aao-sw.png);
 	}
-	.wall-nboxw {
-		background-image: url(../assets/wall-nboxw.png);
+	.wall-x-aao-s {
+		background-image: url(../assets/wall-x-aao-s.png);
 	}
-	.wall-nboxe {
-		background-image: url(../assets/wall-nboxe.png);
+	.wall-x-aao-se {
+		background-image: url(../assets/wall-x-aao-se.png);
 	}
-	.wall-nboxsw {
-		background-image: url(../assets/wall-nboxsw.png);
+
+.wall-x-bbb {
+	background-image: url(../assets/wall-x-bbb.png);
+}
+	.wall-l-bbb-nw {
+		background-image: url(../assets/wall-l-bbb-nw.png);
 	}
-	.wall-nboxs {
-		background-image: url(../assets/wall-nboxs.png);
+	.wall-b-bbb-n {
+		background-image: url(../assets/wall-b-bbb-n.png);
 	}
-	.wall-nboxse {
-		background-image: url(../assets/wall-nboxse.png);
+	.wall-r-bbb-ne {
+		background-image: url(../assets/wall-r-bbb-ne.png);
+	}
+
+	.wall-l-bbb-w {
+		background-image: url(../assets/wall-l-bbb-w.png);
+	}
+	.wall-r-bbb-e {
+		background-image: url(../assets/wall-r-bbb-e.png);
+	}
+
+	.wall-x-bbb-sw {
+		background-image: url(../assets/wall-x-bbb-sw.png);
+	}
+	.wall-x-bbb-s {
+		background-image: url(../assets/wall-x-bbb-s.png);
+	}
+	.wall-x-bbb-se {
+		background-image: url(../assets/wall-x-bbb-se.png);
+	}
+
+	.wall-l-bbo-nw {
+		background-image: url(../assets/wall-l-bbo-nw.png);
+	}
+	.wall-x-bbo-n {
+		background-image: url(../assets/wall-x-bbo-n.png);
+	}
+	.wall-r-bbo-ne {
+		background-image: url(../assets/wall-r-bbo-ne.png);
+	}
+
+	.wall-x-bbo-w {
+		background-image: url(../assets/wall-x-bbo-w.png);
+	}
+	.wall-x-bbo-e {
+		background-image: url(../assets/wall-x-bbo-e.png);
+	}
+
+	.wall-x-bbo-sw {
+		background-image: url(../assets/wall-x-bbo-sw.png);
+	}
+	.wall-x-bbo-s {
+		background-image: url(../assets/wall-x-bbo-s.png);
+	}
+	.wall-x-bbo-se {
+		background-image: url(../assets/wall-x-bbo-se.png);
 	}
 
 .earth {
