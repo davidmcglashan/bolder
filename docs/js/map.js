@@ -309,22 +309,22 @@ const map = {
 				for ( let x=0; x<width; x++ ) {
 					// All the edges are walls.
 					if ( y === 0 ) {
-						bracket[y][x] = {type:map.gridtype.WALL, variant:'x-aao-n'}
+						bracket[y][x] = {type:map.gridtype.WALL, variant:'x-bbo-n'}
 					} else if ( x === 0 ) {
-						bracket[y][x] = {type:map.gridtype.WALL, variant:'x-aao-w'}
+						bracket[y][x] = {type:map.gridtype.WALL, variant:'x-bbo-w'}
 					} else if ( y === height-1 ) {
-						bracket[y][x] = {type:map.gridtype.WALL, variant:'x-aao-s'}
+						bracket[y][x] = {type:map.gridtype.WALL, variant:'x-bbo-s'}
 					} else if ( x === width-1 ) {
-						bracket[y][x] = {type:map.gridtype.WALL, variant:'x-aao-e'}
+						bracket[y][x] = {type:map.gridtype.WALL, variant:'x-bbo-e'}
 					}
 				}
 			}
 
 			// Adjust the corners
-			bracket[0][0].variant = 'l-aao-nw'
-			bracket[0][width-1].variant = 'r-aao-ne'
-			bracket[height-1][0].variant = 'x-aao-sw'
-			bracket[height-1][width-1].variant = 'x-aao-se'
+			bracket[0][0].variant = 'l-bbo-nw'
+			bracket[0][width-1].variant = 'r-bbo-ne'
+			bracket[height-1][0].variant = 'x-bbo-sw'
+			bracket[height-1][width-1].variant = 'x-bbo-se'
 
 			// Becoming true here means we'll turn that side of the box off.
 			let top = random.get( 0,1 )
@@ -550,13 +550,13 @@ const map = {
 				for ( let x=0; x<width; x++ ) {
 					// All the edges are walls.
 					if ( y === 0 ) {
-						struc[y][x] = {type:map.gridtype.WALL, variant:'x-aao-n'}
+						struc[y][x] = {type:map.gridtype.WALL, variant:'x-bbo-n'}
 					} else if ( x === 0 ) {
-						struc[y][x] = {type:map.gridtype.WALL, variant:'x-aao-w'}
+						struc[y][x] = {type:map.gridtype.WALL, variant:'x-bbo-w'}
 					} else if ( y === height-1 ) {
-						struc[y][x] = {type:map.gridtype.WALL, variant:'x-aao-s'}
+						struc[y][x] = {type:map.gridtype.WALL, variant:'x-bbo-s'}
 					} else if ( x === width-1 ) {
-						struc[y][x] = {type:map.gridtype.WALL, variant:'x-aao-e'}
+						struc[y][x] = {type:map.gridtype.WALL, variant:'x-bbo-e'}
 					} else if ( fill ) {
 						struc[y][x] = {type:map.gridtype.DIAMOND}
 					} else {
@@ -583,10 +583,10 @@ const map = {
 			}
 
 			// Adjust the corners
-			struc[0][0].variant = 'l-aao-nw'
-			struc[0][width-1].variant = 'r-aao-ne'
-			struc[height-1][0].variant = 'x-aao-sw'
-			struc[height-1][width-1].variant = 'x-aao-se'
+			struc[0][0].variant = 'l-bbo-nw'
+			struc[0][width-1].variant = 'r-bbo-ne'
+			struc[height-1][0].variant = 'x-bbo-sw'
+			struc[height-1][width-1].variant = 'x-bbo-se'
 
 			// Remove a non-corner wall or two
 			for ( let i=0; i < random.get(2,parseInt(width*height/5)); i++ ) {
