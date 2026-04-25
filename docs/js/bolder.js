@@ -33,7 +33,7 @@ const bolder = {
 	 * Builds the form on the index page with all the payload parameters as <input>s.
 	 */
 	buildForm: () => {
-		let form = document.getElementById( 'form' )
+		let form = document.getElementById( '-form' )
 		let elem = null
 		
 		// If there was a payload in the URL use that to put values in the form elems
@@ -90,36 +90,47 @@ const bolder = {
 	 * Submit's the user's form. This builds a small JSON object representing the form's state,
 	 * base64 encodes it and sticks that in the GET of game.html.
 	 */
-	submit: () => {
+	submit: ( level = null ) => {
 		let payload = {}
 
-		let inputs = document.querySelectorAll("input")
-		inputs.forEach( ( input ) => {
-			// Checkboxes used 'checked' for their value, rather than value. Because 1994 ...
-			if ( input.type === 'checkbox' ) {
-				payload[input.name] = input.checked
-			} else {
-				// If the form proivdes a value put it in.
-				if ( input.value > 0 ) {
-					payload[input.name] = input.value
-				} 
-				
-				// Otherwise, use the default from the fields JSON.
-				else {
-					bolder.fields.forEach( ( field ) =>  {
-						if ( field.name === input.name ) {
-							payload[input.name] = field.value
-						}
-					} )
+		// If a level was passed in we build a very simple payload with the level in it.
+		if ( level ) {
+			payload = { level:level }
+		} 
+		
+		// Otherwise we grab every form element and stick its value in the payload.
+		else {
+			let inputs = document.querySelectorAll("input")
+			inputs.forEach( ( input ) => {
+				// Checkboxes used 'checked' for their value, rather than value. Because 1994 ...
+				if ( input.type === 'checkbox' ) {
+					payload[input.name] = input.checked
+				} else {
+					// If the form proivdes a value put it in.
+					if ( input.value > 0 ) {
+						payload[input.name] = input.value
+					} 
+					
+					// Otherwise, use the default from the fields JSON.
+					else {
+						bolder.fields.forEach( ( field ) =>  {
+							if ( field.name === input.name ) {
+								payload[input.name] = field.value
+							}
+						} )
+					}
 				}
-			}
-		} );
-
-		// Load the game with the encoded form in a parameter.
+			} );
+		}
+			
+		// Encode the payload and then load the game with the encoded payload in a parameter.
 		window.location.href = 'game.html?' + btoa(JSON.stringify(payload)) 
 	},
 
-	go: ( ) => {
+	/**
+	 * 
+	 */
+	play: () => {
 		// Unpack the payload
 		let str = window.location.search
 		if ( str ) {
@@ -127,7 +138,12 @@ const bolder = {
 		}
 
 		// Build the map and update the UI
-		map.gen.start( payload )
+		if ( payload.level ) {
+			map.gen.parse( payload.level )
+		} else {
+			map.gen.start( payload )
+		}
+
 		let elem = document.getElementById( '-diamonds' )
 		elem.innerHTML = 'diamonds: ' + map.diamonds
 		elem = document.getElementById( '-monsters' )

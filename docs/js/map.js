@@ -11,27 +11,43 @@ const map = {
 		EMPTY: ' ',
 		WALL: '#',
 		EARTH: '.',
-		BOULDER: 'O',
+		BOULDER: '@',
 		DIAMOND: '^',
-		SAFE: 'S',
-		KEY: 'k',
-		CAGE: '/',
+		SAFE: '$',
+		KEY: '%',
+		CAGE: '[',
+		EGG: '&',
+
+		// These two aren't used in the game but are for parsing levels from JSON.
 		SPIRIT: '*',
-		EGG: 'G'
+		SPIRIT_IN_EARTH: '8',
+		BOB_START: '!'
 	},
+	
 	cssClasses: {
 		'#': 'wall',
 		'.': 'earth',
-		'O': 'boulder',
+		'@': 'boulder',
 		'^': 'diamond',
-		'S': 'safe',
-		'k': 'key',
-		'/': 'cage',
-		'*': 'spirit',
-		'G': 'egg'
+		'$': 'safe',
+		'%': 'key',
+		'[': 'cage',
+		'&': 'egg'
 	},
 
-	wallVariants: [ '', 'ltop', 'btop', 'rtop', 'nbl', 'nbr', 'alt', 'btop-alt', 'btop', 'ltop-alt', 'rtop-alt', 'nbl-alt', 'nbr-alt' ],
+	wallVariants: { 
+		q: 'ltop', 
+		w: 'btop', 
+		e: 'rtop', 
+		a: 'nbl', 
+		d: 'nbr', 
+		S: 'alt', 
+		W: 'btop-alt', 
+		Q: 'ltop-alt', 
+		E: 'rtop-alt', 
+		A: 'nbl-alt', 
+		D: 'nbr-alt' 
+	},
 
 	dirs: {
 		UP: 0,
@@ -76,6 +92,61 @@ const map = {
 
 			map.gen.addDiamonds()
 			map.gen.placeBob()
+			map.gen.buildDOM()
+		},
+
+		/**
+		 * Loads a numbered game level ready for playing.k
+		 */
+		parse: ( lvl ) => {
+			let level = levels.maps[lvl-1]
+
+			// Set up the map.
+			map.width = level.width
+			map.height = level.height
+			map.options = { 
+				spiritsFatal: true, 
+				bouldersFatal: true, 
+				monstersDirt: false, 
+				monstersSlow: false
+			}
+			
+			let char = 0
+			for ( let y = 0; y < map.height; y++ ) {
+				map.dgrid[y] = []
+				for ( let x = 0; x < map.width; x++ ) {
+					map.dgrid[y][x] = {type:level.map[char], preserve:true}
+
+					// A couple of chars get special treatment.
+					switch( map.dgrid[y][x].type ) {
+						// Bob's start position
+						case map.gridtype.BOB_START:
+							bob.x = x
+							bob.y = y
+							map.dgrid[y][x].type = map.gridtype.EMPTY
+							break
+
+						// Add spirits
+						case map.gridtype.SPIRIT:
+							map.gen.addSpirit( x,y )
+							map.dgrid[y][x].type = map.gridtype.EMPTY
+							break
+						case map.gridtype.SPIRIT_IN_EARTH:
+							map.gen.addSpirit( x,y )
+							map.dgrid[y][x].type = map.gridtype.EARTH
+							break
+					}
+
+					// Wall variants can be detected.
+					if ( map.wallVariants[ map.dgrid[y][x].type ] ) {
+						map.dgrid[y][x].variant = map.wallVariants[ map.dgrid[y][x].type ]
+						map.dgrid[y][x].type = map.gridtype.WALL
+					}
+
+					char += 1
+				}
+			}
+
 			map.gen.buildDOM()
 		},
 
@@ -623,27 +694,36 @@ const map = {
 					let y = random.get(1,map.height-1 )
 
 					if ( map.dgrid[y][x].type === map.gridtype.EARTH || map.dgrid[y][x].type === map.gridtype.EMPTY ) {
-						let elem = document.createElement( 'div' )
-						elem.setAttribute( 'class', 'spirit' )
-						elem.style.left = x*64 + 'px'
-						elem.style.top = y*64 + 'px'
-						canvas.appendChild( elem )
-
-						map.spirits.push( {
-							x: x,
-							y: y,
-							dx: 0,
-							dy: -1,
-							dir: map.dirs.UP,
-							delta: 64,
-							elem: elem
-						} )
+						map.gen.addSpirit( x,y )
 						break
 					}
 
 					counter += 1
 				}
 			}
+		},
+
+		/**
+		 * Add a new spirit to the map, starting at x,y
+		 */
+		addSpirit: ( x,y ) => {
+			let elem = document.createElement( 'div' )
+			elem.setAttribute( 'class', 'spirit' )
+			elem.style.left = x*64 + 'px'
+			elem.style.top = y*64 + 'px'
+
+			let canvas = document.getElementById( '-canvas' )
+			canvas.appendChild( elem )
+
+			map.spirits.push( {
+				x: x,
+				y: y,
+				dx: 0,
+				dy: -1,
+				dir: map.dirs.UP,
+				delta: 64,
+				elem: elem
+			} )
 		},
 
 		placeBob: () => {
@@ -712,9 +792,10 @@ const map = {
 									break
 								}
 
-								v = random.get( 0, map.wallVariants.length )
+								let keys = Object.keys( map.wallVariants )
+								v = random.get( 0, keys.length )
 								if ( v ) {
-									dgrid.variant = map.wallVariants[v]
+									dgrid.variant = map.wallVariants[keys[v]]
 								}
 								break
 

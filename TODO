@@ -3,13 +3,15 @@ bugs
 
 game features
 -------------
-- finish a level
-- boulderUpdate flag which triggers 
-  - when bob moves a boulder
-  - when bob digs earth, diamonds, keys
-  - keys open safes
-  - spirits enter cages
-  - a boulder falls
+
+- a playable game (v1.0)
+  - index.html with options for playing standard levels or daily levels
+  - parse a level from JSON
+  - finish a level
+  - remember progress in localstorage
+  - repair all the JSON stuff and make it more dynamic 
+    - x is a spirit, X is a spirit in earth
+
 - v2 map builder
   - random WxH box filled with stuff
   - has a random exit
@@ -47,7 +49,6 @@ programming
   - build level JSON from flat files
 - swipe gestures to play on mobile
 - versions
-- repair all the JSON stuff and make it more dynamic (and parseable)
 
 ideas 
 -----
@@ -59,3 +60,9 @@ ideas
 	- number of TNT parameters
 - right handed spirits
 - one use teleporters
+- boulderUpdate flag which triggers 
+  - when bob moves a boulder
+  - when bob digs earth, diamonds, keys
+  - keys open safes
+  - spirits enter cages
+  - a boulder falls

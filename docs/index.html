@@ -12,12 +12,18 @@
 	</head>
 	<body class="index">
 		<h1>bolder</h1>
+		<div id="-levels">
+			Level 
+			<a href="javascript:void;" onclick="bolder.submit(1)">001</a> &mdash;
+			<a href="javascript:void;" onclick="bolder.submit(2)">002</a> &mdash;
+			<a href="javascript:void;" onclick="bolder.submit(3)">003</a>
+		</div>
 		<label>
 			Level seed
 			<input name="seed" type="text" id="seed">
 			<button onclick="bolder.submit()">Play</button>
 		</label>
-		<div id="form"></div>
+		<div id="-form"></div>
 		<a href="index.html">Reset form</a>
 	</body>
 	<script>
