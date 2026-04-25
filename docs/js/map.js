@@ -31,7 +31,7 @@ const map = {
 		'G': 'egg'
 	},
 
-	wallVariants: [ '', 'ltop', 'btop', 'rtop', 'nbl', 'nbr' ],
+	wallVariants: [ '', 'ltop', 'btop', 'rtop', 'nbl', 'nbr', 'alt', 'btop-alt', 'btop', 'ltop-alt', 'rtop-alt', 'nbl-alt', 'nbr-alt' ],
 
 	dirs: {
 		UP: 0,

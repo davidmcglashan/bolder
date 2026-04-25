@@ -3,13 +3,6 @@ bugs
 
 game features
 -------------
-- structured earth 
-  - fill interior with rectangles and remove straight lines
-  - convert earth to boulders and diamonds
-- structures
-  - brackets - C, L or U shaped structures with curvy corners - done in special brick like Repton polkas
-  - extra walls get curvy corners
-  - safes and cages in extra walls
 - finish a level
 - boulderUpdate flag which triggers 
   - when bob moves a boulder
@@ -38,12 +31,14 @@ design
   - eggs & variants
   - monsters & variants
 - bob death animation
+- singleton wall variants are considerate of their neighbours ...
+  - use same colour and style
+  - shapes and slopes create sensible larger pieces i.e. no slope with a block above it.
 
 programming
 -----------
 - pushing might be improved by animating bob and then moving the boulder on 3/4ths of his delta
 - collision detection might be improved by looking at deltas to gauge distance
-- css class should be property of the map[][] entity
 - comments
 - probably more than a few places to optimise
 - restructure where it makes sense

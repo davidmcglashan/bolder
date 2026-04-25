@@ -145,6 +145,24 @@ button {
 .wall {
 	background-image: url(../assets/wall.png);
 }
+	.wall-alt {
+		background-image: url(../assets/wall-alt.png);
+	}
+	.wall-btop-alt {
+		background-image: url(../assets/wall-btop-alt.png);
+	}
+	.wall-ltop-alt {
+		background-image: url(../assets/wall-ltop-alt.png);
+	}
+	.wall-rtop-alt {
+		background-image: url(../assets/wall-rtol-alt.png);
+	}
+	.wall-nbr-alt {
+		background-image: url(../assets/wall-nbr-alt.png);
+	}
+	.wall-nbl-alt {
+		background-image: url(../assets/wall-nbl-alt.png);
+	}
 	.wall-ltop {
 		background-image: url(../assets/wall-ltop.png);
 	}
