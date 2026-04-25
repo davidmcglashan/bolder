@@ -108,7 +108,8 @@ button {
  */
 .paused .toolbar .hideOnPause,
 .paused .bob,
-.paused .spirit {
+.paused .spirit,
+.paused .monster {
 	display: none;
 }
 	.showOnPause {

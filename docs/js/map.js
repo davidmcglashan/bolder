@@ -1261,7 +1261,7 @@ const map = {
 		 * Kills the monster
 		 */
 		kill: ( monster ) => {
-			if ( !monster.alive ) {
+			if ( monster.alive ) {
 				monster.elem.remove()
 				monster.alive = false
 				bolder.addToScore( 100 )
