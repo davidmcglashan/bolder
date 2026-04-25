@@ -2,18 +2,19 @@ bugs
 ----
 
 - eggs crack before they land!
+- returning to the form with a level payload bugs out
 
 game features
 -------------
 
 - a playable game (v1.0)
   - index.html with options for playing standard levels or daily levels
-  - sensible system for variants which can be encoded in an ASCII map editor and slopiness
-  - parse a level from JSON
   - finish a level
   - remember progress in localstorage
-  - repair all the JSON stuff and make it more dynamic 
+  - repair all the JSON output stuff and make it more dynamic 
     - x is a spirit, X is a spirit in earth
+- levels should have short descriptions
+- banners before each level e.g. "get all the diamonds!" "rocks fall when not supported"
 
 - v2 map builder
   - random WxH box filled with stuff
@@ -25,13 +26,8 @@ design
 ------
 - animate bob ...
 - better sprites for everything
-  - walls & variants
-  - earth & variants
   - bob
-  - key
-  - safe
-  - diamond
-  - cages
+  - diamond variants
   - spirits
   - eggs & variants
   - monsters & variants
@@ -47,7 +43,6 @@ programming
 - comments
 - probably more than a few places to optimise
 - restructure where it makes sense
-- varieties of earth
 - tools to ...
   - build level JSON from flat files
 - swipe gestures to play on mobile
