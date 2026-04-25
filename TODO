@@ -6,6 +6,7 @@ game features
 
 - a playable game (v1.0)
   - index.html with options for playing standard levels or daily levels
+  - sensible system for variants which can be encoded in an ASCII map editor and slopiness
   - parse a level from JSON
   - finish a level
   - remember progress in localstorage
