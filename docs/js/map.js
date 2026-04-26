@@ -749,6 +749,7 @@ const map = {
 				dy: -1,
 				dir: map.dirs.UP,
 				delta: 64,
+				animLoop: 0,
 				elem: elem
 			} )
 		},
@@ -931,7 +932,7 @@ const map = {
 			spirit.dy = 0
 			spirit.delta = 64
 			spirit.checkDelta = 16
-
+			
 			switch  ( spirit.dir ) {
 				case map.dirs.UP:
 					if ( map.spirit.isTransparentToLeft( spirit ) ) {

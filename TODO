@@ -20,13 +20,14 @@ game features
   - a tunnel of random length
   - then another WxH random box
 
+-sound
+
 design
 ------
 - animate bob ...
 - better sprites for everything
   - bob
   - diamond variants
-  - animated spirits
   - eggs & variants
   - monsters & variants
 - bob death animation

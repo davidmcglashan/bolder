@@ -70,6 +70,24 @@ const drawloop = {
 				if ( spirit.checkDelta <= 0 ) {
 					spirit.checkDelta = 16
 					map.spirit.checkCollision( spirit )
+					spirit.animLoop += 1
+					
+					switch( spirit.animLoop ) {
+						case 4:
+							spirit.animLoop = 0
+						case 0:
+							spirit.elem.setAttribute( 'class', 'spirit north' )
+							break;
+						case 1:
+							spirit.elem.setAttribute( 'class', 'spirit west' )
+							break;
+						case 2:
+							spirit.elem.setAttribute( 'class', 'spirit south' )
+							break;
+						case 3:
+							spirit.elem.setAttribute( 'class', 'spirit east' )
+							break;
+					}
 				}
 
 				// If the delta has run out then it's time for a new one

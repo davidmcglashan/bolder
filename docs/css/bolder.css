@@ -364,6 +364,15 @@ button {
 	height: 64px;
 	position: absolute;
 }
+	.spirit.north {
+		background-image: url(../assets/spirit-n.png);
+	}
+	.spirit.east {
+		background-image: url(../assets/spirit-e.png);
+	}
+	.spirit.west {
+		background-image: url(../assets/spirit-w.png);
+	}
 
 .monster {
 	background-image: url(../assets/monster.png);
