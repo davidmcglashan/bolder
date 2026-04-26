@@ -28,7 +28,7 @@ design
 - better sprites for everything
   - bob
   - diamond variants
-  - spirits
+  - animated spirits
   - eggs & variants
   - monsters & variants
 - bob death animation
@@ -40,11 +40,6 @@ programming
 -----------
 - pushing might be improved by animating bob and then moving the boulder on 3/4ths of his delta
 - collision detection might be improved by looking at deltas to gauge distance
-- comments
-- probably more than a few places to optimise
-- restructure where it makes sense
-- tools to ...
-  - build level JSON from flat files
 - swipe gestures to play on mobile
 - versions
 

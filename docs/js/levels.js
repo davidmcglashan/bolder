@@ -2,6 +2,19 @@ const levels = {
 	meta: {},
 	maps: [
 		{
+			width: 18,
+			height: 10,
+			map: [	"      RTTTY       ",
+					"      F^^^G#####e ",
+					"RTTTTTn^ ..^.^.^A ",
+					"F^^^G.^^ ^H###d.A ",
+					"F^!...   ^H^.^.^ZC",
+					"F^^^ry^^^^H.fggggh",
+					"VBBBGBBBBBN .g.RTY",
+					" #^^n^@.^..^.@.^^H",
+					" #  @^^ ^.^ ..#F^H",
+					" z############cVBN" 	]
+		},{
 			width: 20,
 			height: 10,
 			map: [	"####################",
