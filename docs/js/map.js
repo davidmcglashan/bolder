@@ -141,11 +141,10 @@ const map = {
 				monstersSlow: false
 			}
 			
-			let char = 0
 			for ( let y = 0; y < map.height; y++ ) {
 				map.dgrid[y] = []
 				for ( let x = 0; x < map.width; x++ ) {
-					map.dgrid[y][x] = {type:level.map[char], preserve:true}
+					map.dgrid[y][x] = {type:level.map[y][x], preserve:true}
 
 					// A couple of chars get special treatment.
 					switch( map.dgrid[y][x].type ) {
@@ -172,8 +171,6 @@ const map = {
 						map.dgrid[y][x].variant = map.wallVariants[ map.dgrid[y][x].type ]
 						map.dgrid[y][x].type = map.gridtype.WALL
 					}
-
-					char += 1
 				}
 			}
 
