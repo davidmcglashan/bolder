@@ -1,5 +1,6 @@
 const drawloop = {
 	previousTime: 0,
+	completeTime: 0,
 	boulderTime: 0,
 	paused: false,
 
@@ -50,7 +51,15 @@ const drawloop = {
 			map.pushable.tick()
 			drawloop.boulderTime -= 75
 		}
-		
+
+		// Keep things ticking along while we wait for the level to complete.
+		if ( drawloop.completeTime > 0 ) {
+			drawloop.completeTime -= delta
+			if ( drawloop.completeTime <= 0 ) {
+				bolder.nextLevel()
+			}
+		}
+
 		// Move any spirits along.
 		map.spirits.forEach( (spirit) => {
 			if ( spirit.delta > 0 ) {

@@ -2,6 +2,13 @@ const levels = {
 	meta: {},
 	maps: [
 		{
+			width: 4,
+			height: 3,
+			description: 'a test level',
+			map: [	"RTTY",
+					"F!^H",
+					"VBBN" ]
+		},{
 			width: 18,
 			height: 10,
 			description: 'collect the diamonds',

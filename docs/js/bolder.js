@@ -206,6 +206,31 @@ const bolder = {
 		map.diamonds -= 1
 		let elem = document.getElementById( '-diamonds' )
 		elem.innerHTML = 'diamonds: ' + map.diamonds
+		bolder.checkComplete()
+	},
+
+	/**
+	 * Checks if the level is complete, and if it is, starts the next level sequence
+	 */
+	checkComplete: () => {
+		if ( map.diamonds === 0 ) {
+			drawloop.completeTime = 3000
+			
+			let elem = document.getElementById( '-level' )
+			elem.innerHTML = 'Well done'
+			elem = document.getElementById( '-description' )
+			elem.innerHTML = 'level complete'
+			elem = document.getElementById( '-banner' )
+			elem.setAttribute( 'class', 'level-complete')
+		}
+	},
+
+	/**
+	 * Takes us to the next level
+	 */
+	nextLevel: () => {
+		let elem = document.getElementById( '-home' )
+		window.location.href = elem.getAttribute( 'href' )
 	},
 
 	/**

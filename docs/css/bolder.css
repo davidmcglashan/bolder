@@ -17,8 +17,9 @@ body,a {
 	animation-delay: 2s;
 	animation-fill-mode: forwards;
 }
-	#-banner.hidden {
-		display: none;
+	#-banner.level-complete {
+		animation: 1.5s fadeIn;
+		animation-delay: 0s;
 	}
 	#-level {
 		font-size: 7rem;
@@ -38,7 +39,18 @@ body,a {
 		display: none;
 	}
 }
-	.index {
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+		display: none;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.index {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
