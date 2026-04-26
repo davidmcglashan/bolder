@@ -40,7 +40,12 @@ const bolder = {
 		let payload = null		
 		let str = window.location.search
 		if ( str ) {
-			payload = JSON.parse( atob( str.substring(1) ) )	
+			payload = JSON.parse( atob( str.substring(1) ) )
+			// If the payload contains a level then we last played a level and so the payload
+			// won't contain any fields for the form, therefore we can nullify it.
+			if ( payload.level ) {
+				payload = null
+			}	
 		}
 
 		bolder.fields.forEach( ( field ) =>  {
