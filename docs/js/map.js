@@ -832,7 +832,6 @@ const map = {
 								if ( v ) {
 									dgrid.variant = 'r' + v
 								}
-								break
 								map.diamonds += 1
 								break
 
