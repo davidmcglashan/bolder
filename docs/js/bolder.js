@@ -214,14 +214,16 @@ const bolder = {
 	 */
 	checkComplete: () => {
 		if ( map.diamonds === 0 ) {
-			drawloop.completeTime = 3000
-			
+			// Display the banner again with a 'well done' message.
 			let elem = document.getElementById( '-level' )
 			elem.innerHTML = 'Well done'
 			elem = document.getElementById( '-description' )
 			elem.innerHTML = 'level complete'
 			elem = document.getElementById( '-banner' )
 			elem.setAttribute( 'class', 'level-complete')
+
+			// Set the complete timer to 3 seconds. This will call nextLevel() when it runs out.
+			drawloop.completeTime = 3000
 		}
 	},
 
@@ -229,8 +231,21 @@ const bolder = {
 	 * Takes us to the next level
 	 */
 	nextLevel: () => {
-		let elem = document.getElementById( '-home' )
-		window.location.href = elem.getAttribute( 'href' )
+		let str = window.location.search
+		if ( str ) {
+			let payload = JSON.parse( atob( str.substring(1) ) )
+
+			// If this payload had a level we can progress to the next one.
+			if ( payload.level ) {
+				bolder.submit( payload.level+1 )
+			} 
+			
+			// This was a random level. There's nowhere to go next so lets follow the home link.
+			else {
+				let elem = document.getElementById( '-home' )
+				window.location.href = elem.getAttribute( 'href' )
+			}
+		}
 	},
 
 	/**
