@@ -1,8 +1,9 @@
 bugs
 ----
 
-- eggs crack before they land!
 - returning to the form with a level payload bugs out
+- leave a game running and boulders end up being superspeed
+  - may be to do with the tab being put to sleep or something
 
 game features
 -------------

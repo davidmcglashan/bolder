@@ -1057,7 +1057,7 @@ const map = {
      */
 	pushable: {
 		/**
-		 * Can a pushable move ino the square at loc?
+		 * Can a pushable move into the square at loc?
 		 */
 		canMoveInto: ( loc ) => {
 			// Pushables can't move into where bob is now, assuming he's alive.
@@ -1069,6 +1069,15 @@ const map = {
 				return false
 			}
 
+			// We can use canFallInto() to do the check.
+			return map.pushable.canFallInto( loc )
+		},
+
+		/**
+		 * Can a pushable fall into the square at loc? This is the same as
+		 * canMoveInto but without the bob checks.
+		 */
+		canFallInto: ( loc ) => {
 			// Pushables can move into empty spaces.
 			let type = map.dgrid[loc.y][loc.x].type
 			if ( type === map.gridtype.EMPTY ) {
@@ -1135,7 +1144,7 @@ const map = {
 			}
 
 			// Is the pushable an egg? In which case we crack it!
-			if ( pushable.type === map.gridtype.EGG ) {
+			if ( pushable.type === map.gridtype.EGG && !map.pushable.canFallInto( map.loc.below( pushable ) ) ) {
 				pushable.crackTimer = 30
 				map.updateType( map.dgrid[pushable.y][pushable.x] )
 			}
