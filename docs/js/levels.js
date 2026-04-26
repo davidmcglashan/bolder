@@ -4,6 +4,7 @@ const levels = {
 		{
 			width: 18,
 			height: 10,
+			description: 'collect the diamonds',
 			map: [	"      RTTTY       ",
 					"      F^^^G#####e ",
 					"RTTTTTn^ ..^.^.^A ",

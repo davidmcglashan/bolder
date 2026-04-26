@@ -13,8 +13,6 @@ game features
   - remember progress in localstorage
   - repair all the JSON output stuff and make it more dynamic 
     - x is a spirit, X is a spirit in earth
-- levels should have short descriptions
-- banners before each level e.g. "get all the diamonds!" "rocks fall when not supported"
 
 - v2 map builder
   - random WxH box filled with stuff

@@ -4,7 +4,41 @@ body,a {
 	color: #fff;
 }
 
-.index {
+#-banner {
+	font-family: "Rubik 80s Fade", system-ui;
+	position: absolute;
+	inset: 0;
+	backdrop-filter: blur(8px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	animation: 1.5s fadeOut;
+	animation-delay: 2s;
+	animation-fill-mode: forwards;
+}
+	#-banner.hidden {
+		display: none;
+	}
+	#-level {
+		font-size: 7rem;
+		text-shadow: 1px 2px black, 0 0 1em black, 0 0 0.2em black;	
+	}
+	#-description {
+		font-size: 4rem;
+		text-shadow: 1px 2px black, 0 0 1em black, 0 0 0.2em black;	
+	}
+
+@keyframes fadeOut {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		display: none;
+	}
+}
+	.index {
 	display: flex;
 	flex-direction: column;
 	align-items: center;

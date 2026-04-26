@@ -142,20 +142,37 @@ const bolder = {
 			payload = JSON.parse( atob( str.substring(1) ) )
 		}
 
+		// This link takes us back home.
+		let elem = document.getElementById( '-home' )
+		elem.setAttribute( 'href', 'index.html' + str )
+
 		// Build the map and update the UI
 		if ( payload.level ) {
 			map.gen.parse( payload.level )
+
+			elem = document.getElementById( '-level' )
+			elem.innerHTML = String( payload.level ).padStart( 3, '0' )
+
+			elem = document.getElementById( '-description' )
+			if ( levels.maps[payload.level-1].description ) {
+				elem.innerHTML = levels.maps[payload.level-1].description
+			} else {
+				elem.innerHTML = ''
+			}
 		} else {
 			map.gen.start( payload )
+
+			elem = document.getElementById( '-level' )
+			elem.innerHTML = payload.seed
+			elem = document.getElementById( '-description' )
+			elem.innerHTML = 'good luck!'
 		}
 
-		let elem = document.getElementById( '-diamonds' )
+		elem = document.getElementById( '-diamonds' )
 		elem.innerHTML = 'diamonds: ' + map.diamonds
 		elem = document.getElementById( '-monsters' )
 		elem.innerHTML = 'monsters: ' + map.monsterCount
-		elem = document.getElementById( '-home' )
-		elem.setAttribute( 'href', 'index.html' + str )
-				
+		
 		// Key downs fire movement events in the game.
 		document.addEventListener("keydown", (event) => {
 			// Prevent repeated keypresses. Fire exactly once when the key is pressed.
