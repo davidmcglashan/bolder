@@ -339,7 +339,16 @@ button {
 .diamond {
 	background-image: url(../assets/diamond.png);
 }
-
+	.diamond-r1 {
+		background-image: url(../assets/diamond-r1.png);
+	}
+	.diamond-r2 {
+		background-image: url(../assets/diamond-r2.png);
+	}
+	.diamond-r3 {
+		background-image: url(../assets/diamond-r3.png);
+	}
+	
 .cage {
 	background-image: url(../assets/cage.png);
 }

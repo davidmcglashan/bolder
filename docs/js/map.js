@@ -828,6 +828,11 @@ const map = {
 								break
 
 							case map.gridtype.DIAMOND:
+								v = random.get( 0,3 )
+								if ( v ) {
+									dgrid.variant = 'r' + v
+								}
+								break
 								map.diamonds += 1
 								break
 

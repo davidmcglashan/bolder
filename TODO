@@ -27,8 +27,6 @@ design
 - animate bob ...
 - better sprites for everything
   - bob
-  - diamond variants
-  - eggs & variants
   - monsters & variants
 - bob death animation
 - singleton wall variants are considerate of their neighbours ...
