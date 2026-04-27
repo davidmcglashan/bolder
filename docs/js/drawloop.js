@@ -112,6 +112,18 @@ const drawloop = {
 				if ( monster.checkDelta <= 0 ) {
 					monster.checkDelta = 16
 					map.monster.checkCollision( monster )
+					monster.animLoop += 1
+					
+					switch( monster.animLoop ) {
+						case 8:
+							monster.animLoop = 0
+						case 0:
+							monster.elem.setAttribute( 'class', 'monster east' )
+							break;
+						case 4:
+							monster.elem.setAttribute( 'class', 'monster west' )
+							break;
+					}
 				}
 
 				// If the delta has run out then it's time for a new one

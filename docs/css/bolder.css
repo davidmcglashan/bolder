@@ -389,3 +389,6 @@ button {
 	height: 64px;
 	position: absolute;
 }
+	.monster.west {
+		background-image: url(../assets/monster-r1.png);
+	}

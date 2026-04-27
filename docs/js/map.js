@@ -1357,6 +1357,7 @@ const map = {
 				dx: 0,
 				dy: 0,
 				delta: 1,
+				animLoop: 0,
 				elem: elem
 			} )
 		},
