@@ -2,15 +2,13 @@ const levels = {
 	meta: {},
 	maps: [
 		{
-			width: 4,
-			height: 3,
-			description: 'a test level',
-			map: [	"RTTY",
-					"F!^H",
-					"VBBN" ]
-		},{
-			width: 18,
-			height: 10,
+//			width: 4,
+//			height: 3,
+//			description: 'a test level',
+//			map: [	"RTTY",
+//					"F!^H",
+//					"VBBN" ]
+//		},{
 			description: 'collect the diamonds',
 			map: [	"      RTTTY       ",
 					"      F^^^G#####e ",
@@ -23,8 +21,21 @@ const levels = {
 					" #  @^^ ^.^ ..#F^H",
 					" z############cVBN" 	]
 		},{
-			width: 20,
-			height: 10,
+			description: 'boulders fall, roll, kill ...',
+			map: [	"^                    ",
+					"q###################e",
+					"#@   ..@..   ##@^^^@#",
+					"#E!g^#.@.#@.@z#E^Q^qc",
+					"##^^^#^..#.....  # # ",
+					"z#########^^^### # # ",
+					"         z###c # # # ",
+					"               #^# # ",
+					"               ### # ",
+					"               #^  # ",
+					"               ### c ",
+					"                 z#c ",
+			 	]
+		},{
 			map: [	"####################",
 					"#8..@....#.rty.....#",
 					"#.%.^....#.fgh.QWE.#",
@@ -36,8 +47,6 @@ const levels = {
 					"#....@   #.....VBN.#",
 					"####################" 	]
 		},{
-    		width: 28,
-    		height: 35,
     		map: [	"############################",
 					"#....^ .. ...!^.^#^^@@...@.#",
 					"#########....@.^^ .#@^.@...#",

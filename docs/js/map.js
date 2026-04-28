@@ -132,8 +132,8 @@ const map = {
 			let level = levels.maps[lvl-1]
 
 			// Set up the map.
-			map.width = level.width
-			map.height = level.height
+			map.height = level.map.length
+			map.width = level.map[0].length
 			map.options = { 
 				spiritsFatal: true, 
 				bouldersFatal: true, 
