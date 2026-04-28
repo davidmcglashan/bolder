@@ -26,8 +26,6 @@ design
 - animate bob ...
 - better sprites for everything
   - bob
-  - monsters facing which changes with left/right but not up/down
-    - two left sprites and two right sprites (flipped but redo the lighting)
 - bob death animation
 - singleton wall variants are considerate of their neighbours ...
   - use same colour and style
