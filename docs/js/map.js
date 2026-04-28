@@ -1358,6 +1358,7 @@ const map = {
 				dy: 0,
 				delta: 1,
 				animLoop: 0,
+				facing: 'r',
 				elem: elem
 			} )
 		},
@@ -1415,9 +1416,13 @@ const map = {
 			} else if ( monster.x > bob.x && map.monster.isTransparentToLeft( monster ) ) {
 				monster.x -= 1
 				monster.dx = -1
+				monster.facing = 'l'
+				monster.elem.setAttribute( 'class', 'monster l1' )
 			} else if ( monster.x < bob.x && map.monster.isTransparentToRight( monster ) ) {
 				monster.x += 1
 				monster.dx = 1
+				monster.facing = 'r'
+				monster.elem.setAttribute( 'class', 'monster r1' )
 			} else if ( monster.y > bob.y && map.monster.isTransparentAbove( monster ) ) {
 				monster.y -= 1
 				monster.dy = -1

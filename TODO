@@ -9,7 +9,6 @@ game features
 
 - a playable game (v1.0)
   - index.html with options for playing standard levels or daily levels
-  - finish a level
   - remember progress in localstorage
   - repair all the JSON output stuff and make it more dynamic 
     - x is a spirit, X is a spirit in earth
@@ -27,7 +26,8 @@ design
 - animate bob ...
 - better sprites for everything
   - bob
-  - monsters & variants
+  - monsters facing which changes with left/right but not up/down
+    - two left sprites and two right sprites (flipped but redo the lighting)
 - bob death animation
 - singleton wall variants are considerate of their neighbours ...
   - use same colour and style

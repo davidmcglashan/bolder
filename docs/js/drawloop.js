@@ -118,10 +118,10 @@ const drawloop = {
 						case 8:
 							monster.animLoop = 0
 						case 0:
-							monster.elem.setAttribute( 'class', 'monster east' )
+							monster.elem.setAttribute( 'class', 'monster ' + monster.facing + '1' )
 							break;
 						case 4:
-							monster.elem.setAttribute( 'class', 'monster west' )
+							monster.elem.setAttribute( 'class', 'monster ' + monster.facing + '2' )
 							break;
 					}
 				}

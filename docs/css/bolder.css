@@ -384,11 +384,17 @@ button {
 	}
 
 .monster {
-	background-image: url(../assets/monster.png);
+	background-image: url(../assets/monster-r1.png);
 	width: 64px;
 	height: 64px;
 	position: absolute;
 }
-	.monster.west {
-		background-image: url(../assets/monster-r1.png);
+	.monster.r2 {
+		background-image: url(../assets/monster-r2.png);
+	}
+	.monster.l1 {
+		background-image: url(../assets/monster-l1.png);
+	}
+	.monster.l2 {
+		background-image: url(../assets/monster-l2.png);
 	}
