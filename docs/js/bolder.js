@@ -260,9 +260,11 @@ const bolder = {
 	 */
 	json: () => {
 		let elem = document.getElementById( '-json' )
-		elem.style.display = 'block'
-		elem = document.getElementById( '-viewport' )
-		elem.style.display = 'none'
+		if ( elem.style.display === 'none' ) {
+			elem.style.display = 'block'
+		} else {
+			elem.style.display = 'none'
+		}
 	},
 
 	/**

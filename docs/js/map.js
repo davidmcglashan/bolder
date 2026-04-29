@@ -97,6 +97,7 @@ const map = {
 		 * probabilities.
 		 */
 		start: ( options ) => {
+			map.seed = options.seed
 			random.SEED = parseInt( options.seed ) | 0
 		
 			// Initialise the map and set its dimensions.
@@ -772,9 +773,71 @@ const map = {
 		},
 
 		/**
+		 * Takes the current map state and writes it to a hidden DOM
+		 * element as JSON which can be pasted into the levels.js file.
+		 */
+		writeJSON: () => {
+			let elem = document.getElementById( "-json" )
+			let str = '{\n\tseed: "' + map.seed + '",\n\tmap: [\n'
+
+			for ( let y=0; y<map.height; y++ ) {
+				str += '\t\t"'
+				next: for ( let x=0; x<map.width; x++ ) {
+					// Is this where bob starts?
+					if ( x === bob.x && y === bob.y ) {
+						str += '!'
+						continue
+					} 
+
+					let dgrid = map.dgrid[y][x]
+
+					// Spirits can enter as empty or as earths.
+					for ( let spirit of map.spirits ) {
+						if ( x === spirit.x && y === spirit.y ) {
+							if ( dgrid.type === map.gridtype.EARTH ) {
+								str += map.gridtype.SPIRIT_IN_EARTH
+							} else {
+								str += map.gridtype.SPIRIT
+							}
+							continue next
+						}
+					}
+
+					// If there's nothing here put in a space.
+					if ( !dgrid.type ) {
+						str += ' '
+						continue
+					}
+
+					// Wall variants have a horribly inefficient lookup 
+					if ( dgrid.type === map.gridtype.WALL && dgrid.variant ) {
+						let variant = dgrid.variant
+						for ( const[code,vart] of Object.entries(map.wallVariants)) {
+							if ( dgrid.variant === vart ) {
+								str += code
+								break
+							}
+						}
+					} 
+					
+					// Otherwise just put in the dgrid type attr.
+					else {
+						str += dgrid.type
+					}
+				}
+
+				str += '",\n'
+			}
+
+			elem.innerHTML = '<pre>'+str+'\t]\n}</pre>'
+		},
+
+		/**
 		 * Turn the map model into DOM elements so the game can be played in a web browser!
 		 */
 		buildDOM: () => {
+			map.gen.writeJSON()
+
 			let canvas = document.getElementById( "-canvas" )
 			let pushable = null
 			let v = 0
