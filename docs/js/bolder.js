@@ -33,9 +33,23 @@ const bolder = {
 	 * Builds the form on the index page with all the payload parameters as <input>s.
 	 */
 	buildForm: () => {
+		let progress = Math.max( localStorage['bolder.progress'] | 1, 3 )
+		let elem = document.getElementById( '-levels' )
+		for ( let i=1; i<=progress; i +=1 ) {
+			if ( i>1 ) {
+				elem.appendChild( document.createTextNode( ' - ' ) )
+			}
+
+			let a = document.createElement( 'a' )
+			a.setAttribute( 'href', 'javascript:void;' )
+			a.setAttribute( 'onclick', `bolder.submit(${i})` )
+			a.innerHTML = String( i ).padStart( 3, '0' )
+			elem.appendChild( a )
+		}
+
 		let form = document.getElementById( '-form' )
-		let elem = null
-		
+		elem = null
+
 		// If there was a payload in the URL use that to put values in the form elems
 		let payload = null		
 		let str = window.location.search
@@ -238,6 +252,7 @@ const bolder = {
 			// If this payload had a level we can progress to the next one.
 			if ( payload.level ) {
 				bolder.submit( payload.level+1 )
+				localStorage['bolder.progress'] = Math.max( localStorage['bolder.progress'] | 0, payload.level+1 )
 			} 
 			
 			// This was a random level. There's nowhere to go next so lets follow the home link.
