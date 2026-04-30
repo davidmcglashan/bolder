@@ -14,11 +14,20 @@
 		<h1>bolder</h1>
 		<div>Choose a level &hellip;</div>
 		<div id="-levels"></div>
-		<label>
-			Level seed
-			<input name="seed" type="text" id="seed">
+		<div id="-seed">
+			<label>
+				Level seed
+			</label>
+			<div>
+				<input name="seed" type="number" id="seed" step="1">
+				<div>
+					<a href="javascript:void(0)" onclick="bolder.randomSeed();">Random</a>
+					<a href="javascript:void(0)" onclick="bolder.changeSeed(-1);">-1</a>
+					<a href="javascript:void(0)" onclick="bolder.changeSeed(1);">+1</a>
+				</div>
+			</div>
 			<button onclick="bolder.submit()">Play</button>
-		</label>
+		</div>
 		<div id="-form"></div>
 		<a href="index.html">Reset form</a>
 	</body>

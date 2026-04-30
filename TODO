@@ -7,12 +7,8 @@ bugs
 game features
 -------------
 
-- random seed button
-- non-numeric seeds (just add the chars, I guess?)
-
 - a playable game (v1.0)
-  - dynamic index.html with options for playing standard levels or daily levels
-  - remember progress in localstorage
+  - lots of levels! Remove this TODO note at 20.
 
 - v2 map builder
   - random WxH box filled with stuff
@@ -24,7 +20,7 @@ game features
 
 design
 ------
-- Enter submits the seed
+
 - animate bob ...
 - better sprites for everything
   - bob

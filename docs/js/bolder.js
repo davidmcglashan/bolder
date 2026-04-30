@@ -41,7 +41,7 @@ const bolder = {
 			}
 
 			let a = document.createElement( 'a' )
-			a.setAttribute( 'href', 'javascript:void;' )
+			a.setAttribute( 'href', 'javascript:void(0)' )
 			a.setAttribute( 'onclick', `bolder.submit(${i})` )
 			a.innerHTML = String( i ).padStart( 3, '0' )
 			elem.appendChild( a )
@@ -93,7 +93,7 @@ const bolder = {
 					input.setAttribute( 'checked', 'checked' )
 				}
 			} else {
-				input.setAttribute( 'value', payload ? payload[field.name] : field.value )
+				input.value = payload ? payload[field.name] : field.value
 				input.setAttribute( 'placeholder', field.value )
 			}
 
@@ -102,7 +102,31 @@ const bolder = {
 
 		// Put today's date in the seed box
 		elem = document.getElementById( 'seed' )
-		elem.setAttribute( 'value', payload ? payload['seed'] : random.getSeed() )
+		elem.value = parseInt( payload ? payload['seed'] : random.getSeed() )
+
+		// Make Enter submit the form
+		elem.addEventListener( 'keypress', function(event) {
+			if ( event.key === 'Enter' ) {
+				event.preventDefault()
+				bolder.submit()
+			}
+		} )	
+	},
+
+	/**
+	 * Generates a new random seed and puts it in the form UI element.
+	 */
+	randomSeed: () => {
+		elem = document.getElementById( 'seed' )
+		elem.value = random.get( 1, 99999999 ) 
+	},
+
+	/**
+	 * Changes the seed by the specified amount and puts it in the form UI element.
+	 */
+	changeSeed: ( diff ) => {
+		elem = document.getElementById( 'seed' )
+		elem.value = parseInt(elem.value) + diff
 	},
 
 	/**
@@ -303,4 +327,4 @@ const bolder = {
 			bob.centreDisplay()
 		}
 	}
-}
+};
