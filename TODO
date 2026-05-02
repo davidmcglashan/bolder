@@ -9,6 +9,11 @@ game features
 
 - a playable game (v1.0)
   - lots of levels! Remove this TODO note at 20.
+  - a better toolbar
+  - lay out the random UI form
+  - instructions during the game e.g. on pause show the keys
+  - how to play
+  - about
 
 - v2 map builder
   - random WxH box filled with stuff

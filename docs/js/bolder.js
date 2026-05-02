@@ -35,14 +35,15 @@ const bolder = {
 	buildForm: () => {
 		let progress = Math.max( localStorage['bolder.progress'] | 1, 3 )
 		let elem = document.getElementById( '-levels' )
-		for ( let i=1; i<=progress; i +=1 ) {
-			if ( i>1 ) {
-				elem.appendChild( document.createTextNode( ' - ' ) )
-			}
-
+		for ( let i=1; i<=30; i +=1 ) {
 			let a = document.createElement( 'a' )
 			a.setAttribute( 'href', 'javascript:void(0)' )
-			a.setAttribute( 'onclick', `bolder.submit(${i})` )
+			if ( i < progress ) {
+				a.setAttribute( 'onclick', `bolder.submit(${i})` )
+			} else {
+				a.setAttribute( 'class', 'locked' )
+			}
+
 			a.innerHTML = String( i ).padStart( 3, '0' )
 			elem.appendChild( a )
 		}
@@ -325,6 +326,25 @@ const bolder = {
 			canvas.style.top = offsetY + 'px'
 		} else {
 			bob.centreDisplay()
+		}
+	},
+
+	/**
+	 * Switch to the selected tab in the index.html UI.
+	 */
+	tab: ( index ) => {
+		// Select the tab itself.
+		let tabs = document.getElementById( '-tabs' )
+		for ( let i=0; i < tabs.children.length; i++ ) {
+  			let tab = tabs.children[i];
+			tab.setAttribute( 'class', i === index ? 'selected' : '' )
+		}
+
+		// Make the tab's content appear.
+		tabs = document.getElementById( '-content' )
+		for ( let i=0; i < tabs.children.length; i++ ) {
+  			let tab = tabs.children[i];
+			tab.setAttribute( 'class', i === index ? '' : 'hidden' )
 		}
 	}
 };

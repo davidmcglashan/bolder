@@ -1,35 +1,59 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Bolder</title>
+		<title>All Mine</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css2?family=Rubik+80s+Fade&display=swap" rel="stylesheet">
-		<link rel="stylesheet" href="css/bolder.css">
+		<link rel="stylesheet" href="css/index.css">
 		<script type="text/javascript" src="js/bolder.js"></script>
 		<script type="text/javascript" src="js/random.js"></script>
 	</head>
-	<body class="index">
-		<h1>bolder</h1>
-		<div>Choose a level &hellip;</div>
-		<div id="-levels"></div>
-		<div id="-seed">
-			<label>
-				Level seed
-			</label>
-			<div>
-				<input name="seed" type="number" id="seed" step="1">
-				<div>
-					<a href="javascript:void(0)" onclick="bolder.randomSeed();">Random</a>
-					<a href="javascript:void(0)" onclick="bolder.changeSeed(-1);">-1</a>
-					<a href="javascript:void(0)" onclick="bolder.changeSeed(1);">+1</a>
-				</div>
+	<body>
+		<div>
+			<div id="-masthead">
+				<img src="assets/boulder.png">
+				<img src="assets/bob.png">
+				<img src="assets/diamond.png">
+				<h1><span>&hellip;</span> all mine <span>&hellip;</span></h1>
+				<img src="assets/diamond.png">
+				<img src="assets/monster-l2.png">
+				<img src="assets/wall-r-bbo-ne.png">
 			</div>
-			<button onclick="bolder.submit()">Play</button>
+			<div id="-tabs">
+				<div class="selected"><a href="javascript:void(0)" onclick="bolder.tab(0)">Levels</a></div>
+				<div><a href="javascript:void(0)" onclick="bolder.tab(1)">Random</a></div>
+				<div><a href="javascript:void(0)" onclick="bolder.tab(2)">How to play</a></div>
+				<div><a href="javascript:void(0)" onclick="bolder.tab(3)">About</a></div>
+			</div>
+			<div id="-content">
+				<div>
+					<p>Choose a level &hellip;</p>
+					<div id="-levels"></div>
+				</div>
+				<div class="hidden">
+					<div id="-seed">
+						<label>
+							Level seed
+						</label>
+						<div>
+							<input name="seed" type="number" id="seed" step="1">
+							<div>
+								<a href="javascript:void(0)" onclick="bolder.randomSeed();">Random</a>
+								<a href="javascript:void(0)" onclick="bolder.changeSeed(-1);">-1</a>
+								<a href="javascript:void(0)" onclick="bolder.changeSeed(1);">+1</a>
+							</div>
+						</div>
+						<button onclick="bolder.submit()">Play</button>
+					</div>
+					<div id="-form"></div>
+					<a href="index.html">Reset form</a>
+				</div>
+				<div class="hidden">How to play</div>
+				<div class="hidden">About</div>
+			</div>
 		</div>
-		<div id="-form"></div>
-		<a href="index.html">Reset form</a>
 	</body>
 	<script>
 		bolder.buildForm()
