@@ -13,7 +13,7 @@ const bolder = {
 		{ name: "extraWallMin", label: "Minimum number of extra walls", type: "number", value: 6 },
 		{ name: "extraWallMax", label: "Maximum number of extra walls", type: "number", value: 14 },
 		{ name: "extraWallHoles", label: "Extra wall holey-ness (1 in ...)", type: "number", value: 5, after: 'gap' },
-		{ name: "startFraction", label: "Start in top fraction (1/...)", type: "number", value: 5, after: 'column' },
+		{ name: "startFraction", label: "Start in top fraction (1/...)", type: "number", value: 5 },
 		
 		{ name: "boulderChance", label: "Boulder likelihood (1 in ...)", type: "number", value: 5 },
 		{ name: "holeChance", label: "Hole likelihood (1 in ...)", type: "number", value: 10 },
@@ -33,12 +33,20 @@ const bolder = {
 	 * Builds the form on the index page with all the payload parameters as <input>s.
 	 */
 	buildForm: () => {
-		let progress = Math.max( localStorage['bolder.progress'] | 1, 3 )
+		let progress = localStorage['bolder.progress']
+		if ( progress ) {
+			progress = parseInt( progress )
+			if ( progress < 3 ) {
+				progress = 3
+			}
+		} else {
+			progress = 3
+		}
 		let elem = document.getElementById( '-levels' )
 		for ( let i=1; i<=30; i +=1 ) {
 			let a = document.createElement( 'a' )
 			a.setAttribute( 'href', 'javascript:void(0)' )
-			if ( i < progress ) {
+			if ( i <= progress ) {
 				a.setAttribute( 'onclick', `bolder.submit(${i})` )
 			} else {
 				a.setAttribute( 'class', 'locked' )
@@ -112,6 +120,9 @@ const bolder = {
 				bolder.submit()
 			}
 		} )	
+
+		// Select the tab that got selected last.
+		bolder.tab( localStorage['bolder.tab'] | 0 )
 	},
 
 	/**
@@ -128,6 +139,16 @@ const bolder = {
 	changeSeed: ( diff ) => {
 		elem = document.getElementById( 'seed' )
 		elem.value = parseInt(elem.value) + diff
+	},
+
+	/**
+	 * Called from the play button on the "How To Play" tab. Starts the game at the
+	 * player's next 'progress' level.
+	 */
+	resume: () => {
+		let progress = localStorage['bolder.progress']
+		console.log( progress )
+		bolder.submit( progress ? progress : 1 )
 	},
 
 	/**
@@ -277,7 +298,7 @@ const bolder = {
 			// If this payload had a level we can progress to the next one.
 			if ( payload.level ) {
 				bolder.submit( payload.level+1 )
-				localStorage['bolder.progress'] = Math.max( localStorage['bolder.progress'] | 0, payload.level+1 )
+				localStorage['bolder.progress'] = Math.max( localStorage['bolder.progress'] | 0, parseInt(payload.level)+1 )
 			} 
 			
 			// This was a random level. There's nowhere to go next so lets follow the home link.
@@ -346,5 +367,7 @@ const bolder = {
   			let tab = tabs.children[i];
 			tab.setAttribute( 'class', i === index ? '' : 'hidden' )
 		}
+
+		localStorage['bolder.tab'] = index
 	}
 };

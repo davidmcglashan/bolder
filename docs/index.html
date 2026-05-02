@@ -22,17 +22,38 @@
 				<img src="assets/wall-r-bbo-ne.png">
 			</div>
 			<div id="-tabs">
-				<div class="selected"><a href="javascript:void(0)" onclick="bolder.tab(0)">Levels</a></div>
-				<div><a href="javascript:void(0)" onclick="bolder.tab(1)">Random</a></div>
-				<div><a href="javascript:void(0)" onclick="bolder.tab(2)">How to play</a></div>
+				<div class="selected"><a href="javascript:void(0)" onclick="bolder.tab(0)">How to play</a></div>
+				<div><a href="javascript:void(0)" onclick="bolder.tab(1)">Levels</a></div>
+				<div><a href="javascript:void(0)" onclick="bolder.tab(2)">Random</a></div>
 				<div><a href="javascript:void(0)" onclick="bolder.tab(3)">About</a></div>
 			</div>
 			<div id="-content">
 				<div>
+					<p>
+						<strong>All Mine</strong> is a puzzle game based on old 8-bit games like Boulder Dash, Repton, and The Pit.
+						You must explore each level, digging through the earth to collect all the diamonds, before progressing to the next.
+					</p>
+					<p>Beware of falling boulders and lizards hatching from monstrous yellow eggs.</p>
+					<p>Some diamonds are locked away in safes which need a key to unlock. And keep an eye out for the wandering spirits who must be guided into cages in return for a diamond &hellip;</p>
+
+					<div class="centred">
+						<button onclick="bolder.resume()">Play</button>
+						<p><strong>Controls</strong></p>
+						<ul>
+							<li><strong>Z</strong> - move left</li>
+							<li><strong>X</strong> - move right</li>
+							<li><strong>K</strong> - move up</li>
+							<li><strong>M</strong> - move down</li>
+							<li><strong>P</strong> - pause (and see a map)</li>
+						</ul>
+					</div>
+				</div>
+				<div class="hidden">
 					<p>Choose a level &hellip;</p>
 					<div id="-levels"></div>
 				</div>
 				<div class="hidden">
+					<p>Random levels are created using a seed to generate random numbers. The same seed produces the same level. Random levels are not guaranteed to be possible &mdash; try and get the highest score you can!</p>
 					<div id="-seed">
 						<label>
 							Level seed
@@ -46,11 +67,10 @@
 							</div>
 						</div>
 						<button onclick="bolder.submit()">Play</button>
+						<a href="index.html">Reset form</a>
 					</div>
 					<div id="-form"></div>
-					<a href="index.html">Reset form</a>
 				</div>
-				<div class="hidden">How to play</div>
 				<div class="hidden">About</div>
 			</div>
 		</div>
