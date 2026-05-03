@@ -6,13 +6,15 @@ Beware of falling boulders and lizards hatching from monstrous yellow eggs.
 
 Some diamonds are locked away in safes which need a key to unlock. And keep an eye out for the wandering spirits who must be guided into cages in return for a diamond …
 
-Go to https://allmine.mcglashan.net to play
+<img width="400" alt="All Mine screenshot" src="https://github.com/user-attachments/assets/decd288c-f315-40ab-862a-0aaeb7d0dec9" />
 
-Controls
+## Go to https://allmine.mcglashan.net to play
 
-Z - move left
-X - move right
-K - move up
-M - move down
+**Controls**
 
-P - pause (and see a map)
+**Z** - move left<br>
+**X** - move right<br>
+**K** - move up<br>
+**M** - move down<br>
+
+**P** - pause (and see a map)
