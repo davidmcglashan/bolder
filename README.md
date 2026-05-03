@@ -8,13 +8,13 @@ Some diamonds are locked away in safes which need a key to unlock. And keep an e
 
 <img width="400" alt="All Mine screenshot" src="https://github.com/user-attachments/assets/decd288c-f315-40ab-862a-0aaeb7d0dec9" />
 
-Go to https://allmine.mcglashan.net to play
+## Go to https://allmine.mcglashan.net to play
 
-Controls
+**Controls**
 
-Z - move left
-X - move right
-K - move up
-M - move down
+**Z** - move left<br>
+**X** - move right<br>
+**K** - move up<br>
+**M** - move down<br>
 
-P - pause (and see a map)
+**P** - pause (and see a map)
