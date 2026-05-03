@@ -9,6 +9,7 @@ body {
 	background-image: url('../assets/wall-index.png');
 	padding: 2rem;
 	overflow-y: scroll;
+	line-height: 1.3rem;
 }
 	body > div {
 		width: 60rem;
@@ -86,15 +87,22 @@ a {
 		flex-direction: column;
 		align-items: stretch;
 		width: 100%;
+		gap: 1rem;
 	}
+
+p {
+	margin: 0;
+	margin-bottom: 1rem;
+}
 
 ul {
 	list-style: none;
-	display: contents;
+	padding-inline-start: 0;
+	margin: 0;
 }
 
 #-levels {
-	margin-top: 0.25rem;
+	margin-top: 1rem;
 	font-size: 120%;
 	display: flex;
 	flex-direction: row;
@@ -127,17 +135,15 @@ ul {
 	align-items: baseline;
 	justify-content: center;
 	gap: 1rem;
+	margin: 2rem 0 1.5rem;
 }
 	#-seed>label {
-		margin-top: 2rem;
-		margin-bottom: 1rem;
 		font-size: 120%;
 	}
 	#-seed>div {
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
-		margin-bottom: 2rem;
 	}
 	#-seed input {
 		width: 10rem;
@@ -159,7 +165,7 @@ h1 {
 
 div#-form {
 	border-top: 1px solid #888;
-	padding-top: 4rem;
+	padding-top: 2rem;
 	margin-top: 1rem;
 	display: flex;
 	gap: 4rem;
@@ -250,6 +256,61 @@ button {
 .anim4 .bob {
 	background-image: url('../assets/bob-r2.png');
 }
+
+.earth {
+	background-image: url('../assets/earth.png');
+}
+.boulder {
+	background-image: url('../assets/boulder.png');
+}
+.egg {
+	background-image: url('../assets/egg.png');
+}
+.key {
+	background-image: url('../assets/key.png');
+}
+.safe {
+	background-image: url('../assets/safe.png');
+}
+.cage {
+	background-image: url('../assets/cage.png');
+}
+.spirit {
+	background-image: url('../assets/spirit.png');
+}
+.anim2 .spirit {
+	background-image: url('../assets/spirit-e.png');
+}
+.anim3 .spirit {
+	background-image: url('../assets/spirit-n.png');
+}
+.anim4 .spirit {
+	background-image: url('../assets/spirit-w.png');
+}
+
+div.instructions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin-top: 2rem;
+}
+div.card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	flex: 1;
+	min-width: 45%;
+	border: 1px solid #444;
+	padding: 1rem;
+	border-radius: 1rem;
+}
+	div.instruction > div.frame {
+		border: 1px solid #444;
+		background-color: #222;
+		border-radius: 1rem;
+		padding: 1rem;
+	}
 
 #-credits {
 	margin-top: 2rem;

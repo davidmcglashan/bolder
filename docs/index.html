@@ -40,14 +40,13 @@
 						<img src="assets/screenshot.png">
 						<div>
 							<button onclick="bolder.resume()">Press to Play</button>
-							<p><strong>Controls</strong></p>
+							<strong>Controls</strong>
 							<ul>
 								<li><strong>Z</strong> - move left</li>
 								<li><strong>X</strong> - move right</li>
 								<li><strong>K</strong> - move up</li>
 								<li><strong>M</strong> - move down</li>
 							</ul>
-							<br>
 							<ul>
 								<li><strong>P</strong> - pause (and see a map)</li>
 							</ul>
@@ -77,7 +76,117 @@
 					</div>
 					<div id="-form"></div>
 				</div>
-				<div class="hidden">About</div>
+				<div class="hidden">
+					<p>
+						The aim of the game is to collect all the diamonds on each level. Only then
+						can you progress to the next one. Since cages and safes become diamonds when
+						opened you'll need to take care of these too!
+					</p>
+					<div class="instructions">
+						<div class="card">
+							<div class="frame"><div class="sprite bob"></div></div>
+							<div>
+								<p>
+									You control Bob with the keyboard. He can move left and right, and up and
+									down. He isn't bound by gravity and can move freely around each level's
+									maze.
+								</p>
+								<p>
+									Bob can dig dirt and collect diamonds by moving over them. He must avoid
+									lizards and spirits &mdash; touching these is fatal.
+								</p>
+							</div>
+						</div>
+						<div class="card">
+							<div class="frame"><div class="sprite boulder"></div></div>
+							<div>
+								<p>
+									Boulders will fall if unsupported, so be careful digging that dirt away.
+									They also roll off any surface that isn't flat, including diamonds, curved
+									walls, and other boulders.
+								</p>
+								<p>
+									They're heavy enough to kill, but light enough to be pushed.
+								</p>
+							</div>
+						</div>
+						<div class="card">
+							<div class="frame"><div class="sprite diamond"></div></div>
+							<div>
+								<p>
+									Bob must collect all the diamonds to finish each level and move
+									on to the next one.
+								</p>
+							</div>
+						</div>
+						<div class="card">
+							<div class="frame"><div class="sprite earth"></div></div>
+							<div>
+								<p>
+									Good old harmless dirt. 
+								</p>
+							</div>
+						</div>
+						<div class="card">
+							<div class="frame"><div class="sprite egg"></div></div>
+							<div>
+								<p>
+									Eggs will crack if they fall from any height. Once cracked, it's
+									only a matter of time before a lizard emerges. 
+									</s>
+								</p>
+							</div>
+						</div>
+						<div class="card">
+							<div class="frame"><div class="sprite monster"></div></div>
+							<div>
+								<p>
+									Lizards are dangerous and will hunt Bob for breakfast. They're
+									not invincible, however. In fact, they're just as squishy as Bob is.
+								</p>
+							</div>
+						</div>
+						<div class="card">
+							<div class="frame"><div class="sprite safe"></div></div>
+							<div>
+								<p>
+									Flat-topped safes contain diamonds, but they can't be moved until
+									Bob collects a key. Then all the safes on the level instantly
+									become diamonds.
+								</p>
+							</div>
+						</div>
+						<div class="card">
+							<div class="frame"><div class="sprite key"></div></div>
+							<div>
+								<p>
+									Collecting the key opens all the safes.
+								</p>
+							</div>
+						</div>
+						<div class="card">
+							<div class="frame"><div class="sprite spirit"></div></div>
+							<div>
+								<p>
+									Restless spirits are blind and never stop moving as they aimlessly 
+									wander the levels. Since they can't see, they like to keep the
+									walls and other solid objects on their left.
+								</p>
+								<p>
+									Remember that their ghostly forms let them move through the dirt.
+								</p>
+							</div>
+						</div>
+						<div class="card">
+							<div class="frame"><div class="sprite cage"></div></div>
+							<div>
+								<p>
+									If you can guide a spirit into a cage it will reveal a diamond.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div id="-credits"></div>
