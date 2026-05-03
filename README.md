@@ -6,7 +6,7 @@ Beware of falling boulders and lizards hatching from monstrous yellow eggs.
 
 Some diamonds are locked away in safes which need a key to unlock. And keep an eye out for the wandering spirits who must be guided into cages in return for a diamond …
 
-<img width="800" alt="All Mine screenshot" src="https://github.com/user-attachments/assets/decd288c-f315-40ab-862a-0aaeb7d0dec9" />
+<img width="400" alt="All Mine screenshot" src="https://github.com/user-attachments/assets/decd288c-f315-40ab-862a-0aaeb7d0dec9" />
 
 Go to https://allmine.mcglashan.net to play
 
