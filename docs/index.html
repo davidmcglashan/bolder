@@ -10,15 +10,15 @@
 		<script type="text/javascript" src="js/bolder.js"></script>
 		<script type="text/javascript" src="js/random.js"></script>
 	</head>
-	<body>
+	<body id="-body">
 		<div>
 			<div id="-masthead">
 				<img src="assets/boulder.png">
 				<img src="assets/bob.png">
-				<img src="assets/diamond.png">
+				<div class="sprite diamond"></div>
 				<h1><span>&hellip;</span> all mine <span>&hellip;</span></h1>
-				<img src="assets/diamond.png">
-				<img src="assets/monster-l2.png">
+				<div class="sprite diamond"></div>
+				<div class="sprite monster"></div>
 				<img src="assets/wall-r-bbo-ne.png">
 			</div>
 			<div id="-tabs">
@@ -77,5 +77,15 @@
 	</body>
 	<script>
 		bolder.buildForm()
+
+		let body = document.getElementById( '-body' )
+		let count = 1
+		window.setInterval( function(){
+			body.setAttribute('class','anim'+count)
+			count += 1
+			if ( count === 5 ) {
+				count = 1
+			}
+		}, 500 );
 	</script>
 </html>

@@ -189,3 +189,31 @@ button {
 	color: #fff;
 	cursor: pointer;
 }
+
+.sprite {
+	width: 3rem;
+	height: 3rem;
+	background-size: contain;
+}
+
+.monster {
+	background-image: url('../assets/monster-l1.png');
+}
+
+.anim2 .monster,
+.anim4 .monster {
+	background-image: url('../assets/monster-l2.png');
+}
+
+.diamond {
+	background-image: url('../assets/diamond.png');
+}
+.anim2 .diamond {
+	background-image: url('../assets/diamond-r1.png');
+}
+.anim3 .diamond {
+	background-image: url('../assets/diamond-r2.png');
+}
+.anim4 .diamond {
+	background-image: url('../assets/diamond-r3.png');
+}
