@@ -169,6 +169,19 @@ const drawloop = {
 				bob.startToMove()
 			}
 
+			// Advance bob's frame counter for his animation.
+			bob.animLoop += 1
+			switch( bob.animLoop ) {
+				case 16:
+					bob.animLoop = 0
+				case 0:
+					bob.elem.setAttribute( 'class', 'bob ' + bob.facing + '1' )
+					break;
+				case 8:
+					bob.elem.setAttribute( 'class', 'bob ' + bob.facing + '2' )
+					break;
+			}
+
 			// Move the display to keep bob centred.
 			bob.centreDisplay()
 		}

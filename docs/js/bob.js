@@ -28,6 +28,8 @@ const bob = {
 		bob.oldY = bob.y
 		bob.dx = 0
 		bob.dy = 0
+		bob.facing = 'l'
+		bob.animLoop = 1
 		map.loc.setToEmpty( bob )
 		
 		// Move bob's sprite to its proper location.
@@ -161,6 +163,8 @@ const bob = {
 		bob.dy = 0
 		bob.delta = 64
 		bob.x -= 1
+		bob.facing = 'l'
+		bob.animLoop = 15
 		map.loc.setToEmpty( bob, true )
 	},
 
@@ -189,6 +193,8 @@ const bob = {
 		bob.dy = 0
 		bob.delta = 64
 		bob.x += 1
+		bob.facing = 'r'
+		bob.animLoop = 15
 		map.loc.setToEmpty( bob, true )
 	},
 

@@ -197,12 +197,16 @@ button {
 }
 
 .monster {
+	background-image: url('../assets/monster-l2.png');
+}
+.anim2 .monster {
 	background-image: url('../assets/monster-l1.png');
 }
-
-.anim2 .monster,
+.anim3 .monster {
+	background-image: url('../assets/monster-r1.png');
+}
 .anim4 .monster {
-	background-image: url('../assets/monster-l2.png');
+	background-image: url('../assets/monster-r2.png');
 }
 
 .diamond {
@@ -216,4 +220,17 @@ button {
 }
 .anim4 .diamond {
 	background-image: url('../assets/diamond-r3.png');
+}
+
+.bob {
+	background-image: url('../assets/bob-l1.png');
+}
+.anim2 .bob {
+	background-image: url('../assets/bob-l2.png');
+}
+.anim3 .bob {
+	background-image: url('../assets/bob-r1.png');
+}
+.anim4 .bob {
+	background-image: url('../assets/bob-r2.png');
 }

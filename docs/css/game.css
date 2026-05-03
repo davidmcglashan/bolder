@@ -303,11 +303,23 @@ a {
 }
 
 .bob {
-	background-image: url(../assets/bob.png);
+	background-image: url(../assets/bob-l1.png);
 	width: 64px;
 	height: 64px;
 	position: absolute;
 }
+	.bob.l1 {
+		background-image: url(../assets/bob-l1.png);
+	}
+	.bob.l2 {
+		background-image: url(../assets/bob-l2.png);
+	}
+	.bob.r1 {
+		background-image: url(../assets/bob-r1.png);
+	}
+	.bob.r2 {
+		background-image: url(../assets/bob-r2.png);
+	}
 
 .spirit {
 	background-image: url(../assets/spirit.png);
