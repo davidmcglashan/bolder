@@ -1,6 +1,5 @@
 const bolder = {
-	score: 0,
-
+	version: 'v0.9',
 	fields: [
 		{ name: "minWidth", label: "Minimum width", type: "number", value: 25 },
 		{ name: "maxWidth", label: "Maximum width", type: "number", value: 45 },
@@ -29,10 +28,13 @@ const bolder = {
 		{ name: "monstersDirt", label: "Monsters move through dirt", type: "checkbox", value: false },
 	],
 
+	score: 0,
+
 	/**
 	 * Builds the form on the index page with all the payload parameters as <input>s.
 	 */
 	buildForm: () => {
+		// Fish any existing progress out of localstorage.
 		let progress = localStorage['bolder.progress']
 		if ( progress ) {
 			progress = parseInt( progress )
@@ -42,6 +44,8 @@ const bolder = {
 		} else {
 			progress = 3
 		}
+
+		// Display a button for each unlocked level.
 		let elem = document.getElementById( '-levels' )
 		for ( let i=1; i<=30; i +=1 ) {
 			let a = document.createElement( 'a' )
@@ -56,6 +60,7 @@ const bolder = {
 			elem.appendChild( a )
 		}
 
+		// Build the form for the random tab
 		let form = document.getElementById( '-form' )
 		elem = null
 
@@ -120,6 +125,10 @@ const bolder = {
 				bolder.submit()
 			}
 		} )	
+
+		// Display a version and copyright notice at the bottom.
+		elem = document.getElementById( '-credits' )
+		elem.innerHTML = `${bolder.version} &mdash; &copy; ${new Date().getFullYear()} David McGlashan  &mdash; <a href="https://allmine.mcglashan.net">https://allmine.mcglashan.net</a> &mdash; Source code on <a href="https://github.com/davidmcglashan/all-mine">github.com</a>`
 
 		// Select the tab that got selected last.
 		bolder.tab( localStorage['bolder.tab'] | 0 )

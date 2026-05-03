@@ -7,11 +7,17 @@ bugs
 game features
 -------------
 
+- slicker keyboard controls
+  - monitor direction keys and maintain four flags - ignore flags if two are down already
+  - when finishing a move ... is same direction key down? 
+    - y - go in that direction again
+	- n - go in new direction if key down
+	- N - do nothing
+
 - a playable game (v1.0)
   - lots of levels! Remove this TODO note at 20.
   - a better toolbar
   - instructions during the game e.g. on pause show the keys
-  - about
 
 - v2 map builder
   - random WxH box filled with stuff
@@ -20,13 +26,17 @@ game features
   - then another WxH random box
 
 - sounds: tone.js
+  - diamong ting
+  - earth pffft
+  - boulder landing chhhk
+  - egg landing puhk
+  - monster squashing bzzt
+  - spirit caging ping
+  - disable sounds in toolbar/keyboard
 
 design
 ------
 
-- animate bob ...
-- better sprites for everything
-  - bob
 - bob death animation
 - singleton wall variants are considerate of their neighbours ...
   - use same colour and style

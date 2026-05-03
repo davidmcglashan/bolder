@@ -22,10 +22,10 @@
 				<img src="assets/wall-r-bbo-ne.png">
 			</div>
 			<div id="-tabs">
-				<div class="selected"><a href="javascript:void(0)" onclick="bolder.tab(0)">How to play</a></div>
+				<div class="selected"><a href="javascript:void(0)" onclick="bolder.tab(0)">Welcome</a></div>
 				<div><a href="javascript:void(0)" onclick="bolder.tab(1)">Levels</a></div>
 				<div><a href="javascript:void(0)" onclick="bolder.tab(2)">Random</a></div>
-				<div><a href="javascript:void(0)" onclick="bolder.tab(3)">About</a></div>
+				<div><a href="javascript:void(0)" onclick="bolder.tab(3)">Instructions</a></div>
 			</div>
 			<div id="-content">
 				<div>
@@ -36,16 +36,22 @@
 					<p>Beware of falling boulders and lizards hatching from monstrous yellow eggs.</p>
 					<p>Some diamonds are locked away in safes which need a key to unlock. And keep an eye out for the wandering spirits who must be guided into cages in return for a diamond &hellip;</p>
 
-					<div class="centred">
-						<button onclick="bolder.resume()">Play</button>
-						<p><strong>Controls</strong></p>
-						<ul>
-							<li><strong>Z</strong> - move left</li>
-							<li><strong>X</strong> - move right</li>
-							<li><strong>K</strong> - move up</li>
-							<li><strong>M</strong> - move down</li>
-							<li><strong>P</strong> - pause (and see a map)</li>
-						</ul>
+					<div class="panels">
+						<img src="assets/screenshot.png">
+						<div>
+							<button onclick="bolder.resume()">Press to Play</button>
+							<p><strong>Controls</strong></p>
+							<ul>
+								<li><strong>Z</strong> - move left</li>
+								<li><strong>X</strong> - move right</li>
+								<li><strong>K</strong> - move up</li>
+								<li><strong>M</strong> - move down</li>
+							</ul>
+							<br>
+							<ul>
+								<li><strong>P</strong> - pause (and see a map)</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 				<div class="hidden">
@@ -74,10 +80,13 @@
 				<div class="hidden">About</div>
 			</div>
 		</div>
+		<div id="-credits"></div>
 	</body>
 	<script>
+		// Prep the UI.
 		bolder.buildForm()
 
+		// Run an animation counter by swapping out the class attributes of <body> on a schedule.
 		let body = document.getElementById( '-body' )
 		let count = 1
 		window.setInterval( function(){
