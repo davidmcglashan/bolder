@@ -313,12 +313,8 @@ div.card {
 	}
 
 #-credits {
-	margin-top: 2rem;
-	margin-left: 4rem;
+	margin-top: 1rem;
 	font-size: 85%;
-	background: none;
-	box-shadow: none;
-	backdrop-filter: none;
 	color: #bbb;
 }
 	#-credits a {

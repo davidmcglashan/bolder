@@ -128,7 +128,7 @@ const bolder = {
 
 		// Display a version and copyright notice at the bottom.
 		elem = document.getElementById( '-credits' )
-		elem.innerHTML = `${bolder.version} &mdash; &copy; ${new Date().getFullYear()} David McGlashan  &mdash; <a href="https://allmine.mcglashan.net">https://allmine.mcglashan.net</a> &mdash; Source code on <a href="https://github.com/davidmcglashan/all-mine">github.com</a>`
+		elem.innerHTML = `${bolder.version}<br>&copy; ${new Date().getFullYear()} David McGlashan<br><a href="https://allmine.mcglashan.net">https://allmine.mcglashan.net</a><br>Source code on <a href="https://github.com/davidmcglashan/all-mine">github.com</a>`
 
 		// Select the tab that got selected last.
 		bolder.tab( localStorage['bolder.tab'] | 0 )
@@ -155,9 +155,15 @@ const bolder = {
 	 * player's next 'progress' level.
 	 */
 	resume: () => {
+		// Check the user's progress so far. 
 		let progress = localStorage['bolder.progress']
-		console.log( progress )
-		bolder.submit( progress ? progress : 1 )
+		if ( progress && progress < levels.maps.length ) {
+			bolder.submit( progress )
+			return
+		}
+
+		// Just play level one.
+		bolder.submit( 1 )
 	},
 
 	/**
