@@ -16,14 +16,14 @@
 	</head>
 	<body id="-body">
 		<div id="-main">
-			<div class="toolbar">
-				<a id="-home" href="index.html">&lt;&lt; Home</a>
-				<span id="-score">score: 0</span>
-				<span id="-diamonds">diamonds: 0</span>
-				<span id="-monsters">monsters: 0</span>
-				<a class="hideOnPause" href="javascript:void(0);" onclick="bolder.stuck()">Stuck?!</a>
-				<a class="hideOnPause" href="javascript:void(0);" onclick="bolder.json()">JSON</a>
-				<a class="hideOnPause" href="javascript:void(0);" onclick="bolder.map()">Map</a>
+			<div id="-toolbar">
+				<a class="border" id="-home" href="index.html">&lt;&lt; Menu</a>
+				<div class="status">
+					<span id="-score">score: 0</span>
+					<span id="-diamonds">diamonds: 0</span>
+					<span id="-monsters">monsters: 0</span>
+				</div>
+				<a class="hideOnPause" href="javascript:void(0);" onclick="bolder.map()">Press 'P' to pause</a>
 				<a class="showOnPause" href="javascript:void(0);" onclick="bolder.map()">Resume</a>
 			</div>
 			<div id="-border">
@@ -37,6 +37,20 @@
 		<div id="-banner">
 			<div id="-level">001</div>
 			<div id="-description">collect the diamonds</div>
+		</div>
+		<div class="controls showOnPause">
+			<strong>Controls</strong>
+			<ul>
+				<li><strong>Z</strong> - move left</li>
+				<li><strong>X</strong> - move right</li>
+				<li><strong>K</strong> - move up</li>
+				<li><strong>M</strong> - move down</li>
+			</ul>
+			<ul>
+				<li><strong>P</strong> - pause</li>
+				<li><strong>Q</strong> - kill bob</li>
+				<li><strong>R</strong> - restart</li>
+			</ul>
 		</div>
 	</body>
 	<script>bolder.play()</script>

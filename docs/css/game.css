@@ -10,7 +10,8 @@ a {
 }
 	a:hover,
 	a:focus {
-		text-decoration: underline;
+		background-color: #ff0;
+		color: #000;
 	}
 
 #-banner {
@@ -72,8 +73,9 @@ a {
 
 #-border {
 	position: absolute;
-	inset: 2.5rem 1rem 1rem;
+	inset: 2.75rem 1rem 1rem;
 	border: 1px solid white;
+	border-radius: 6px;
 }
 
 #-viewport {
@@ -85,16 +87,45 @@ a {
 /**
  * Toolbar shows links and the game state e.g. score across the top of the page.
  */
-.toolbar {
+#-toolbar {
 	display: flex;
-	padding: 0rem 1rem;
+	padding: 0rem 0.5rem;
 	justify-content: space-between;
+}
+	#-toolbar a {
+		border: 1px transparent;
+		border-radius: 6px;
+		padding: 0.25rem 0.5rem;
+	}
+	#-toolbar .border {
+		border: 1px solid #ff0;
+	}
+	#-toolbar .status {
+		padding: 0.25rem 0.5rem;
+		display: flex;
+		gap: 3rem;
+	}
+
+.paused .showOnPause.controls {
+	display: flex;
+}
+
+.controls {
+	flex-direction: column;
+	gap: 1rem;
+	margin: 1.5rem;
+}
+
+ul {
+	list-style: none;
+	padding-inline-start: 0;
+	margin: 0;
 }
 
 /**
  * When the game is paused the toolbar and dynamic game entities are hidden.
  */
-.paused .toolbar .hideOnPause,
+.paused #-toolbar .hideOnPause,
 .paused .bob,
 .paused .spirit,
 .paused .monster {
@@ -115,7 +146,7 @@ a {
 	position: absolute;
 }
 .paused #-border {
-	border: 1px solid transparent;
+	border: 1px solid #666;
 }
 
 /**

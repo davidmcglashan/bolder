@@ -256,8 +256,19 @@ const bolder = {
 			}
 
 			const keyName = event.key;
-			if ( keyName === 'p' ) { 
-				bolder.map()
+			switch ( keyName ) {
+				case 'p':
+					bolder.map()
+					break
+				case 'j':
+					bolder.json()
+					break
+				case 'q':
+					bolder.stuck()
+					break
+				case 'r':
+					bolder.restartLevel()
+					break
 			}
 		} )
 
@@ -320,6 +331,26 @@ const bolder = {
 			else {
 				let elem = document.getElementById( '-home' )
 				window.location.href = elem.getAttribute( 'href' )
+			}
+		}
+	},
+
+	/**
+	 * Restarts the current level.
+	 */
+	restartLevel: () => {
+		let str = window.location.search
+		if ( str ) {
+			let payload = JSON.parse( atob( str.substring(1) ) )
+
+			// If this payload had a level we can restart by resubmitting it.
+			if ( payload.level ) {
+				bolder.submit( payload.level )
+			}
+
+			// This was a random level so just refresh
+			else {
+				window.location.href = window.location.href
 			}
 		}
 	},
