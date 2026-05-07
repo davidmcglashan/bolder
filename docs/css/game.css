@@ -142,7 +142,6 @@ ul {
  * Scale the canvas when paused so the player can peek the map.
  */
 .paused #-canvas {
-	transform: scale(0.3);
 	position: absolute;
 }
 .paused #-border {

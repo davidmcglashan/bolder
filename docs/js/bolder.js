@@ -385,13 +385,18 @@ const bolder = {
 		// Centre the map nicely in the display.
 		if ( drawloop.paused ) {
 			let viewport = document.getElementById( '-viewport' )
+			let scale = Math.min( 0.5, viewport.getBoundingClientRect().height / (map.height*64) )
+
+			let offsetX = ( viewport.getBoundingClientRect().width - ( map.width*64*scale ) ) / 2
+			let offsetY = ( viewport.getBoundingClientRect().height - ( map.height*64*scale ) ) / 2
+			
 			let canvas = document.getElementById( '-canvas' )
-	
-			let offsetX = ( viewport.getBoundingClientRect().width - ( map.width*64*0.3 ) ) / 2
-			let offsetY = ( viewport.getBoundingClientRect().height - ( map.height*64*0.3 ) ) / 2
 			canvas.style.left = offsetX + 'px'
 			canvas.style.top = offsetY + 'px'
+			canvas.style.transform = `scale(${scale})`
 		} else {
+			let canvas = document.getElementById( '-canvas' )
+			canvas.style.transform = 'scale(1)'
 			bob.centreDisplay()
 		}
 	},
