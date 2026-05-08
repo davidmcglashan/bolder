@@ -260,10 +260,10 @@ const bolder = {
 				case 'p':
 					bolder.map()
 					break
-				case 'j':
+				case '6':
 					bolder.json()
 					break
-				case 'q':
+				case 'Escape':
 					bolder.stuck()
 					break
 				case 'r':
