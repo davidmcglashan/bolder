@@ -251,7 +251,7 @@ const bolder = {
 		// Key downs fire movement events in the game.
 		document.addEventListener("keydown", (event) => {
 			// Prevent repeated keypresses. Fire exactly once when the key is pressed.
-			if ( event.repeat ) { 
+			if ( event.repeat || drawloop.completeTime > 0 ) { 
 				return
 			}
 
@@ -359,6 +359,10 @@ const bolder = {
 	 * Called from the UI when the player is stuck. Kills bob.
 	 */
 	stuck: () => {
+		if ( drawloop.paused ) {
+			bolder.map()
+			return
+		}
 		bob.killBob()
 	},
 

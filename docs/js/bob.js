@@ -47,7 +47,7 @@ const bob = {
 		// Key downs fire movement events in the game.
 		document.addEventListener("keydown", (event) => {
 			// Prevent repeated keypresses. Fire exactly once when the key is pressed.
-			if ( event.repeat || bob.deathClock > 0 || drawloop.paused ) { 
+			if ( event.repeat || bob.deathClock > 0 || drawloop.paused || drawloop.completeTime > 0 ) { 
 				return
 			}
 
