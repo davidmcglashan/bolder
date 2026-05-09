@@ -18,10 +18,10 @@ game features
   - lots of levels! Remove this TODO note at 20.
 
 - v2 map builder
-  - random WxH box filled with stuff
-  - has a random exit
-  - a tunnel of random length
-  - then another WxH random box
+  - levels are graphs of squarish areas monged together
+    - make sure exits line up and are blockage free
+    - make sure there are "paths" between exits within a node e.g. earth/space/diamond
+    - eggs don't get placed on walls
 
 - sounds: tone.js
   - diamong ting
