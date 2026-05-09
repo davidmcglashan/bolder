@@ -9,7 +9,14 @@ const bob = {
 
 	// This determine bob's movements. The latch is triggered by keypresses and records his direction (or none).
 	// Delta is how far he has to go and is decreased by the drawloop. Deathclock counts down when bob dies.
-	moveLatch: 0,
+	latch: {
+		1: false,
+		2: false,
+		3: false,
+		4: false,
+		next: bolder.dirs.NONE
+	},
+
 	delta: 0,
 	deathClock: 0,
 
@@ -52,10 +59,10 @@ const bob = {
 			}
 
 			const keyName = event.key;
-			if ( keyName === 'z'  ) { bob.latch( 'left' ) }
-			if ( keyName === 'x' ) { bob.latch( 'right' ) }
-			if ( keyName === 'k'  ) { bob.latch( 'up' ) }
-			if ( keyName === 'm' ) { bob.latch( 'down' ) }
+			if ( keyName === 'z'  ) { bob.setLatch( bolder.dirs.LEFT ) }
+			if ( keyName === 'x' ) { bob.setLatch( bolder.dirs.RIGHT ) }
+			if ( keyName === 'k'  ) { bob.setLatch( bolder.dirs.UP ) }
+			if ( keyName === 'm' ) { bob.setLatch( bolder.dirs.DOWN ) }
 		} )
 
 		// key up results in an un-latching.
@@ -68,10 +75,10 @@ const bob = {
 			// Only unlatch if the key being released matches bob's current direction. This ensures
 			// bob doesn't 'stick' if the user briefly holds two keys simultaneously.
 			const keyName = event.key;
-			if ( keyName === 'z' && bob.moveLatch === 'left' ) { bob.latch() }
-			if ( keyName === 'x' && bob.moveLatch === 'right' ) { bob.latch() }
-			if ( keyName === 'k' && bob.moveLatch === 'up' ) { bob.latch() }
-			if ( keyName === 'm' && bob.moveLatch === 'down') { bob.latch() }
+			if ( keyName === 'z'  ) { bob.setLatch( bolder.dirs.LEFT, false ) }
+			if ( keyName === 'x' ) { bob.setLatch( bolder.dirs.RIGHT, false ) }
+			if ( keyName === 'k'  ) { bob.setLatch( bolder.dirs.UP, false ) }
+			if ( keyName === 'm' ) { bob.setLatch( bolder.dirs.DOWN, false ) }
 		} )
 	},
 
@@ -80,18 +87,36 @@ const bob = {
 	 * deciding where to move he'll try and head in that direction. If bob isn't 
 	 * currently moving this happens immediately.
 	 */
-	latch: ( dir ) => {
-		// If this was a release latch event we forget the next direction.
-		if ( !dir ) {
-			bob.moveLatch = 0
-			return
-		}
+	setLatch: ( dir, set = true ) => {
+		bob.latch[dir] = set
+		
+		// Count the latches being held down
+		let latches = bob.latch[bolder.dirs.LEFT] 
+					+ bob.latch[bolder.dirs.RIGHT] 
+					+ bob.latch[bolder.dirs.UP] 
+					+ bob.latch[bolder.dirs.DOWN]
+		
+		// If nothing is latched then bob will stop.
+		if ( latches === 0 ) {
+			bob.latch.next = bolder.dirs.NONE
+		} 
 
-		// Record the move latch. When bob's delta reaches zero this will move him in that direction.
-		bob.moveLatch = dir
+		// If one latch is down then bob will move in that direction
+		else if ( latches === 1 ) {
+			if ( bob.latch[bolder.dirs.LEFT] ) { bob.latch.next = bolder.dirs.LEFT }
+			if ( bob.latch[bolder.dirs.RIGHT] ) { bob.latch.next = bolder.dirs.RIGHT }
+			if ( bob.latch[bolder.dirs.UP] ) { bob.latch.next = bolder.dirs.UP }
+			if ( bob.latch[bolder.dirs.DOWN] ) { bob.latch.next = bolder.dirs.DOWN }
+		} 
+
+		// If more than one latch is down then bob will move in the direction passed in 
+		// to this function as long as set is true
+		else if ( latches > 1 && set ) {
+			bob.latch.next = dir
+		} 
 
 		// If bob has no delta he can move immediately
-		if ( bob.delta <= 0 ) {
+		if ( set && bob.delta <= 0 ) {
 			bob.startToMove()
 		}
 	},
@@ -101,17 +126,17 @@ const bob = {
 	 * from the animation loop when bob finishes a previous movement.
 	 */
 	startToMove: () => {
-		switch ( bob.moveLatch ) {
-			case 'left':
+		switch ( bob.latch.next ) {
+			case bolder.dirs.LEFT:
 				bob.left()
 				break
-			case 'right':
+			case bolder.dirs.RIGHT:
 				bob.right()
 				break
-			case 'up':
+			case bolder.dirs.UP:
 				bob.up()
 				break
-			case 'down':
+			case bolder.dirs.DOWN:
 				bob.down()
 				break
 		}
@@ -247,7 +272,7 @@ const bob = {
 		bob.oldX = bob.startX
 		bob.oldY = bob.startY
 		bob.delta = 0
-		bob.moveLatch = 0
+		bob.latch.next = bolder.dirs.NONE
 
 		// 100 points off for dying!
 		bolder.addToScore( -100 )

@@ -78,15 +78,7 @@ const map = {
 		B: 'x-bbo-s',
 		N: 'x-bbo-se',
 	},
-	
-	dirs: {
-		UP: 0,
-		RIGHT: 1,
-		DOWN: 2,
-		LEFT: 3,
-		NONE: 4
-	},
-	
+		
 	/**
 	 * Generator functions
 	 */
@@ -464,25 +456,25 @@ const map = {
 					
 					// Move to the next square.
 					switch ( dir ) {
-						case map.dirs.RIGHT: 
+						case bolder.dirs.RIGHT: 
 							if ( map.dgrid[y-1][x].type !== map.gridtype.EMPTY || map.dgrid[y+1][x].type !== map.gridtype.EMPTY ) {
 								return startPos
 							}
 							x+=1
 							break
-						case map.dirs.UP: 
+						case bolder.dirs.UP: 
 							if ( map.dgrid[y][x-1].type !== map.gridtype.EMPTY || map.dgrid[y][x+1].type !== map.gridtype.EMPTY ) {
 								return startPos
 							}
 							y-=1
 							break
-						case map.dirs.LEFT: 
+						case bolder.dirs.LEFT: 
 							if ( map.dgrid[y-1][x].type !== map.gridtype.EMPTY || map.dgrid[y+1][x].type !== map.gridtype.EMPTY ) {
 								return startPos
 							}
 							x-=1
 							break
-						case map.dirs.DOWN: 
+						case bolder.dirs.DOWN: 
 							if ( map.dgrid[y][x-1].type !== map.gridtype.EMPTY || map.dgrid[y][x+1].type !== map.gridtype.EMPTY ) {
 								return startPos
 							}
@@ -748,7 +740,7 @@ const map = {
 				y: y,
 				dx: 0,
 				dy: -1,
-				dir: map.dirs.UP,
+				dir: bolder.dirs.UP,
 				delta: 64,
 				animLoop: 0,
 				elem: elem
@@ -1001,81 +993,81 @@ const map = {
 			spirit.checkDelta = 16
 			
 			switch  ( spirit.dir ) {
-				case map.dirs.UP:
+				case bolder.dirs.UP:
 					if ( map.spirit.isTransparentToLeft( spirit ) ) {
-						spirit.dir = map.dirs.LEFT
+						spirit.dir = bolder.dirs.LEFT
 						spirit.x -= 1
 						spirit.dx = -1
 					} else if ( map.spirit.isTransparentAbove( spirit ) ) {
-						spirit.dir = map.dirs.UP
+						spirit.dir = bolder.dirs.UP
 						spirit.y -= 1
 						spirit.dy = -1
 					} else if ( map.spirit.isTransparentToRight( spirit ) ) {
-						spirit.dir = map.dirs.RIGHT
+						spirit.dir = bolder.dirs.RIGHT
 						spirit.x += 1
 						spirit.dx = 1
 					} else if ( map.spirit.isTransparentBelow( spirit ) ) {
-						spirit.dir = map.dirs.DOWN
+						spirit.dir = bolder.dirs.DOWN
 						spirit.y += 1
 						spirit.dy = 1
 					}
 					break
 
-				case map.dirs.RIGHT:
+				case bolder.dirs.RIGHT:
 					if ( map.spirit.isTransparentAbove( spirit ) ) {
-						spirit.dir = map.dirs.UP
+						spirit.dir = bolder.dirs.UP
 						spirit.y -= 1
 						spirit.dy = -1
 					} else if ( map.spirit.isTransparentToRight( spirit ) ) {
-						spirit.dir = map.dirs.RIGHT
+						spirit.dir = bolder.dirs.RIGHT
 						spirit.x += 1
 						spirit.dx = 1
 					} else if ( map.spirit.isTransparentBelow( spirit ) ) {
-						spirit.dir = map.dirs.DOWN
+						spirit.dir = bolder.dirs.DOWN
 						spirit.y += 1
 						spirit.dy = 1
 					} else if ( map.spirit.isTransparentToLeft( spirit ) ) {
-						spirit.dir = map.dirs.LEFT
+						spirit.dir = bolder.dirs.LEFT
 						spirit.x -= 1
 						spirit.dx = -1
 					}
 					break
 
-				case map.dirs.DOWN:
+				case bolder.dirs.DOWN:
 					if ( map.spirit.isTransparentToRight( spirit ) ) {
-						spirit.dir = map.dirs.RIGHT
+						spirit.dir = bolder.dirs.RIGHT
 						spirit.x += 1
 						spirit.dx = 1
 					} else if ( map.spirit.isTransparentBelow( spirit ) ) {
-						spirit.dir = map.dirs.DOWN
+						spirit.dir = bolder.dirs.DOWN
 						spirit.y += 1
 						spirit.dy = 1
 					} else if ( map.spirit.isTransparentToLeft( spirit ) ) {
-						spirit.dir = map.dirs.LEFT
+						spirit.dir = bolder.dirs.LEFT
 						spirit.x -= 1
 						spirit.dx = -1
 					} else if ( map.spirit.isTransparentAbove( spirit ) ) {
-						spirit.dir = map.dirs.UP
+						spirit.dir = bolder.dirs.UP
 						spirit.y -= 1
 						spirit.dy = -1
 					} 
 					break
 
-				case map.dirs.LEFT:
+				case bolder.dirs.LEFT:
 					if ( map.spirit.isTransparentBelow( spirit ) ) {
-						spirit.dir = map.dirs.DOWN
+						spirit.dir = bolder.dirs.DOWN
 						spirit.y += 1
 						spirit.dy = 1
 					} else if ( map.spirit.isTransparentToLeft( spirit ) ) {
-						spirit.dir = map.dirs.LEFT
+						spirit.dir = bolder.dirs.LEFT
 						spirit.x -= 1
 						spirit.dx = -1
 					} else if ( map.spirit.isTransparentAbove( spirit ) ) {
-						spirit.dir = map.dirs.UP
+						spirit.dir = bolder.dirs.UP
 						spirit.y -= 1
 						spirit.dy = -1
 					} else if ( map.spirit.isTransparentToRight( spirit ) ) {
-						spirit.dir = map.dirs.RIGHT
+						spirit.dir = bolder.dirs.RIGHT
 						spirit.x += 1
 						spirit.dx = 1
 					}
@@ -1163,7 +1155,7 @@ const map = {
 
 			// Move the pushable and update the new grid cell
 			pushable.x += 1
-			pushable.pushDirection = map.dirs.RIGHT
+			pushable.pushDirection = bolder.dirs.RIGHT
 
 			map.pushables[pushable.x+'_'+pushable.y] = pushable
 			map.loc.setToPushable( pushable )
@@ -1179,7 +1171,7 @@ const map = {
 
 			// Move the pushable and update the new grid cell
 			pushable.x -= 1
-			pushable.pushDirection = map.dirs.LEFT
+			pushable.pushDirection = bolder.dirs.LEFT
 
 			map.pushables[pushable.x+'_'+pushable.y] = pushable
 			map.loc.setToPushable( pushable )
@@ -1242,10 +1234,10 @@ const map = {
 				// Boulders are unsupported if they're on a slopey object with space
 				// on either side ...
 				switch ( map.sloping.get( pp ) ) {
-					case map.dirs.LEFT:
+					case bolder.dirs.LEFT:
 						map.pushable.moveLeft( pp )
 						continue
-					case map.dirs.RIGHT:
+					case bolder.dirs.RIGHT:
 						map.pushable.moveRight( pp )
 						continue
 				}
@@ -1280,27 +1272,27 @@ const map = {
 
 			// Abort if there's no check to be made in either direction.
 			if ( !(slopesLeft || slopesRight) ) {
-				return map.dirs.NONE
+				return bolder.dirs.NONE
 			}
 
 			// If our objects slopes to the left, AND it was pushed that way, try moving it left. 
-			if ( slopesLeft && ( !pushable.pushDirection || pushable.pushDirection === map.dirs.LEFT ) ) {
+			if ( slopesLeft && ( !pushable.pushDirection || pushable.pushDirection === bolder.dirs.LEFT ) ) {
 				// Try to the left first
 				if ( 
 					map.pushable.canMoveInto( map.loc.toLeft( pushable ) ) 
 					&& map.pushable.canMoveInto( map.loc.toLeftAndBelow( pushable ) ) 
 				) {
-					return map.dirs.LEFT
+					return bolder.dirs.LEFT
 				}
 			}
 
 			// If our objects slopes to the right, AND it was pushed that way, try moving it right. 
-			if ( slopesRight && pushable.pushDirection === map.dirs.RIGHT ) {
+			if ( slopesRight && pushable.pushDirection === bolder.dirs.RIGHT ) {
 				if ( 
 					map.pushable.canMoveInto( map.loc.toRight( pushable ) ) 
 					&& map.pushable.canMoveInto( map.loc.toRightAndBelow( pushable ) ) 
 				) {
-					return map.dirs.RIGHT
+					return bolder.dirs.RIGHT
 				}
 			}
 
@@ -1311,7 +1303,7 @@ const map = {
 					map.pushable.canMoveInto( map.loc.toLeft( pushable ) ) 
 					&& map.pushable.canMoveInto( map.loc.toLeftAndBelow( pushable ) ) 
 				) {
-					return map.dirs.LEFT
+					return bolder.dirs.LEFT
 				}
 			} 
 			if ( slopesRight ) {
@@ -1319,12 +1311,12 @@ const map = {
 					map.pushable.canMoveInto( map.loc.toRight( pushable ) ) 
 					&& map.pushable.canMoveInto( map.loc.toRightAndBelow( pushable ) ) 
 				) {
-					return map.dirs.RIGHT
+					return bolder.dirs.RIGHT
 				}
 			}
 
 			// Didn't return before, so there's no slope.
-			return map.dirs.NONE
+			return bolder.dirs.NONE
 		}
 	},
 

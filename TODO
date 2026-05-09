@@ -7,13 +7,6 @@ bugs
 game features
 -------------
 
-- slicker keyboard controls
-  - monitor direction keys and maintain four flags - ignore flags if two are down already
-  - when finishing a move ... is same direction key down? 
-    - y - go in that direction again
-	- n - go in new direction if key down
-	- N - do nothing
-
 - a playable game (v1.0)
   - lots of levels! Remove this TODO note at 20.
 
