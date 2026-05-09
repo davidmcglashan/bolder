@@ -285,6 +285,7 @@ const bob = {
 
 		// 100 points off for dying!
 		bolder.addToScore( -100 )
+		sound.killBob()
 	},
 
 	/**

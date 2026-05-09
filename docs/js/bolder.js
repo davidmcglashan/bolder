@@ -278,6 +278,9 @@ const bolder = {
 				case 'r':
 					bolder.restartLevel()
 					break
+				case 's':
+					sound.toggleMute()
+					break
 			}
 		} )
 

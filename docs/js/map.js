@@ -985,6 +985,7 @@ const map = {
 				spirit.isCaged = true
 				spirit.elem.remove()
 				map.updateType( dgrid, map.gridtype.DIAMOND )
+				sound.cageSpirit()
 			}
 
 			spirit.dx = 0
@@ -1107,6 +1108,7 @@ const map = {
 			map.updateType( map.dgrid[safe.y][safe.x], map.gridtype.DIAMOND )
 		}
 		map.safes = {}
+		sound.openSafes()
 	},
 
 	/**
@@ -1159,6 +1161,12 @@ const map = {
 
 			map.pushables[pushable.x+'_'+pushable.y] = pushable
 			map.loc.setToPushable( pushable )
+			
+			if ( pushable.type === map.gridtype.EGG ) {
+				sound.pushEgg()
+			} else {
+				sound.pushBoulder()
+			}
 		},
 
 		/**
@@ -1175,6 +1183,12 @@ const map = {
 
 			map.pushables[pushable.x+'_'+pushable.y] = pushable
 			map.loc.setToPushable( pushable )
+
+			if ( pushable.type === map.gridtype.EGG ) {
+				sound.pushEgg()
+			} else {
+				sound.pushBoulder()
+			}
 		},
 
 		/**
@@ -1195,6 +1209,11 @@ const map = {
 			// Update the score
 			bolder.addToScore( 1 )
 
+			// If we've hit something play a thud
+			if ( pushable.type === map.gridtype.BOULDER && !map.pushable.canFallInto( map.loc.below( pushable ) ) ) {
+				sound.boulderLanding()
+			}
+
 			// Did we hit bob?
 			if ( map.options.bouldersFatal && pushable.x === bob.x && pushable.y+1 === bob.y ) {
 				bob.killBob()
@@ -1203,6 +1222,7 @@ const map = {
 			// Is the pushable an egg? In which case we crack it!
 			if ( pushable.type === map.gridtype.EGG && !map.pushable.canFallInto( map.loc.below( pushable ) ) ) {
 				pushable.crackTimer = 30
+				sound.eggLanding()
 				map.updateType( map.dgrid[pushable.y][pushable.x] )
 			}
 		},
@@ -1370,9 +1390,11 @@ const map = {
 			if ( scoring ) {
 				switch ( dgrid.type ) {
 					case map.gridtype.EARTH:
+						sound.earth()
 						bolder.addToScore( 10 )
 						break
 					case map.gridtype.DIAMOND:
+						sound.diamond()
 						bolder.addToScore( 50 )
 						bolder.decreaseDiamonds()
 						break
@@ -1450,6 +1472,8 @@ const map = {
 				map.monsterCount -= 1
 				let elem = document.getElementById( '-monsters' )
 				elem.innerHTML = 'monsters: ' + map.monsterCount
+
+				sound.killMonster()
 			}
 		},
 

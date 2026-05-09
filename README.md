@@ -17,6 +17,8 @@ Some diamonds are locked away in safes which need a key to unlock. And keep an e
 **K** - move up<br>
 **M** - move down<br>
 
-**P** - pause (and see a map)
-**Esc** - kill bob - handy if you get stuck
-**R** - restart
+**P** - pause (and see a map)<br>
+**Esc** - kill bob - handy if you get stuck<br>
+**R** - restart<br>
+
+**S** - toggle sounds on or off<br>
