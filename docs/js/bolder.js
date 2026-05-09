@@ -372,7 +372,7 @@ const bolder = {
 			bolder.map()
 			return
 		}
-		bob.killBob()
+		bob.killBob( true )
 	},
 
 	/**

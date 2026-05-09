@@ -258,15 +258,19 @@ const bob = {
 	/**
 	 * Kills bob
 	 */
-	killBob: () => {
+	killBob: ( flash = false ) => {
 		// Can't kill bob if he's already dead!
 		if ( bob.deathClock > 0 ) { 
 			return
 		}
 		bob.deathClock = 500
+		bob.flash = flash
 
 		// Hide bob and reset all of his state.
-		bob.elem.style.display = 'none'
+		if ( !flash ) {
+			bob.elem.style.display = 'none'
+		}
+		
 		bob.x = bob.startX
 		bob.y = bob.startY
 		bob.oldX = bob.startX

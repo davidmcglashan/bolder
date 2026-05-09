@@ -965,7 +965,7 @@ const map = {
 				( spirit.x === bob.x && spirit.y === bob.y )
 				|| ( spirit.x === bob.oldX && spirit.y === bob.oldY )
 			) {
-				bob.killBob()
+				bob.killBob( true )
 			}
 		},
 
@@ -1432,7 +1432,7 @@ const map = {
 				( monster.x === bob.x && monster.y === bob.y )
 				|| ( monster.x === bob.oldX && monster.y === bob.oldY )
 			) {
-				bob.killBob()
+				bob.killBob( true )
 			}
 		},
 

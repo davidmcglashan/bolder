@@ -3,6 +3,7 @@ bugs
 
 - leave a game running and boulders end up being superspeed
   - may be to do with the tab being put to sleep or something
+  - also affects monster hatch speed!
 
 game features
 -------------
@@ -28,7 +29,6 @@ game features
 design
 ------
 
-- bob death animation
 - singleton wall variants are considerate of their neighbours ...
   - use same colour and style
   - shapes and slopes create sensible larger pieces i.e. no slope with a block above it.

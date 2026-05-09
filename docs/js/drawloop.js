@@ -140,6 +140,12 @@ const drawloop = {
 		// If bob is dead, leave him that way for a short time.
 		if ( bob.deathClock > 0 ) {
 			bob.deathClock -= delta/4
+
+			// Flash bob if bob is flashing with a cheap opacity trick!
+			if ( bob.flash ) {
+				bob.elem.style.opacity = bob.deathClock % 10 % 2
+			}
+
 			// Bob is now risen again. Move back to show him.
 			if ( bob.deathClock <= 0 ) {
 				map.loc.setToEmpty( bob )
@@ -149,6 +155,7 @@ const drawloop = {
 				bob.elem.style.left = (bob.x*64 - (bob.delta*bob.dx)) + 'px'
 				bob.elem.style.top = (bob.y*64 - (bob.delta*bob.dy)) + 'px'
 				bob.elem.style.display = null
+				bob.elem.style.opacity = 1
 			}
 		}
 
