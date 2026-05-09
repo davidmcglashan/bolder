@@ -1409,6 +1409,8 @@ const map = {
 				alive: true,
 				x: loc.x,
 				y: loc.y,
+				startX: loc.x,
+				startY: loc.y,
 				dx: 0,
 				dy: 0,
 				delta: 1,
@@ -1460,28 +1462,34 @@ const map = {
 				return
 			}
 
+			// If bob is alive he is the target, otherwise monster return to where they hatched.
+			let targetX = bob.x
+			let targetY = bob.y
+			if ( bob.deathClock > 0 ) {
+				targetX = monster.startX
+				targetY = monster.startY
+			}
+
 			monster.dx = 0
 			monster.dy = 0
 			monster.delta = 64
 			monster.checkDelta = 16
 
-			// Monster's naively move toward bob, x first and then y. If bob isn't alive they wait ...
-			if ( bob.deathClock > 0 ) {
-				return
-			} else if ( monster.x > bob.x && map.monster.isTransparentToLeft( monster ) ) {
+			// Monster's naively move toward their target, x first and then y. 
+			if ( monster.x > targetX && map.monster.isTransparentToLeft( monster ) ) {
 				monster.x -= 1
 				monster.dx = -1
 				monster.facing = 'l'
 				monster.elem.setAttribute( 'class', 'monster l1' )
-			} else if ( monster.x < bob.x && map.monster.isTransparentToRight( monster ) ) {
+			} else if ( monster.x < targetX && map.monster.isTransparentToRight( monster ) ) {
 				monster.x += 1
 				monster.dx = 1
 				monster.facing = 'r'
 				monster.elem.setAttribute( 'class', 'monster r1' )
-			} else if ( monster.y > bob.y && map.monster.isTransparentAbove( monster ) ) {
+			} else if ( monster.y > targetY && map.monster.isTransparentAbove( monster ) ) {
 				monster.y -= 1
 				monster.dy = -1
-			} else if ( monster.y < bob.y && map.monster.isTransparentBelow( monster ) ) {
+			} else if ( monster.y < targetY && map.monster.isTransparentBelow( monster ) ) {
 				monster.y += 1
 				monster.dy = 1
 			} 
