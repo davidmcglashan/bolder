@@ -272,7 +272,12 @@ const bob = {
 		bob.oldX = bob.startX
 		bob.oldY = bob.startY
 		bob.delta = 0
+
 		bob.latch.next = bolder.dirs.NONE
+		bob.latch[bolder.dirs.LEFT] = false
+		bob.latch[bolder.dirs.RIGHT] = false
+		bob.latch[bolder.dirs.UP] = false
+		bob.latch[bolder.dirs.DOWN] = false
 
 		// 100 points off for dying!
 		bolder.addToScore( -100 )
